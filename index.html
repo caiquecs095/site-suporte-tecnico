@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Core | Enterprise TI</title>
+<title>Suporte Técnico | Portal TI Enterprise</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
+/* ================= RESET ================= */
 *{
 margin:0;
 padding:0;
@@ -17,7 +18,7 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#050814;
+background:#0b1220;
 color:#e5edf7;
 overflow:hidden;
 }
@@ -38,7 +39,7 @@ inset:0;
 width:100%;
 height:100%;
 object-fit:cover;
-filter:brightness(0.4);
+filter:brightness(0.45);
 }
 
 .overlay{
@@ -71,7 +72,7 @@ inset:0;
 display:none;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
 backdrop-filter:blur(10px);
 z-index:9999;
 }
@@ -84,7 +85,7 @@ display:flex;
 background:#0b1220;
 padding:30px;
 border-radius:12px;
-width:320px;
+width:340px;
 text-align:center;
 border:1px solid rgba(255,255,255,0.08);
 }
@@ -97,27 +98,55 @@ border:none;
 border-radius:8px;
 background:#0f1a2b;
 color:white;
+outline:none;
 }
 
-/* ================= DASHBOARD ================= */
-.dashboard{
+/* ================= APP ================= */
+.app{
 display:none;
 height:100vh;
-padding:20px;
+flex-direction:column;
 }
 
-.dashboard.active{
-display:block;
+.app.active{
+display:flex;
+}
+
+/* ================= NAV ================= */
+nav{
+background:#0f172a;
+padding:15px;
+display:flex;
+justify-content:center;
+gap:20px;
+}
+
+nav a{
+color:#cbd5e1;
+text-decoration:none;
+font-weight:600;
+cursor:pointer;
+}
+
+nav a:hover{
+color:white;
+}
+
+/* ================= CONTENT ================= */
+.content{
+flex:1;
+overflow:auto;
+padding:30px;
 }
 
 /* ================= SLIDER ================= */
 .slider{
 position:relative;
-height:300px;
-margin-top:20px;
-overflow:hidden;
-border-radius:12px;
+height:260px;
 background:#0b1220;
+border-radius:12px;
+overflow:hidden;
+margin-bottom:30px;
 }
 
 .slide{
@@ -138,7 +167,7 @@ opacity:1;
 
 .dots{
 position:absolute;
-bottom:10px;
+bottom:12px;
 left:50%;
 transform:translateX(-50%);
 display:flex;
@@ -157,10 +186,18 @@ cursor:pointer;
 background:#3b82f6;
 }
 
-/* ================= CARDS ================= */
+/* ================= SEÇÕES ================= */
+section{
+display:none;
+}
+
+section.active{
+display:block;
+}
+
 .grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
 margin-top:20px;
 }
@@ -172,8 +209,14 @@ border-radius:12px;
 border:1px solid rgba(255,255,255,0.06);
 }
 
-</style>
+footer{
+text-align:center;
+padding:20px;
+background:#0f172a;
+margin-top:30px;
+}
 
+</style>
 </head>
 
 <body>
@@ -188,9 +231,9 @@ border:1px solid rgba(255,255,255,0.06);
 <div class="overlay"></div>
 
 <div class="intro-box">
-<h1>NEXUS CORE</h1>
-<p>Enterprise Infrastructure System</p>
-<button class="btn" onclick="openLogin()">Secure Access</button>
+<h1>SUPORTE TÉCNICO</h1>
+<p>Portal de Tecnologia da Informação</p>
+<button class="btn" onclick="openLogin()">Acesso ao Sistema</button>
 </div>
 
 </div>
@@ -200,41 +243,46 @@ border:1px solid rgba(255,255,255,0.06);
 
 <div class="login-box">
 
-<h3>Admin Access</h3>
+<h3>Área ADM</h3>
 
 <input type="text" placeholder="ADM_USER">
-<input type="password" placeholder="Password">
+<input type="password" placeholder="Senha">
 
-<button class="btn" onclick="enter()">Login ADM</button>
-
-</div>
+<button class="btn" onclick="enter()">Entrar</button>
 
 </div>
 
-<!-- ================= DASHBOARD ================= -->
-<div class="dashboard" id="dashboard">
+</div>
 
-<h2>Control Panel</h2>
+<!-- ================= APP ================= -->
+<div class="app" id="app">
+
+<!-- NAV -->
+<nav>
+<a onclick="show('home')">Início</a>
+<a onclick="show('sobre')">Sobre</a>
+<a onclick="show('dicas')">Dicas</a>
+<a onclick="show('ods')">ODS</a>
+<a onclick="show('contato')">Contato</a>
+</nav>
+
+<div class="content">
 
 <!-- SLIDER -->
 <div class="slider">
 
 <div class="slide active">
-<h2>Infraestrutura Global</h2>
-<p>Monitoramento em tempo real</p>
+<h2>Bem-vindo ao Sistema TI</h2>
 </div>
 
 <div class="slide">
-<h2>Segurança Ativa</h2>
-<p>Sistemas protegidos 24/7</p>
+<h2>Carreira em Crescimento</h2>
 </div>
 
 <div class="slide">
-<h2>Cloud Systems</h2>
-<p>Alta performance enterprise</p>
+<h2>Suporte Técnico em Alta</h2>
 </div>
 
-<!-- DOTS -->
 <div class="dots">
 <div class="dot active" onclick="go(0)"></div>
 <div class="dot" onclick="go(1)"></div>
@@ -243,12 +291,46 @@ border:1px solid rgba(255,255,255,0.06);
 
 </div>
 
-<!-- CARDS -->
-<div class="grid">
+<!-- HOME -->
+<section id="home" class="active">
+<h2>Início</h2>
+<p>Portal institucional sobre suporte técnico e tecnologia.</p>
+</section>
 
-<div class="card">Nodes: 1.284</div>
-<div class="card">Latency: 11ms</div>
-<div class="card">Security: MAX</div>
+<!-- SOBRE -->
+<section id="sobre">
+<h2>Sobre</h2>
+<p>Profissão de suporte técnico atua na resolução de problemas de TI.</p>
+</section>
+
+<!-- DICAS -->
+<section id="dicas">
+<h2>Dicas</h2>
+
+<div class="grid">
+<div class="card">Informática</div>
+<div class="card">Redes</div>
+<div class="card">Cursos</div>
+<div class="card">Comunicação</div>
+</div>
+
+</section>
+
+<!-- ODS -->
+<section id="ods">
+<h2>ODS 9</h2>
+<p>Inovação e infraestrutura tecnológica.</p>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+<h2>Contato</h2>
+<p>LinkedIn | GitHub</p>
+</section>
+
+<footer>
+Projeto Acadêmico
+</footer>
 
 </div>
 
@@ -256,7 +338,7 @@ border:1px solid rgba(255,255,255,0.06);
 
 <script>
 
-/* ================= LOGIN ================= */
+/* LOGIN */
 function openLogin(){
 document.getElementById("login").classList.add("active");
 }
@@ -264,32 +346,32 @@ document.getElementById("login").classList.add("active");
 function enter(){
 document.getElementById("intro").style.display="none";
 document.getElementById("login").classList.remove("active");
-document.getElementById("dashboard").classList.add("active");
+document.getElementById("app").classList.add("active");
 }
 
-/* ================= SLIDER ================= */
+/* NAV */
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+/* SLIDER */
 let slides = document.querySelectorAll(".slide");
 let dots = document.querySelectorAll(".dot");
 let i = 0;
 
-function show(n){
+function go(n){
 slides.forEach(s=>s.classList.remove("active"));
 dots.forEach(d=>d.classList.remove("active"));
 
 slides[n].classList.add("active");
 dots[n].classList.add("active");
-
 i = n;
 }
 
-function go(n){
-show(n);
-}
-
-/* AUTO SLIDE */
 setInterval(()=>{
 i = (i+1)%slides.length;
-show(i);
+go(i);
 },4000);
 
 </script>
