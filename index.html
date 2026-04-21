@@ -3,281 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Core TI</title>
+<title>Nexus SaaS TI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script type="module">
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
-body{background:#0b1220;color:#e5edf7;}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+getAuth,
+onAuthStateChanged,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-header{
-background:#0f172a;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+import {
+getFirestore,
+collection,
+addDoc,
+onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-button{
-background:#3b82f6;
-color:white;
-border:none;
-padding:10px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.container{
-max-width:900px;
-margin:30px auto;
-padding:20px;
-}
-
-.card{
-background:#0f172a;
-padding:15px;
-border-radius:10px;
-margin-top:10px;
-border-left:4px solid #3b82f6;
-}
-
-input,textarea{
-width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:8px;
-border:none;
-background:#0b1220;
-color:white;
-}
-
-.login{
-position:fixed;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,0.85);
-}
-
-.box{
-background:#0f172a;
-padding:20px;
-border-radius:12px;
-width:340px;
-}
-
-.hidden{display:none;}
-
-.status{
-padding:4px 10px;
-border-radius:6px;
-font-size:12px;
-}
-
-.aberto{background:#f59e0b;color:black;}
-.andamento{background:#3b82f6;}
-.resolvido{background:#22c55e;}
-
-</style>
-</head>
-
-<body>
-
-<header>
-<h2>Nexus Core</h2>
-<button id="authBtn" onclick="logout()">Logoff</button>
-</header>
-
-<!-- LOGIN -->
-<div id="loginBox" class="login">
-
-<div class="box">
-
-<h3>Login / Cadastro</h3>
-
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Senha">
-
-<button onclick="login()">Entrar</button>
-<button onclick="register()" style="margin-top:10px;background:#22c55e;">Criar Conta</button>
-
-</div>
-
-</div>
-
-<!-- APP -->
-<div id="app" class="container hidden">
-
-<h3>Bem-vindo <span id="userEmail"></span></h3>
-
-<h3>Abrir Chamado</h3>
-
-<input id="title" placeholder="Título">
-<textarea id="desc"></textarea>
-
-<button onclick="createTicket()">Enviar</button>
-
-<h3>Chamados</h3>
-<div id="tickets"></div>
-
-</div>
-
-<script>
-
-/* ================= FIREBASE CONFIG ================= */
-/* 🔴 SUBSTITUA AQUI PELO SEU FIREBASE REAL */
+/* 🔥 SUA CONFIG REAL */
 const firebaseConfig = {
 apiKey: "SUA_API_KEY",
-authDomain: "SEU_PROJETO.firebaseapp.com",
-projectId: "SEU_PROJECT_ID"
+authDomain: "nexus-saas-54337.firebaseapp.com",
+projectId: "nexus-saas-54337",
+appId: "1:31279431377:web:1c70f4fa42253a7f824ff0"
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+let user = null;
 
-/* ADMIN FIXO */
-const ADMIN_EMAIL = "admin";
-
-let currentUser = null;
-
-/* ================= LOGIN PERSISTENTE ================= */
-auth.onAuthStateChanged(user=>{
-
-if(user){
-currentUser = user;
-
-loginBox.classList.add("hidden");
-app.classList.remove("hidden");
-
-authBtn.innerText = "Logoff";
-userEmail.innerText = user.email;
-
-loadTickets();
-
-}else{
-currentUser = null;
-
-app.classList.add("hidden");
-loginBox.classList.remove("hidden");
-
-authBtn.innerText = "Login";
+/* ================= UI ================= */
+window.login = async () => {
+try {
+await signInWithEmailAndPassword(auth, email.value, pass.value);
+} catch (e) {
+alert(e.message);
 }
+};
 
-});
-
-/* ================= LOGIN ================= */
-function login(){
-
-let emailVal = email.value.trim();
-let passVal = pass.value.trim();
-
-if(!emailVal || !passVal){
-alert("Preencha todos os campos");
-return;
+window.register = async () => {
+try {
+await createUserWithEmailAndPassword(auth, email.value, pass.value);
+alert("Conta criada!");
+} catch (e) {
+alert(e.message);
 }
+};
 
-auth.signInWithEmailAndPassword(emailVal, passVal)
-.catch(err=>{
-alert("Erro login: " + err.message);
-console.log(err);
-});
+window.logout = () => signOut(auth);
 
-}
+window.createTicket = async () => {
+if (!user) return;
 
-/* ================= CADASTRO ================= */
-function register(){
-
-let emailVal = email.value.trim();
-let passVal = pass.value.trim();
-
-if(!emailVal || !passVal){
-alert("Preencha todos os campos");
-return;
-}
-
-auth.createUserWithEmailAndPassword(emailVal, passVal)
-.then(()=>{
-alert("Conta criada com sucesso!");
-})
-.catch(err=>{
-alert("Erro cadastro: " + err.message);
-console.log(err);
-});
-
-}
-
-/* ================= LOGOUT ================= */
-function logout(){
-auth.signOut();
-}
-
-/* ================= CRIAR TICKET ================= */
-function createTicket(){
-
-if(!currentUser) return;
-
-db.collection("tickets").add({
-user: currentUser.email,
+await addDoc(collection(db, "tickets"), {
+user: user.email,
 title: title.value,
 desc: desc.value,
 status: "ABERTO",
 created: Date.now()
 });
+};
 
+/* ================= AUTH ================= */
+onAuthStateChanged(auth, (u) => {
+user = u;
+
+if (user) {
+loginBox.style.display = "none";
+app.style.display = "block";
+loadTickets();
+} else {
+loginBox.style.display = "flex";
+app.style.display = "none";
 }
+});
 
-/* ================= CARREGAR TICKETS ================= */
-function loadTickets(){
-
-db.collection("tickets").onSnapshot(snapshot=>{
-
+/* ================= LOAD ================= */
+function loadTickets() {
+onSnapshot(collection(db, "tickets"), (snap) => {
 tickets.innerHTML = "";
 
-snapshot.forEach(doc=>{
-
+snap.forEach(doc => {
 let t = doc.data();
-let isAdmin = currentUser.email === ADMIN_EMAIL;
 
 tickets.innerHTML += `
-<div class="card">
-
+<div style="background:#0f172a;padding:10px;margin:10px;border-radius:8px">
 <b>${t.user}</b><br>
 ${t.title}<br>
 ${t.desc}<br>
-
-<span class="status ${t.status.toLowerCase()}">${t.status}</span>
-
-${isAdmin ? `
-<br><br>
-<select onchange="updateStatus('${doc.id}',this.value)">
-<option>ABERTO</option>
-<option>ANDAMENTO</option>
-<option>RESOLVIDO</option>
-</select>
-` : ""}
-
-</div>`;
-
+<span>${t.status}</span>
+</div>
+`;
 });
-
 });
-
-}
-
-/* ================= STATUS ADMIN ================= */
-function updateStatus(id,status){
-db.collection("tickets").doc(id).update({status});
 }
 
 </script>
+
+<style>
+body{margin:0;font-family:Poppins;background:#0b1220;color:white}
+input,textarea{width:100%;padding:10px;margin:5px 0;border-radius:6px}
+button{padding:10px;background:#3b82f6;color:white;border:none;cursor:pointer}
+#loginBox,#app{padding:20px}
+#app{display:none}
+</style>
+
+</head>
+
+<body>
+
+<div id="loginBox">
+<h2>Login SaaS</h2>
+
+<input id="email" placeholder="email">
+<input id="pass" type="password" placeholder="senha">
+
+<button onclick="login()">Login</button>
+<button onclick="register()">Criar Conta</button>
+</div>
+
+<div id="app">
+
+<h2>Dashboard</h2>
+
+<button onclick="logout()">Sair</button>
+
+<h3>Novo Ticket</h3>
+<input id="title" placeholder="titulo">
+<textarea id="desc"></textarea>
+
+<button onclick="createTicket()">Enviar</button>
+
+<h3>Tickets</h3>
+<div id="tickets"></div>
+
+</div>
 
 </body>
 </html>
