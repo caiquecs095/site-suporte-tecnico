@@ -53,7 +53,7 @@ transition:1.5s;
 .intro-overlay{
 position:absolute;
 width:100%;height:100%;
-background:rgba(0,0,0,0.7);
+background:rgba(0,0,0,0.75);
 }
 
 .intro-box{
@@ -64,17 +64,8 @@ max-width:720px;
 padding:30px;
 }
 
-.intro h1{
-font-size:34px;
-letter-spacing:1px;
-margin-bottom:10px;
-}
-
-.intro p{
-color:var(--muted);
-font-size:14px;
-margin-bottom:20px;
-}
+.intro h1{font-size:34px;margin-bottom:10px;}
+.intro p{color:var(--muted);font-size:14px;margin-bottom:20px;}
 
 .intro button{
 background:linear-gradient(90deg,var(--accent2),#2563eb);
@@ -84,6 +75,22 @@ border-radius:10px;
 color:white;
 font-weight:600;
 cursor:pointer;
+}
+
+/* BOTAO LOGIN PEQUENO */
+.quick-login{
+position:absolute;
+top:20px;
+right:20px;
+z-index:2000;
+background:rgba(255,255,255,0.08);
+border:1px solid var(--border);
+color:white;
+padding:8px 12px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+backdrop-filter:blur(10px);
 }
 
 /* ===== LOGIN ===== */
@@ -98,24 +105,44 @@ z-index:999;
 overflow:hidden;
 }
 
+/* LOGIN VIDEO BACKGROUND LAYER */
 .login-video{
 position:absolute;
 top:0;left:0;
 width:100%;height:100%;
 object-fit:cover;
+opacity:0;
+transition:1.5s;
 }
+
+.login-video.active{opacity:1;}
 
 .login-overlay{
 position:absolute;
 width:100%;height:100%;
-background:rgba(0,0,0,0.72);
+background:rgba(0,0,0,0.78);
+}
+
+/* ANIMAÇÃO FORÇA VISUAL */
+.login::before{
+content:"";
+position:absolute;
+width:200%;height:200%;
+background:radial-gradient(circle,rgba(59,130,246,0.08),transparent 60%);
+animation:move 8s linear infinite;
+}
+
+@keyframes move{
+0%{transform:translate(-20%,-20%)}
+50%{transform:translate(20%,20%)}
+100%{transform:translate(-20%,-20%)}
 }
 
 .login-box{
 position:relative;
 z-index:2;
 background:rgba(11,18,32,0.9);
-backdrop-filter:blur(10px);
+backdrop-filter:blur(12px);
 padding:30px;
 border-radius:14px;
 width:330px;
@@ -143,7 +170,7 @@ color:white;
 cursor:pointer;
 }
 
-/* ===== APP ===== */
+/* APP */
 .app{display:none;}
 
 .sidebar{
@@ -156,27 +183,13 @@ border-right:1px solid var(--border);
 padding:22px;
 }
 
-.sidebar h2{
-color:var(--accent2);
-margin-bottom:25px;
-letter-spacing:2px;
-}
-
-.sidebar a{
-display:block;
-margin:16px 0;
-color:var(--muted);
-text-decoration:none;
-font-size:14px;
-transition:0.2s;
-}
-
+.sidebar h2{color:var(--accent2);margin-bottom:25px;letter-spacing:2px;}
+.sidebar a{display:block;margin:16px 0;color:var(--muted);text-decoration:none;font-size:14px;transition:0.2s;}
 .sidebar a:hover{color:white;transform:translateX(4px);}
 .sidebar i{margin-right:8px;color:var(--accent2);}
 
 .content{margin-left:240px;padding:20px;}
 
-/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -196,7 +209,6 @@ width:100%;padding:10px 12px;border-radius:8px;border:none;background:#0f1a2b;co
 
 .top-icons i{margin-left:15px;cursor:pointer;color:var(--muted);}
 
-/* METRICS */
 .metrics{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -214,7 +226,6 @@ border-radius:14px;
 .metric h3{font-size:13px;color:var(--muted);}
 .metric p{font-size:22px;margin-top:5px;}
 
-/* CHART */
 .chart{
 margin-top:25px;
 background:var(--panel);
@@ -252,6 +263,8 @@ border-radius:6px 6px 0 0;
 <!-- INTRO -->
 <div class="intro" id="intro">
 
+<button class="quick-login" onclick="goLogin()">Login</button>
+
 <video class="intro-video active" autoplay muted loop>
 <source src="https://cdn.coverr.co/videos/coverr-working-in-it-office-4361/1080p.mp4">
 </video>
@@ -268,7 +281,7 @@ border-radius:6px 6px 0 0;
 
 <div class="intro-box">
 <h1>NEXUS CORE GLOBAL SYSTEM</h1>
-<p>Plataforma corporativa de infraestrutura, segurança e operações globais de tecnologia.</p>
+<p>Infraestrutura global de tecnologia, segurança e operações corporativas de alta performance.</p>
 <button onclick="goLogin()">Acessar Sistema</button>
 </div>
 
@@ -277,8 +290,16 @@ border-radius:6px 6px 0 0;
 <!-- LOGIN -->
 <div class="login" id="login">
 
-<video class="login-video" autoplay muted loop>
+<video class="login-video active" autoplay muted loop>
 <source src="https://cdn.coverr.co/videos/coverr-it-team-working-1555/1080p.mp4">
+</video>
+
+<video class="login-video" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-programming-team-1578/1080p.mp4">
+</video>
+
+<video class="login-video" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-data-center-night-1550/1080p.mp4">
 </video>
 
 <div class="login-overlay"></div>
@@ -308,15 +329,15 @@ border-radius:6px 6px 0 0;
 
 <div class="topbar">
 <div><strong>Global Control Center</strong></div>
-<div class="search"><input placeholder="Search systems, logs, services..."></div>
+<div class="search"><input placeholder="Search systems..."></div>
 <div class="top-icons"><i class="fas fa-bell"></i><i class="fas fa-user"></i></div>
 </div>
 
 <div class="metrics">
 <div class="metric"><h3>Uptime</h3><p>99.999%</p></div>
-<div class="metric"><h3>Requests</h3><p>2.8M</p></div>
-<div class="metric"><h3>Latency</h3><p>18ms</p></div>
-<div class="metric"><h3>Security</h3><p>Ultra Stable</p></div>
+<div class="metric"><h3>Requests</h3><p>3.1M</p></div>
+<div class="metric"><h3>Latency</h3><p>15ms</p></div>
+<div class="metric"><h3>Security</h3><p>MAX</p></div>
 </div>
 
 <div class="chart">
@@ -335,13 +356,22 @@ border-radius:6px 6px 0 0;
 </div>
 
 <script>
-let videos=document.querySelectorAll('.intro-video');
-let v=0;
+let introV=document.querySelectorAll('.intro-video');
+let loginV=document.querySelectorAll('.login-video');
+
+let i=0,j=0;
+
 setInterval(()=>{
-videos[v].classList.remove('active');
-v=(v+1)%videos.length;
-videos[v].classList.add('active');
+introV[i].classList.remove('active');
+i=(i+1)%introV.length;
+introV[i].classList.add('active');
 },6000);
+
+setInterval(()=>{
+loginV[j].classList.remove('active');
+j=(j+1)%loginV.length;
+loginV[j].classList.add('active');
+},5000);
 
 function goLogin(){
 document.getElementById('intro').style.display='none';
