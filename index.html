@@ -3,149 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Support | Plataforma TI</title>
+<title>Nexus Support | SaaS TI Real</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:#0b1220;color:#e5edf7;}
 
-body{
-background:#0b1220;
-color:#e5edf7;
-}
-
-/* ================= HEADER ================= */
+/* HEADER */
 header{
 background:#0f172a;
-padding:15px 25px;
+padding:15px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-position:sticky;
-top:0;
-z-index:10;
 }
 
-nav{
-display:flex;
-gap:14px;
-}
-
-nav a{
-color:#cbd5e1;
-text-decoration:none;
-font-weight:600;
-cursor:pointer;
-}
-
-nav a:hover{
-color:#3b82f6;
-}
-
-/* ================= HERO ================= */
-.hero{
-padding:50px 20px;
-text-align:center;
-background:linear-gradient(120deg,#0f172a,#1e3a8a);
-}
-
-/* ================= SECTIONS ================= */
-.container{
-max-width:1100px;
-margin:40px auto;
-padding:0 20px;
-}
-
-section{
-display:none;
-margin-bottom:40px;
-}
-
-section.active{
-display:block;
-}
-
-h3{
-border-left:4px solid #3b82f6;
-padding-left:10px;
-margin-bottom:10px;
-}
-
-/* ================= CARDS ================= */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:15px;
-margin-top:15px;
-}
-
-.card{
-background:#0f172a;
-padding:18px;
-border-radius:12px;
-border:1px solid rgba(255,255,255,0.05);
-}
-
-/* ================= TICKETS ================= */
-.ticket{
-background:#0f172a;
-padding:15px;
-border-radius:12px;
-margin-top:10px;
-border-left:4px solid #3b82f6;
-}
-
-/* ================= LOGIN ================= */
-.login{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.85);
-display:none;
-align-items:center;
-justify-content:center;
-backdrop-filter:blur(10px);
-}
-
-.login.active{
-display:flex;
-}
-
-.login-box{
-background:#0f172a;
-padding:25px;
-border-radius:12px;
-width:340px;
-text-align:center;
-}
-
-.login-box input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#0b1220;
-color:white;
-}
-
-/* ================= BUTTON ================= */
-.btn{
-padding:10px 14px;
+button{
 background:#3b82f6;
 color:white;
 border:none;
+padding:10px;
 border-radius:8px;
 cursor:pointer;
 }
 
-/* ================= WHATSAPP ================= */
+/* CONTAINER */
+.container{
+max-width:900px;
+margin:30px auto;
+padding:20px;
+}
+
+/* CARD */
+.card{
+background:#0f172a;
+padding:15px;
+margin-top:10px;
+border-radius:10px;
+}
+
+/* INPUT */
+input, textarea{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:none;
+background:#0f172a;
+color:white;
+}
+
+/* LOGIN */
+.login{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.85);
+}
+
+.box{
+background:#0f172a;
+padding:20px;
+border-radius:12px;
+width:320px;
+}
+
+.hidden{display:none;}
+
+/* WHATSAPP */
 .whatsapp{
 position:fixed;
 bottom:20px;
@@ -155,7 +89,6 @@ color:white;
 padding:14px;
 border-radius:50px;
 text-decoration:none;
-font-weight:bold;
 }
 
 </style>
@@ -163,186 +96,140 @@ font-weight:bold;
 
 <body>
 
-<!-- HEADER -->
 <header>
+<h2>Nexus Support SaaS</h2>
 
-<h1>Nexus Support TI</h1>
-
-<nav>
-<a onclick="show('home')">Início</a>
-<a onclick="show('sobre')">Sobre</a>
-<a onclick="show('servicos')">Serviços</a>
-<a onclick="show('dicas')">Dicas</a>
-<a onclick="show('contato')">Contato</a>
-<a onclick="openLogin()">Login</a>
-</nav>
-
+<button id="authBtn" onclick="toggleAuth()">Login</button>
 </header>
 
-<!-- HERO -->
-<div class="hero">
-<h2>Plataforma de Suporte em Tecnologia</h2>
-<p>Atendimento para clientes e empresas</p>
-</div>
-
-<!-- CONTAINER -->
-<div class="container">
-
-<!-- PÚBLICO -->
-<section id="home" class="active">
-<h3>Bem-vindo</h3>
-<p>Portal de suporte técnico e serviços de TI.</p>
-</section>
-
-<section id="sobre">
-<h3>Sobre</h3>
-<p>Empresa especializada em suporte e infraestrutura de TI.</p>
-</section>
-
-<section id="servicos">
-<h3>Serviços</h3>
-
-<div class="grid">
-<div class="card">Suporte Técnico</div>
-<div class="card">Redes</div>
-<div class="card">Servidores</div>
-<div class="card">Consultoria</div>
-</div>
-
-</section>
-
-<section id="dicas">
-<h3>Dicas</h3>
-
-<div class="grid">
-<div class="card">Segurança Digital</div>
-<div class="card">Backup</div>
-<div class="card">Redes</div>
-<div class="card">Boas práticas</div>
-</div>
-
-</section>
-
-<section id="contato">
-<h3>Contato</h3>
-<p>Email: suporte@nexus.com</p>
-<p>WhatsApp: +55 21 98104-8950</p>
-</section>
-
-<!-- CLIENTE -->
-<section id="cliente">
-
-<h3>Área do Cliente</h3>
-
-<div>
-<input id="titulo" placeholder="Título do chamado">
-<input id="desc" placeholder="Descrição">
-<button class="btn" onclick="criarTicket()">Abrir Chamado</button>
-</div>
-
-<div id="ticketsCliente"></div>
-
-</section>
-
-<!-- ADMIN -->
-<section id="admin">
-
-<h3>Painel Administrativo</h3>
-
-<div class="grid">
-<div class="card">Total Clientes</div>
-<div class="card">Chamados Abertos</div>
-<div class="card">Sistema Online</div>
-</div>
-
-<div id="ticketsAdmin"></div>
-
-</section>
-
-</div>
-
 <!-- LOGIN -->
-<div class="login" id="login">
+<div id="loginBox" class="login">
 
-<div class="login-box">
+<div class="box">
+
 <h3>Login</h3>
 
-<input id="user" placeholder="Usuário">
-<input type="password" placeholder="Senha">
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Senha">
 
-<button class="btn" onclick="login()">Entrar</button>
+<button onclick="login()">Entrar</button>
+<button onclick="register()" style="margin-top:10px;background:#22c55e;">Criar Conta</button>
 
 </div>
 
 </div>
 
-<!-- WHATSAPP -->
+<!-- APP -->
+<div id="app" class="container hidden">
+
+<h3>Bem-vindo <span id="user"></span></h3>
+
+<h3>Abrir Chamado</h3>
+
+<input id="title" placeholder="Título">
+<textarea id="desc"></textarea>
+
+<button onclick="createTicket()">Enviar</button>
+
+<h3>Meus Chamados</h3>
+<div id="tickets"></div>
+
+</div>
+
 <a class="whatsapp" href="https://wa.me/5521981048950" target="_blank">
 💬 SAC
 </a>
 
 <script>
 
-let role = "guest";
-let tickets = [];
+/* FIREBASE CONFIG (SUBSTITUIR PELO SEU) */
+const firebaseConfig = {
+apiKey: "SUA_API_KEY",
+authDomain: "SEU_PROJETO.firebaseapp.com",
+projectId: "SEU_PROJETO",
+storageBucket: "SEU_PROJETO.appspot.com",
+messagingSenderId: "XXXX",
+appId: "XXXX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let currentUser = null;
+
+/* LOGIN PERSISTENTE */
+auth.onAuthStateChanged(user=>{
+if(user){
+currentUser = user;
+loginBox.classList.add("hidden");
+app.classList.remove("hidden");
+authBtn.innerText = "Logoff";
+userSpan.innerText = user.email;
+loadTickets();
+}else{
+app.classList.add("hidden");
+loginBox.classList.remove("hidden");
+authBtn.innerText = "Login";
+}
+});
+
+/* TOGGLE LOGIN */
+function toggleAuth(){
+if(currentUser){
+auth.signOut();
+}else{
+loginBox.classList.remove("hidden");
+}
+}
+
+/* REGISTER */
+function register(){
+auth.createUserWithEmailAndPassword(email.value, pass.value);
+}
 
 /* LOGIN */
 function login(){
-
-let u = document.getElementById("user").value;
-
-if(u === "admin"){
-role = "admin";
-show("admin");
-alert("Entrou como ADMIN");
-}
-else{
-role = "client";
-show("cliente");
-alert("Entrou como CLIENTE");
+auth.signInWithEmailAndPassword(email.value, pass.value);
 }
 
-document.getElementById("login").classList.remove("active");
+/* LOGOUT */
+function logout(){
+auth.signOut();
 }
 
-/* SEÇÕES */
-function show(id){
+/* CREATE TICKET */
+function createTicket(){
 
-document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+db.collection("tickets").add({
+user:currentUser.email,
+title:title.value,
+desc:desc.value,
+date:Date.now()
+});
 
-document.getElementById(id).classList.add("active");
+loadTickets();
 }
 
-/* LOGIN OPEN */
-function openLogin(){
-document.getElementById("login").classList.add("active");
-}
+/* LOAD TICKETS */
+function loadTickets(){
 
-/* CRIAR TICKET */
-function criarTicket(){
+let box = document.getElementById("tickets");
+box.innerHTML="";
 
-let t = document.getElementById("titulo").value;
-let d = document.getElementById("desc").value;
+db.collection("tickets")
+.where("user","==",currentUser.email)
+.get()
+.then(snapshot=>{
+snapshot.forEach(doc=>{
+let d = doc.data();
 
-tickets.push({t,d});
-
-render();
-}
-
-/* CLIENTE VÊ SÓ OS DELE */
-function render(){
-
-let c = document.getElementById("ticketsCliente");
-let a = document.getElementById("ticketsAdmin");
-
-c.innerHTML="";
-a.innerHTML="";
-
-tickets.forEach(x=>{
-
-c.innerHTML += `<div class="ticket">${x.t} - aberto</div>`;
-a.innerHTML += `<div class="ticket">${x.t} - aguardando atendimento</div>`;
-
+box.innerHTML += `
+<div class="card">
+<b>${d.title}</b>
+<p>${d.desc}</p>
+</div>`;
+});
 });
 
 }
