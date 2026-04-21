@@ -9,133 +9,246 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-* {margin:0;padding:0;box-sizing:border-box;}
 
-a {
-    text-decoration: none;
-    color: inherit;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
-body {
-    font-family:'Poppins',sans-serif;
-    background:#f8fafc;
-    color:#1e293b;
+body{
+background:#f8fafc;
+color:#1e293b;
 }
 
-/* HERO */
-.hero {
-/* ===== BANNER ===== */
-.banner {
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-    background: linear-gradient(120deg,#0f172a,#1e3a8a);
-    color: white;
+/* ================= NAV ================= */
+nav{
+background:white;
+padding:15px;
+text-align:center;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
 }
 
-.slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    justify-content:space-between;
-    padding:80px 10%;
-    background:linear-gradient(120deg,#0f172a,#1e3a8a);
-    color:white;
-    flex-wrap:wrap;
+nav a{
+margin:0 15px;
+color:#1e293b;
+font-weight:600;
+text-decoration:none;
 }
 
-.hero-text {
-    max-width:500px;
-    animation:fadeUp 1s ease;
-    text-align:center;
-    opacity:0;
-    transition:opacity 1s ease;
-    padding:20px;
+nav a:hover{
+color:#3b82f6;
 }
 
-.hero h1 {
-    font-size:3em;
-.slide h1 {
-    font-size:2.5em;
+/* ================= BANNER ================= */
+.banner{
+position:relative;
+height:400px;
+overflow:hidden;
+background:linear-gradient(120deg,#0f172a,#1e3a8a);
+color:white;
 }
 
-.hero p {
-    margin:20px 0;
-.slide p {
-    margin-top:10px;
-    opacity:0.8;
+.slide{
+position:absolute;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:40px;
+opacity:0;
+transition:1s ease;
 }
 
-.hero a {
-    padding:12px 25px;
-    background:#3b82f6;
-    border-radius:8px;
-    color:white;
+.slide.active{
+opacity:1;
 }
 
-/* IMAGEM */
-.hero img {
-    width:320px;
-    animation:fadeUp 1.2s ease;
-.slide.active {
-    opacity:1;
+.slide h1{
+font-size:2.5em;
 }
 
-/* NAV */
-@@ -70,7 +68,6 @@
-
-nav a {
-    margin:0 15px;
-    color:#1e293b;
-    font-weight:600;
+.slide p{
+margin-top:10px;
+opacity:0.85;
 }
 
-@@ -156,14 +153,22 @@
+/* imagem ilustrativa */
+.banner img{
+position:absolute;
+right:40px;
+bottom:30px;
+width:220px;
+opacity:0.9;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+max-width:1100px;
+margin:50px auto;
+padding:0 20px;
+}
+
+.section{
+margin-bottom:60px;
+}
+
+.section h2{
+border-left:5px solid #3b82f6;
+padding-left:10px;
+margin-bottom:15px;
+}
+
+/* ================= GRID ================= */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+}
+
+/* ================= CARDS ================= */
+.card{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.05);
+text-align:center;
+text-decoration:none;
+color:#1e293b;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.03);
+}
+
+/* ================= BOTÃO ================= */
+.btn{
+padding:10px 20px;
+background:#1e3a8a;
+color:white;
+border-radius:8px;
+text-decoration:none;
+display:inline-block;
+margin-right:10px;
+}
+
+.btn:hover{
+background:#3b82f6;
+}
+
+/* ================= FOOTER ================= */
+footer{
+background:#0f172a;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+/* ================= ANIMAÇÃO ================= */
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+</head>
 
 <body>
 
-<div class="hero">
-    <div class="hero-text">
-<!-- ===== BANNER ===== -->
+<!-- NAV -->
+<nav>
+<a href="#inicio">Início</a>
+<a href="#sobre">Profissão</a>
+<a href="#dicas">Dicas</a>
+<a href="#ods">ODS 9</a>
+<a href="#contato">Contato</a>
+</nav>
+
+<!-- BANNER -->
 <div class="banner">
-    <div class="slide active">
-        <h1>Suporte Técnico</h1>
-        <p>A porta de entrada para o mundo da Tecnologia da Informação.</p>
-        <a href="#sobre">Explorar</a>
-        <p>A base da Tecnologia da Informação</p>
-    </div>
 
-    <img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="Suporte Técnico">
-    <div class="slide">
-        <h1>Mercado em Crescimento</h1>
-        <p>Alta demanda por profissionais de TI</p>
-    </div>
-
-    <div class="slide">
-        <h1>Comece na Tecnologia</h1>
-        <p>Uma das melhores portas de entrada</p>
-    </div>
+<div class="slide active">
+<h1>Suporte Técnico</h1>
+<p>A porta de entrada para a Tecnologia da Informação</p>
 </div>
 
-<nav>
-@@ -215,5 +220,17 @@
-    <p>Projeto Acadêmico | Caique Costa Silva</p>
+<div class="slide">
+<h1>Mercado em Crescimento</h1>
+<p>Alta demanda por profissionais de TI</p>
+</div>
+
+<div class="slide">
+<h1>Comece na Tecnologia</h1>
+<p>Uma das melhores carreiras atuais</p>
+</div>
+
+<img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="Suporte Técnico">
+
+</div>
+
+<!-- CONTEÚDO -->
+<div class="container">
+
+<div class="section" id="inicio">
+<h2>Bem-vindo</h2>
+<p>Este site apresenta informações sobre a carreira em Suporte Técnico.</p>
+</div>
+
+<div class="section" id="sobre">
+<h2>Sobre a Profissão</h2>
+<p>Profissionais de suporte técnico resolvem problemas de hardware, software e redes.</p>
+</div>
+
+<div class="section" id="dicas">
+<h2>Dicas e Tendências</h2>
+
+<div class="grid">
+<a class="card" href="#sobre">💻 Aprenda Informática</a>
+<a class="card" href="#dicas">🎓 Cursos Técnicos</a>
+<a class="card" href="#dicas">🌐 Redes de Computadores</a>
+<a class="card" href="#dicas">🗣️ Comunicação</a>
+</div>
+
+</div>
+
+<div class="section" id="ods">
+<h2>ODS 9 - Tecnologia e Inovação</h2>
+<p>O suporte técnico contribui para inovação e infraestrutura tecnológica.</p>
+</div>
+
+<div class="section" id="contato">
+<h2>Contato</h2>
+<a class="btn" href="#">LinkedIn</a>
+<a class="btn" href="#">GitHub</a>
+</div>
+
+</div>
+
+<footer>
+<p>Projeto Acadêmico | Caique Costa Silva</p>
 </footer>
 
-<!-- ===== SCRIPT DO BANNER ===== -->
+<!-- SCRIPT -->
 <script>
 let slides = document.querySelectorAll('.slide');
 let index = 0;
 
-setInterval(() => {
-    slides[index].classList.remove('active');
-    index = (index + 1) % slides.length;
-    slides[index].classList.add('active');
-}, 3000);
+setInterval(()=>{
+slides[index].classList.remove('active');
+index = (index + 1) % slides.length;
+slides[index].classList.add('active');
+},3000);
 </script>
 
 </body>
