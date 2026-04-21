@@ -3,244 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suporte Técnico | Carreira em TI</title>
-
+<title>TI Pro | Dashboard Seguro</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
 
-:root {
-    --bg: #0f172a;
-    --card: rgba(255,255,255,0.05);
-    --text: #e2e8f0;
-    --primary: #3b82f6;
+:root{
+--bg:#070b14;
+--panel:#0b1220;
+--panel2:#0f1a2b;
+--text:#d6e2f0;
+--muted:#93a4b8;
+--accent:#22c55e;
+--accent2:#3b82f6;
+--border:rgba(255,255,255,0.06);
 }
 
-body.light {
-    --bg: #f8fafc;
-    --card: white;
-    --text: #0f172a;
+body{
+background: radial-gradient(1200px 600px at 20% 0%, #0b1a2e 0%, var(--bg) 50%, #05070d 100%);
+color:var(--text);
+overflow-x:hidden;
 }
 
-* {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-    transition:0.3s;
+/* SIDEBAR */
+.sidebar{
+position:fixed;
+left:0;top:0;
+height:100vh;
+width:230px;
+background:linear-gradient(180deg,var(--panel),#070b14);
+border-right:1px solid var(--border);
+padding:22px;
 }
 
-body {
-    background: var(--bg);
-    color: var(--text);
+.sidebar h2{
+color:var(--accent2);
+margin-bottom:25px;
+letter-spacing:1px;
+font-weight:600;
 }
 
-/* ===== MENU FIXO PREMIUM ===== */
-nav {
-    position:sticky;
-    top:0;
-    background: rgba(15,23,42,0.7);
-    backdrop-filter: blur(10px);
-    padding:15px;
-    text-align:center;
-    z-index:10;
+.sidebar a{
+display:block;
+margin:16px 0;
+color:var(--muted);
+text-decoration:none;
+font-size:14px;
+transition:0.3s;
 }
 
-body.light nav {
-    background: rgba(255,255,255,0.7);
+.sidebar a:hover{
+color:var(--text);
+transform:translateX(4px);
 }
 
-nav a {
-    margin:0 15px;
-    font-weight:600;
-    color:var(--text);
+.sidebar i{
+margin-right:8px;
+color:var(--accent2);
 }
 
-.toggle {
-    position:absolute;
-    right:20px;
-    top:15px;
-    cursor:pointer;
-    padding:5px 10px;
-    border-radius:20px;
-    background:var(--primary);
-    color:white;
+/* CONTENT */
+.content{
+margin-left:230px;
+padding:25px;
 }
 
-/* ===== BANNER PREMIUM ===== */
-.banner {
-    position: relative;
-    height: 320px;
-    overflow: hidden;
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+background:rgba(255,255,255,0.02);
+padding:18px;
+border:1px solid var(--border);
+border-radius:12px;
+backdrop-filter:blur(10px);
 }
 
-.slide {
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-    background-size:cover;
-    background-position:center;
-    opacity:0;
-    transform:scale(1.05);
-    transition:opacity 1s ease, transform 1s ease;
-    cursor:pointer;
+.topbar h1{
+font-size:18px;
+font-weight:600;
 }
 
-.slide::after {
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
+.topbar p{
+font-size:12px;
+color:var(--muted);
 }
 
-.slide-content {
-    position:relative;
-    z-index:2;
-    max-width:600px;
+.topbar button{
+background:linear-gradient(90deg,var(--accent2),#2563eb);
+border:none;
+padding:10px 14px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-weight:500;
+transition:0.3s;
+box-shadow:0 0 20px rgba(59,130,246,0.15);
 }
 
-.slide h1 {
-    font-size:2.2em;
+.topbar button:hover{
+transform:translateY(-2px);
+box-shadow:0 0 30px rgba(59,130,246,0.25);
 }
 
-.active {
-    opacity:1;
-    transform:scale(1);
+/* CARDS */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
 }
 
-/* CONTROLES */
-.controls {
-    position:absolute;
-    width:100%;
-    top:50%;
-    display:flex;
-    justify-content:space-between;
-    transform:translateY(-50%);
-    z-index:3;
+.card{
+background:linear-gradient(180deg,var(--panel2),rgba(255,255,255,0.02));
+border:1px solid var(--border);
+padding:22px;
+border-radius:14px;
+transition:0.3s;
 }
 
-.controls span {
-    cursor:pointer;
-    background:rgba(0,0,0,0.5);
-    color:white;
-    padding:10px 15px;
-    border-radius:50%;
+.card:hover{
+transform:translateY(-6px);
+border-color:rgba(59,130,246,0.3);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* DOTS */
-.dots {
-    position:absolute;
-    bottom:10px;
-    width:100%;
-    text-align:center;
-    z-index:3;
+.card i{
+font-size:22px;
+color:var(--accent);
+margin-bottom:10px;
 }
 
-.dot {
-    height:10px;
-    width:10px;
-    margin:5px;
-    background:#64748b;
-    display:inline-block;
-    border-radius:50%;
-    cursor:pointer;
+.card h3{
+font-size:15px;
+margin-bottom:5px;
 }
 
-.dot.active {
-    background:var(--primary);
+.card p{
+font-size:13px;
+color:var(--muted);
 }
 
-/* CONTAINER */
-.container {
-    max-width:1100px;
-    margin:60px auto;
-    padding:0 20px;
+/* INDICADOR DE SEGURANÇA */
+.security-bar{
+margin-top:30px;
+background:var(--panel2);
+padding:18px;
+border-radius:12px;
+border:1px solid var(--border);
 }
 
-.section {
-    margin-bottom:60px;
+.bar{
+background:#111827;
+height:8px;
+border-radius:10px;
+overflow:hidden;
 }
 
-/* TÍTULO PREMIUM */
-.section h2 {
-    font-size:1.8rem;
-    margin-bottom:20px;
-    background: linear-gradient(90deg,#3b82f6,#22c55e);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    border-left:5px solid var(--primary);
-    padding-left:10px;
+.bar div{
+height:100%;
+background:linear-gradient(90deg,var(--accent),#16a34a);
 }
 
-/* CARDS PREMIUM */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-}
-
-.card {
-    background: var(--card);
-    backdrop-filter: blur(10px);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:25px;
-    border-radius:16px;
-    text-align:center;
-    transition:0.4s;
-}
-
-.card:hover {
-    transform:translateY(-10px) scale(1.03);
-}
-
-.card i {
-    font-size:30px;
-    margin-bottom:10px;
-    color:var(--primary);
-}
-
-/* BARRAS */
-.bar {
-    background:#334155;
-    height:10px;
-    border-radius:5px;
-    margin-bottom:15px;
-    overflow:hidden;
-}
-
-.bar div {
-    height:10px;
-    background:var(--primary);
-}
-
-/* FOOTER */
-footer {
-    text-align:center;
-    padding:30px;
-    opacity:0.7;
-}
-
-/* BOTÃO TO TOP */
-.top {
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:var(--primary);
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:50%;
-    cursor:pointer;
-    display:none;
+/* MOBILE */
+@media(max-width:768px){
+.sidebar{width:90px;}
+.content{margin-left:90px;}
+.sidebar a{font-size:11px;}
+.sidebar h2{font-size:13px;}
 }
 
 </style>
@@ -248,155 +181,64 @@ footer {
 
 <body>
 
-<!-- MENU -->
-<nav>
-<a href="#inicio">Início</a>
-<a href="#sobre">Profissão</a>
-<a href="#dicas">Dicas</a>
-<a href="#ods">ODS</a>
-<a href="#contato">Contato</a>
-
-<div class="toggle" onclick="toggleMode()">🌙</div>
-</nav>
-
-<!-- BANNER -->
-<div class="banner">
-
-<div class="slide active" data-link="#sobre" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
-<div class="slide-content">
-<h1>Carreira em Suporte Técnico</h1>
-<p>Entre no mundo da TI</p>
-</div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>TI•SEC</h2>
+<a href="#"><i class="fas fa-shield"></i> Painel</a>
+<a href="#"><i class="fas fa-chart-line"></i> Monitoramento</a>
+<a href="#"><i class="fas fa-server"></i> Servidores</a>
+<a href="#"><i class="fas fa-user-lock"></i> Acessos</a>
 </div>
 
-<div class="slide" data-link="#dicas" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
-<div class="slide-content">
-<h1>Mercado em Alta</h1>
-<p>Alta demanda por profissionais</p>
-</div>
-</div>
+<!-- CONTENT -->
+<div class="content">
 
-<div class="slide" data-link="#contato" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
-<div class="slide-content">
-<h1>Comece Hoje</h1>
-<p>Inicie sua carreira</p>
-</div>
+<div class="topbar">
+<div>
+<h1>Sistema de Segurança TI</h1>
+<p>Monitoramento e controle de infraestrutura</p>
 </div>
 
-<div class="controls">
-<span onclick="prevSlide()">❮</span>
-<span onclick="nextSlide()">❯</span>
+<button onclick="alert('Login administrativo')">
+<i class="fas fa-lock"></i> Acesso
+</button>
 </div>
 
-<div class="dots">
-<span class="dot active" onclick="goSlide(0)"></span>
-<span class="dot" onclick="goSlide(1)"></span>
-<span class="dot" onclick="goSlide(2)"></span>
+<div class="cards">
+
+<div class="card">
+<i class="fas fa-shield-halved"></i>
+<h3>Segurança</h3>
+<p>Sistema protegido</p>
 </div>
 
+<div class="card">
+<i class="fas fa-server"></i>
+<h3>Servidores</h3>
+<p>Estabilidade 99.9%</p>
 </div>
 
-<!-- CONTEÚDO -->
-<div class="container">
-
-<div id="inicio" class="section" data-aos="fade-up">
-<h2>Bem-vindo</h2>
-<p>Carreira profissional em suporte técnico e tecnologia da informação.</p>
+<div class="card">
+<i class="fas fa-network-wired"></i>
+<h3>Rede</h3>
+<p>Tráfego monitorado</p>
 </div>
 
-<div id="sobre" class="section" data-aos="fade-up">
-<h2>Sobre</h2>
-<p>Profissional responsável por resolver problemas de tecnologia.</p>
-</div>
-
-<div id="dicas" class="section" data-aos="fade-up">
-<h2>Dicas</h2>
-
-<div class="grid">
-
-<div class="card"><i class="fas fa-laptop"></i><p>Informática</p></div>
-<div class="card"><i class="fas fa-graduation-cap"></i><p>Cursos</p></div>
-<div class="card"><i class="fas fa-network-wired"></i><p>Redes</p></div>
-<div class="card"><i class="fas fa-comments"></i><p>Comunicação</p></div>
-
-</div>
-</div>
-
-<div class="section" data-aos="fade-up">
-<h2>Habilidades</h2>
-
-<p>Hardware</p>
-<div class="bar"><div style="width:80%"></div></div>
-
-<p>Redes</p>
-<div class="bar"><div style="width:70%"></div></div>
-
-<p>Programação</p>
-<div class="bar"><div style="width:85%"></div></div>
-
-</div>
-
-<div id="ods" class="section" data-aos="fade-up">
-<h2>ODS 9</h2>
-<p>Inovação e tecnologia.</p>
-</div>
-
-<div id="contato" class="section" data-aos="fade-up">
-<h2>Contato</h2>
-<p>LinkedIn | GitHub</p>
+<div class="card">
+<i class="fas fa-user-shield"></i>
+<h3>Acessos</h3>
+<p>Controle ativo</p>
 </div>
 
 </div>
 
-<footer>
-Projeto Acadêmico | Caique Costa Silva
-</footer>
+<div class="security-bar">
+<h3>Índice de Segurança</h3>
+<p style="color:var(--muted);font-size:12px">Monitoramento em tempo real</p>
+<div class="bar"><div style="width:92%"></div></div>
+</div>
 
-<button class="top" onclick="topo()">↑</button>
-
-<!-- SCRIPTS -->
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>
-AOS.init();
-
-/* SLIDER */
-let slides=document.querySelectorAll('.slide');
-let dots=document.querySelectorAll('.dot');
-let i=0;
-
-function showSlide(n){
-slides.forEach(s=>s.classList.remove('active'));
-dots.forEach(d=>d.classList.remove('active'));
-slides[n].classList.add('active');
-dots[n].classList.add('active');
-}
-
-function nextSlide(){i=(i+1)%slides.length;showSlide(i);}
-function prevSlide(){i=(i-1+slides.length)%slides.length;showSlide(i);}
-function goSlide(n){i=n;showSlide(i);}
-
-slides.forEach(s=>{
-s.onclick=()=>window.location.href=s.dataset.link;
-});
-
-setInterval(nextSlide,4000);
-
-/* DARK MODE */
-function toggleMode(){
-document.body.classList.toggle('light');
-}
-
-/* TOP BUTTON */
-let topBtn=document.querySelector('.top');
-
-window.onscroll=()=>{
-topBtn.style.display=window.scrollY>300?'block':'none';
-}
-
-function topo(){
-window.scrollTo({top:0,behavior:'smooth'});
-}
-</script>
+</div>
 
 </body>
 </html>
