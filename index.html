@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Site sobre a carreira em Suporte Técnico na área de Tecnologia da Informação">
-<title>Suporte Técnico | Carreira em TI</title>
+<title>Suporte Técnico | TI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* ================= RESET ================= */
 *{
 margin:0;
 padding:0;
@@ -23,35 +21,33 @@ background:#f8fafc;
 color:#1e293b;
 }
 
-/* ================= NAV ================= */
+/* NAV */
 nav{
-background:white;
+background:#fff;
 padding:15px;
 text-align:center;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
 position:sticky;
 top:0;
-z-index:10;
 }
 
 nav a{
 margin:0 15px;
+text-decoration:none;
 color:#1e293b;
 font-weight:600;
-text-decoration:none;
-transition:0.2s;
 }
 
 nav a:hover{
 color:#3b82f6;
 }
 
-/* ================= BANNER ================= */
+/* BANNER */
 .banner{
 position:relative;
-height:400px;
-overflow:hidden;
+height:380px;
 background:linear-gradient(120deg,#0f172a,#1e3a8a);
+overflow:hidden;
 color:white;
 }
 
@@ -63,9 +59,8 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-padding:40px;
 opacity:0;
-transition:1s ease;
+transition:1s;
 }
 
 .slide.active{
@@ -81,73 +76,46 @@ margin-top:10px;
 opacity:0.85;
 }
 
-/* imagem lateral */
 .banner img{
 position:absolute;
-right:40px;
+right:30px;
 bottom:20px;
-width:220px;
-opacity:0.9;
+width:200px;
 }
 
-/* ================= CONTAINER ================= */
+/* CONTEÚDO */
 .container{
-max-width:1100px;
-margin:50px auto;
+max-width:1000px;
+margin:40px auto;
 padding:0 20px;
 }
 
-/* ================= SEÇÕES ================= */
 .section{
-margin-bottom:60px;
+margin-bottom:50px;
 }
 
 .section h2{
 border-left:5px solid #3b82f6;
 padding-left:10px;
-margin-bottom:15px;
+margin-bottom:10px;
 }
 
-/* ================= GRID ================= */
+/* CARDS */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
 }
 
-/* ================= CARDS ================= */
 .card{
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 5px 20px rgba(0,0,0,0.05);
+background:#fff;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 15px rgba(0,0,0,0.05);
 text-align:center;
-text-decoration:none;
-color:#1e293b;
-transition:0.3s;
 }
 
-.card:hover{
-transform:translateY(-8px) scale(1.03);
-}
-
-/* ================= BOTÃO ================= */
-.btn{
-padding:10px 20px;
-background:#1e3a8a;
-color:white;
-border-radius:8px;
-text-decoration:none;
-display:inline-block;
-margin-right:10px;
-transition:0.2s;
-}
-
-.btn:hover{
-background:#3b82f6;
-}
-
-/* ================= FOOTER ================= */
+/* FOOTER */
 footer{
 background:#0f172a;
 color:white;
@@ -156,107 +124,85 @@ padding:20px;
 margin-top:40px;
 }
 
-/* ================= ANIMAÇÃO ================= */
-@keyframes fadeUp{
-from{
-opacity:0;
-transform:translateY(20px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- ================= NAV ================= -->
 <nav>
 <a href="#inicio">Início</a>
-<a href="#sobre">Profissão</a>
+<a href="#sobre">Sobre</a>
 <a href="#dicas">Dicas</a>
-<a href="#ods">ODS 9</a>
 <a href="#contato">Contato</a>
 </nav>
 
-<!-- ================= BANNER ================= -->
 <div class="banner">
 
 <div class="slide active">
 <h1>Suporte Técnico</h1>
-<p>A porta de entrada para a Tecnologia da Informação</p>
+<p>Entrada para o mundo da TI</p>
 </div>
 
 <div class="slide">
 <h1>Mercado em Crescimento</h1>
-<p>Alta demanda por profissionais de TI</p>
+<p>Alta demanda profissional</p>
 </div>
 
 <div class="slide">
 <h1>Carreira em Tecnologia</h1>
-<p>Oportunidades reais no mercado atual</p>
+<p>Oportunidades reais</p>
 </div>
 
-<img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="TI">
+<img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png">
 
 </div>
 
-<!-- ================= CONTEÚDO ================= -->
 <div class="container">
 
 <div class="section" id="inicio">
 <h2>Bem-vindo</h2>
-<p>Este site apresenta informações sobre a carreira em Suporte Técnico na área de Tecnologia da Informação.</p>
+<p>Site sobre carreira em Suporte Técnico na área de TI.</p>
 </div>
 
 <div class="section" id="sobre">
-<h2>Sobre a Profissão</h2>
-<p>O profissional de suporte técnico resolve problemas de hardware, software e redes, garantindo o funcionamento da infraestrutura tecnológica.</p>
+<h2>Sobre</h2>
+<p>Profissional de suporte resolve problemas de sistemas, redes e hardware.</p>
 </div>
 
 <div class="section" id="dicas">
-<h2>Dicas e Tendências</h2>
+
+<h2>Dicas</h2>
 
 <div class="grid">
-<a class="card" href="#sobre">💻 Informática básica</a>
-<a class="card" href="#dicas">🎓 Cursos técnicos</a>
-<a class="card" href="#dicas">🌐 Redes de computadores</a>
-<a class="card" href="#dicas">🗣️ Comunicação profissional</a>
+<div class="card">Informática</div>
+<div class="card">Redes</div>
+<div class="card">Cursos</div>
+<div class="card">Comunicação</div>
 </div>
 
-</div>
-
-<div class="section" id="ods">
-<h2>ODS 9 - Indústria e Inovação</h2>
-<p>O suporte técnico contribui para a inovação e o desenvolvimento de infraestrutura tecnológica no mundo moderno.</p>
 </div>
 
 <div class="section" id="contato">
 <h2>Contato</h2>
-<a class="btn" href="https://linkedin.com" target="_blank">LinkedIn</a>
-<a class="btn" href="https://github.com" target="_blank">GitHub</a>
+<p>LinkedIn | GitHub</p>
 </div>
 
 </div>
 
-<!-- ================= FOOTER ================= -->
 <footer>
-<p>Projeto Acadêmico | Caique Costa Silva</p>
+Projeto Acadêmico
 </footer>
 
-<!-- ================= SCRIPT BANNER ================= -->
 <script>
 
 let slides = document.querySelectorAll('.slide');
-let index = 0;
+let i = 0;
 
 setInterval(()=>{
-slides[index].classList.remove('active');
-index = (index + 1) % slides.length;
-slides[index].classList.add('active');
+slides[i].classList.remove('active');
+i = (i + 1) % slides.length;
+slides[i].classList.add('active');
 },3000);
 
 </script>
