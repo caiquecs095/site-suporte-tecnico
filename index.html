@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS CORE 3.0 | Global System Simulator</title>
+<title>Portal TI | Suporte & Tecnologia</title>
 
 <style>
 *{
@@ -14,169 +14,119 @@ font-family:Arial;
 }
 
 body{
-background:#050814;
-color:#d6e2f0;
-overflow:hidden;
+background:#0b1220;
+color:#e5edf7;
 }
 
-/* ================= INTRO ================= */
-.intro{
-position:fixed;
-inset:0;
+/* ================= NAV ================= */
+nav{
 display:flex;
-align-items:center;
 justify-content:center;
-z-index:1000;
+gap:20px;
+padding:15px;
+background:#0f172a;
+position:sticky;
+top:0;
+z-index:10;
 }
 
-.intro.hidden{display:none;}
-
-.intro-video{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
+nav a{
+color:#cbd5e1;
+text-decoration:none;
+font-weight:600;
+transition:.2s;
 }
 
-.intro-overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,0.6);
-}
-
-.intro-box{
-position:relative;
-z-index:2;
-text-align:center;
-}
-
-.btn{
-padding:12px 18px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-background:#3b82f6;
+nav a:hover{
 color:white;
 }
 
-/* ================= LOGIN ================= */
-.secure-access{
-position:fixed;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,0.85);
-z-index:9999;
-backdrop-filter:blur(10px);
-}
-
-.secure-access.active{
-display:flex;
-}
-
-.login-box{
-background:#0b1220;
-padding:25px;
-border-radius:12px;
-width:320px;
-text-align:center;
-border:1px solid rgba(255,255,255,0.1);
-}
-
-.login-box input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-outline:none;
-}
-
-/* ================= DASHBOARD ================= */
-.dashboard{
-display:none;
-height:100vh;
-}
-
-.dashboard.active{
-display:flex;
-}
-
-/* ================= MAPA GLOBAL ================= */
-#map{
-flex:2;
+/* ================= BANNER ================= */
+.banner{
 position:relative;
-background:radial-gradient(circle at center,#0b1a2e,#050814);
+height:420px;
 overflow:hidden;
+background:linear-gradient(120deg,#0f172a,#1e3a8a);
 }
 
-/* pontos */
-.node{
+.slide{
 position:absolute;
-width:6px;
-height:6px;
-background:#22c55e;
-border-radius:50%;
-box-shadow:0 0 10px #22c55e;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);opacity:1}
-50%{transform:scale(2);opacity:0.5}
-100%{transform:scale(1);opacity:1}
-}
-
-/* ataques */
-.attack{
-position:absolute;
-height:2px;
-background:linear-gradient(90deg,transparent,#3b82f6,transparent);
-animation:move 2s linear;
-}
-
-@keyframes move{
-0%{transform:translateX(-200px);opacity:0}
-50%{opacity:1}
-100%{transform:translateX(600px);opacity:0}
-}
-
-/* ================= PAINEL ================= */
-.panel{
-flex:1;
-background:#0b1220;
-padding:15px;
+inset:0;
 display:flex;
 flex-direction:column;
-gap:10px;
-border-left:1px solid rgba(255,255,255,0.1);
+justify-content:center;
+align-items:center;
+text-align:center;
+opacity:0;
+transition:1s ease;
+padding:20px;
 }
 
-.box{
-background:#0f1a2b;
-padding:10px;
-border-radius:8px;
-font-size:13px;
+.slide.active{
+opacity:1;
 }
 
-.logs{
-flex:1;
-overflow:auto;
-background:#070b14;
-padding:10px;
-border-radius:8px;
+.slide h1{
+font-size:2.5em;
+}
+
+.slide p{
+margin-top:10px;
+opacity:0.8;
+}
+
+/* ================= SEÇÃO ATTACKS (MENU VISUAL) ================= */
+.attacks{
+padding:40px 10%;
+background:#0b1220;
+}
+
+.attacks h2{
+margin-bottom:20px;
+}
+
+.attack-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.attack-card{
+background:#0f172a;
+padding:20px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.05);
+transition:.2s;
+}
+
+.attack-card:hover{
+transform:translateY(-5px);
+background:#111c33;
+}
+
+.status{
 font-size:12px;
+margin-top:10px;
+color:#94a3b8;
 }
 
-.ai{
-background:#0f1a2b;
-padding:10px;
-border-radius:8px;
+/* cores simuladas */
+.green{color:#22c55e;}
+.yellow{color:#eab308;}
+.red{color:#ef4444;}
+
+/* ================= CONTEÚDO ================= */
+.content{
+padding:40px 10%;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#0f172a;
+margin-top:30px;
 font-size:12px;
-color:#93a4b8;
+color:#94a3b8;
 }
 
 </style>
@@ -184,146 +134,90 @@ color:#93a4b8;
 
 <body>
 
-<!-- ================= INTRO ================= -->
-<div class="intro" id="intro">
+<!-- NAV -->
+<nav>
+<a href="#">Home</a>
+<a href="#attacks">Security</a>
+<a href="#sobre">Sobre</a>
+<a href="#contato">Contato</a>
+</nav>
 
-<video class="intro-video" autoplay muted loop>
-<source src="intro.mp4" type="video/mp4">
-</video>
+<!-- BANNER -->
+<div class="banner">
 
-<div class="intro-overlay"></div>
+<div class="slide active">
+<h1>Suporte Técnico</h1>
+<p>A base da Tecnologia da Informação</p>
+</div>
 
-<div class="intro-box">
-<h1>NEXUS CORE 3.0</h1>
-<p>Global Infrastructure Simulation System</p>
-<button class="btn" onclick="openLogin()">Secure Access</button>
+<div class="slide">
+<h1>Mercado em Crescimento</h1>
+<p>Alta demanda por profissionais de TI</p>
+</div>
+
+<div class="slide">
+<h1>Comece na Tecnologia</h1>
+<p>Uma das melhores portas de entrada</p>
 </div>
 
 </div>
 
-<!-- ================= LOGIN ================= -->
-<div class="secure-access" id="login" onclick="outside(event)">
+<!-- ATTACKS / SECURITY MENU -->
+<section class="attacks" id="attacks">
 
-<div class="login-box" onclick="event.stopPropagation()">
+<h2>Security Events Dashboard</h2>
 
-<h3>SECURE LOGIN</h3>
+<div class="attack-grid">
 
-<input type="text" placeholder="User ID">
-<input type="password" placeholder="Password">
+<div class="attack-card">
+<h3>Firewall Status</h3>
+<p class="status green">ACTIVE - PROTECTED</p>
+</div>
 
-<button class="btn" onclick="enterSystem()">ENTER SYSTEM</button>
+<div class="attack-card">
+<h3>Login Attempts</h3>
+<p class="status yellow">23 suspicious attempts blocked</p>
+</div>
 
+<div class="attack-card">
+<h3>Network Traffic</h3>
+<p class="status green">Stable - 98.7% uptime</p>
+</div>
+
+<div class="attack-card">
+<h3>Threat Monitoring</h3>
+<p class="status red">3 anomalies detected</p>
 </div>
 
 </div>
 
-<!-- ================= DASHBOARD ================= -->
-<div class="dashboard" id="dashboard">
+</section>
 
-<!-- MAPA -->
-<div id="map"></div>
+<!-- CONTEÚDO -->
+<section class="content" id="sobre">
 
-<!-- PAINEL -->
-<div class="panel">
+<h2>Sobre o Sistema</h2>
+<p>
+Portal de suporte e tecnologia com foco em aprendizado, infraestrutura e mercado de TI.
+</p>
 
-<h3>GLOBAL SYSTEM STATUS</h3>
+</section>
 
-<div class="box">Nodes Online: <span id="nodes">1284</span></div>
-<div class="box">Threat Level: <span style="color:#22c55e">LOW</span></div>
-<div class="box">Latency: 11ms</div>
+<footer id="contato">
+<p>Projeto Acadêmico | Sistema de Demonstração TI</p>
+</footer>
 
-<div class="ai" id="ai">AI CORE: Initializing...</div>
-
-<div class="logs" id="logs"></div>
-
-</div>
-
-</div>
-
+<!-- SCRIPT BANNER -->
 <script>
 
-/* ================= LOGIN FLOW ================= */
-function openLogin(){
-document.getElementById("login").classList.add("active");
-}
+let slides = document.querySelectorAll('.slide');
+let index = 0;
 
-function outside(){
-document.getElementById("login").classList.remove("active");
-}
-
-function enterSystem(){
-
-document.getElementById("intro").classList.add("hidden");
-document.getElementById("login").classList.remove("active");
-document.getElementById("dashboard").classList.add("active");
-
-startSimulation();
-}
-
-/* ================= MAP INIT ================= */
-const map = document.getElementById("map");
-
-function createNodes(){
-for(let i=0;i<30;i++){
-let n=document.createElement("div");
-n.className="node";
-n.style.left=Math.random()*window.innerWidth*0.6+"px";
-n.style.top=Math.random()*window.innerHeight+"px";
-map.appendChild(n);
-}
-}
-
-createNodes();
-
-/* ================= SIMULATION ================= */
-const logs = document.getElementById("logs");
-const ai = document.getElementById("ai");
-const nodes = document.getElementById("nodes");
-
-const aiMsgs = [
-"Scanning global network...",
-"Firewall integrity stable.",
-"Monitoring dark traffic routes...",
-"All systems synchronized.",
-"Threat neutralized in sector EU-3",
-"Quantum routing optimized."
-];
-
-let aiIndex=0;
-
-function addLog(text){
-let div=document.createElement("div");
-div.textContent="> "+text;
-logs.prepend(div);
-}
-
-function attack(){
-let a=document.createElement("div");
-a.className="attack";
-a.style.top=Math.random()*window.innerHeight+"px";
-a.style.width=(200+Math.random()*300)+"px";
-map.appendChild(a);
-
-setTimeout(()=>a.remove(),2000);
-}
-
-/* ================= MAIN LOOP ================= */
-function startSimulation(){
-
-setInterval(()=>{
-
-attack();
-
-addLog("Inbound connection detected and blocked");
-
-nodes.textContent=1200+Math.floor(Math.random()*200);
-
-ai.textContent="AI CORE: "+aiMsgs[aiIndex];
-aiIndex=(aiIndex+1)%aiMsgs.length;
-
-},1200);
-
-}
+setInterval(() => {
+slides[index].classList.remove('active');
+index = (index + 1) % slides.length;
+slides[index].classList.add('active');
+}, 3000);
 
 </script>
 
