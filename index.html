@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suporte Técnico | Portal TI Enterprise</title>
+<title>Nexus Support | Suporte Técnico Profissional</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* ================= RESET ================= */
+/* ================= BASE ================= */
 *{
 margin:0;
 padding:0;
@@ -20,105 +20,27 @@ font-family:'Poppins',sans-serif;
 body{
 background:#0b1220;
 color:#e5edf7;
-overflow:hidden;
 }
 
-/* ================= INTRO ================= */
-.intro{
-position:fixed;
-inset:0;
-z-index:1000;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.intro video{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-filter:brightness(0.45);
-}
-
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,0.6);
-}
-
-.intro-box{
-position:relative;
-z-index:2;
-text-align:center;
-}
-
-.btn{
-padding:12px 20px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-weight:600;
-background:#3b82f6;
-color:white;
-margin-top:15px;
-}
-
-/* ================= LOGIN ================= */
-.login{
-position:fixed;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(10px);
-z-index:9999;
-}
-
-.login.active{
-display:flex;
-}
-
-.login-box{
-background:#0b1220;
-padding:30px;
-border-radius:12px;
-width:340px;
-text-align:center;
-border:1px solid rgba(255,255,255,0.08);
-}
-
-.login-box input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#0f1a2b;
-color:white;
-outline:none;
-}
-
-/* ================= APP ================= */
-.app{
-display:none;
-height:100vh;
-flex-direction:column;
-}
-
-.app.active{
-display:flex;
-}
-
-/* ================= NAV ================= */
-nav{
+/* ================= HEADER ================= */
+header{
 background:#0f172a;
-padding:15px;
+padding:15px 25px;
 display:flex;
-justify-content:center;
-gap:20px;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:10;
+}
+
+header h1{
+font-size:18px;
+}
+
+nav{
+display:flex;
+gap:16px;
 }
 
 nav a{
@@ -126,51 +48,108 @@ color:#cbd5e1;
 text-decoration:none;
 font-weight:600;
 cursor:pointer;
+transition:0.2s;
 }
 
 nav a:hover{
-color:white;
+color:#3b82f6;
 }
 
-/* ================= CONTENT ================= */
-.content{
-flex:1;
-overflow:auto;
-padding:30px;
+/* ================= HERO ================= */
+.hero{
+padding:60px 20px;
+text-align:center;
+background:linear-gradient(120deg,#0f172a,#1e3a8a);
+}
+
+.hero h2{
+font-size:2em;
+}
+
+.hero p{
+margin-top:10px;
+opacity:0.85;
+}
+
+/* ================= BUTTON ================= */
+.btn{
+padding:10px 14px;
+border:none;
+border-radius:8px;
+background:#3b82f6;
+color:white;
+cursor:pointer;
+}
+
+/* ================= SECTIONS ================= */
+.container{
+max-width:1100px;
+margin:40px auto;
+padding:0 20px;
+}
+
+section{
+display:none;
+margin-bottom:40px;
+}
+
+section.active{
+display:block;
+}
+
+h3{
+border-left:4px solid #3b82f6;
+padding-left:10px;
+margin-bottom:10px;
+}
+
+/* ================= GRID ================= */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:15px;
+}
+
+.card{
+background:#0f172a;
+padding:18px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.05);
+text-decoration:none;
+color:#e5edf7;
+cursor:pointer;
+transition:0.2s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+border-color:#3b82f6;
 }
 
 /* ================= SLIDER ================= */
 .slider{
-position:relative;
-height:260px;
-background:#0b1220;
+margin:30px auto;
+max-width:900px;
+background:#0f172a;
 border-radius:12px;
-overflow:hidden;
-margin-bottom:30px;
+padding:40px;
+text-align:center;
+position:relative;
 }
 
 .slide{
-position:absolute;
-inset:0;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-opacity:0;
-transition:1s;
+display:none;
 }
 
 .slide.active{
-opacity:1;
+display:block;
 }
 
 .dots{
-position:absolute;
-bottom:12px;
-left:50%;
-transform:translateX(-50%);
+margin-top:20px;
 display:flex;
+justify-content:center;
 gap:8px;
 }
 
@@ -186,34 +165,46 @@ cursor:pointer;
 background:#3b82f6;
 }
 
-/* ================= SEÇÕES ================= */
-section{
+/* ================= LOGIN ================= */
+.login{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.75);
 display:none;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(10px);
 }
 
-section.active{
-display:block;
+.login.active{
+display:flex;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-top:20px;
-}
-
-.card{
-background:#0b1220;
-padding:18px;
+.login-box{
+background:#0f172a;
+padding:25px;
 border-radius:12px;
-border:1px solid rgba(255,255,255,0.06);
+width:340px;
+text-align:center;
 }
 
+.login-box input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#0b1220;
+color:white;
+outline:none;
+}
+
+/* ================= FOOTER ================= */
 footer{
 text-align:center;
 padding:20px;
 background:#0f172a;
-margin-top:30px;
+margin-top:40px;
 }
 
 </style>
@@ -221,66 +212,43 @@ margin-top:30px;
 
 <body>
 
-<!-- ================= INTRO ================= -->
-<div class="intro" id="intro">
+<!-- HEADER -->
+<header>
 
-<video autoplay muted loop>
-<source src="intro.mp4" type="video/mp4">
-</video>
+<h1>Nexus Support TI</h1>
 
-<div class="overlay"></div>
-
-<div class="intro-box">
-<h1>SUPORTE TÉCNICO</h1>
-<p>Portal de Tecnologia da Informação</p>
-<button class="btn" onclick="openLogin()">Acesso ao Sistema</button>
-</div>
-
-</div>
-
-<!-- ================= LOGIN ================= -->
-<div class="login" id="login">
-
-<div class="login-box">
-
-<h3>Área ADM</h3>
-
-<input type="text" placeholder="ADM_USER">
-<input type="password" placeholder="Senha">
-
-<button class="btn" onclick="enter()">Entrar</button>
-
-</div>
-
-</div>
-
-<!-- ================= APP ================= -->
-<div class="app" id="app">
-
-<!-- NAV -->
 <nav>
 <a onclick="show('home')">Início</a>
 <a onclick="show('sobre')">Sobre</a>
+<a onclick="show('servicos')">Serviços</a>
 <a onclick="show('dicas')">Dicas</a>
 <a onclick="show('ods')">ODS</a>
 <a onclick="show('contato')">Contato</a>
 </nav>
 
-<div class="content">
+<button class="btn" onclick="openLogin()">Portal Cliente</button>
+
+</header>
+
+<!-- HERO -->
+<div class="hero">
+<h2>Suporte Técnico Profissional</h2>
+<p>Infraestrutura, redes e atendimento corporativo de TI</p>
+</div>
 
 <!-- SLIDER -->
 <div class="slider">
 
 <div class="slide active">
-<h2>Bem-vindo ao Sistema TI</h2>
+<h2>Suporte Ágil e Eficiente</h2>
 </div>
 
 <div class="slide">
-<h2>Carreira em Crescimento</h2>
+<h2>Infraestrutura Corporativa</h2>
 </div>
 
 <div class="slide">
-<h2>Suporte Técnico em Alta</h2>
+<h2>Atendimento Empresarial 24/7</h2>
 </div>
 
 <div class="dots">
@@ -291,50 +259,74 @@ margin-top:30px;
 
 </div>
 
-<!-- HOME -->
+<!-- CONTENT -->
+<div class="container">
+
 <section id="home" class="active">
-<h2>Início</h2>
-<p>Portal institucional sobre suporte técnico e tecnologia.</p>
+<h3>Início</h3>
+<p>Bem-vindo ao sistema de suporte técnico empresarial.</p>
 </section>
 
-<!-- SOBRE -->
 <section id="sobre">
-<h2>Sobre</h2>
-<p>Profissão de suporte técnico atua na resolução de problemas de TI.</p>
+<h3>Sobre</h3>
+<p>Empresa especializada em TI, redes, servidores e suporte corporativo.</p>
 </section>
 
-<!-- DICAS -->
-<section id="dicas">
-<h2>Dicas</h2>
+<section id="servicos">
+
+<h3>Serviços</h3>
 
 <div class="grid">
-<div class="card">Informática</div>
-<div class="card">Redes</div>
-<div class="card">Cursos</div>
-<div class="card">Comunicação</div>
+<div class="card">Suporte Remoto</div>
+<div class="card">Redes e Servidores</div>
+<div class="card">Manutenção Corporativa</div>
+<div class="card">Consultoria TI</div>
 </div>
 
 </section>
 
-<!-- ODS -->
+<section id="dicas">
+
+<h3>Dicas</h3>
+
+<div class="grid">
+<a class="card">Segurança Digital</a>
+<a class="card">Redes Avançadas</a>
+<a class="card">Backup de Dados</a>
+<a class="card">Boas Práticas TI</a>
+</div>
+
+</section>
+
 <section id="ods">
-<h2>ODS 9</h2>
-<p>Inovação e infraestrutura tecnológica.</p>
+<h3>ODS 9</h3>
+<p>Inovação, tecnologia e infraestrutura sustentável.</p>
 </section>
 
-<!-- CONTATO -->
 <section id="contato">
-<h2>Contato</h2>
-<p>LinkedIn | GitHub</p>
+<h3>Contato</h3>
+<p>Email: suporte@nexus.com</p>
+<p>Telefone: (21) 0000-0000</p>
 </section>
 
+</div>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+
+<div class="login-box">
+<h3>Portal Cliente</h3>
+<input type="text" placeholder="Usuário">
+<input type="password" placeholder="Senha">
+<button class="btn" onclick="closeLogin()">Entrar</button>
+</div>
+
+</div>
+
+<!-- FOOTER -->
 <footer>
-Projeto Acadêmico | Caique Costa
+© 2026 Nexus Support TI - Todos os direitos reservados
 </footer>
-
-</div>
-
-</div>
 
 <script>
 
@@ -343,13 +335,11 @@ function openLogin(){
 document.getElementById("login").classList.add("active");
 }
 
-function enter(){
-document.getElementById("intro").style.display="none";
+function closeLogin(){
 document.getElementById("login").classList.remove("active");
-document.getElementById("app").classList.add("active");
 }
 
-/* NAV */
+/* SEÇÕES */
 function show(id){
 document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
