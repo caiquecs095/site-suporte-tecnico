@@ -3,399 +3,313 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suporte Técnico | Carreira em TI</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<title>NEXUS SYSTEM - Gestão e Suporte TI</title>
 
 <style>
-
-:root {
-    --bg: #0f172a;
-    --card: rgba(255,255,255,0.05);
-    --text: #e2e8f0;
-    --primary: #3b82f6;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
-body.light {
-    --bg: #f8fafc;
-    --card: white;
-    --text: #0f172a;
+body{
+background:#050814;
+color:#d6e2f0;
 }
 
-* {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-    transition:0.3s;
+/* ================= HEADER MENU ================= */
+.menu{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:50px;
+background:#0b1220;
+display:flex;
+align-items:center;
+gap:20px;
+padding:0 20px;
+border-bottom:1px solid #1e293b;
+z-index:1000;
 }
 
-body {
-    background: var(--bg);
-    color: var(--text);
+.menu a{
+color:#d6e2f0;
+text-decoration:none;
+font-size:14px;
+cursor:pointer;
 }
 
-/* ===== MENU FIXO PREMIUM ===== */
-nav {
-    position:sticky;
-    top:0;
-    background: rgba(15,23,42,0.7);
-    backdrop-filter: blur(10px);
-    padding:15px;
-    text-align:center;
-    z-index:10;
+.menu a:hover{
+color:#3b82f6;
 }
 
-body.light nav {
-    background: rgba(255,255,255,0.7);
+/* ================= PAGES ================= */
+.page{
+display:none;
+padding:20px;
+margin-top:60px;
 }
 
-nav a {
-    margin:0 15px;
-    font-weight:600;
-    color:var(--text);
+.page.active{
+display:block;
 }
 
-.toggle {
-    position:absolute;
-    right:20px;
-    top:15px;
-    cursor:pointer;
-    padding:5px 10px;
-    border-radius:20px;
-    background:var(--primary);
-    color:white;
+/* ================= SLIDER ================= */
+.slider{
+height:300px;
+background:#0b1220;
+position:relative;
+overflow:hidden;
+cursor:pointer;
+margin-top:50px;
 }
 
-/* ===== BANNER PREMIUM ===== */
-.banner {
-    position: relative;
-    height: 320px;
-    overflow: hidden;
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:22px;
+opacity:0;
+transition:0.5s;
+text-align:center;
+padding:20px;
 }
 
-.slide {
-    position:absolute;
-    width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:white;
-    background-size:cover;
-    background-position:center;
-    opacity:0;
-    transform:scale(1.05);
-    transition:opacity 1s ease, transform 1s ease;
-    cursor:pointer;
+.slide.active{
+opacity:1;
 }
 
-.slide::after {
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
+/* setas */
+.nav span{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:30px;
+cursor:pointer;
+color:white;
 }
 
-.slide-content {
-    position:relative;
-    z-index:2;
-    max-width:600px;
+.nav span:first-child{left:10px;}
+.nav span:last-child{right:10px;}
+
+/* dots */
+.dots{
+position:absolute;
+bottom:10px;
+width:100%;
+text-align:center;
 }
 
-.slide h1 {
-    font-size:2.2em;
+.dots span{
+width:10px;
+height:10px;
+display:inline-block;
+background:#444;
+border-radius:50%;
+margin:0 4px;
+cursor:pointer;
 }
 
-.active {
-    opacity:1;
-    transform:scale(1);
+.dots span.active{
+background:#3b82f6;
 }
 
-/* CONTROLES */
-.controls {
-    position:absolute;
-    width:100%;
-    top:50%;
-    display:flex;
-    justify-content:space-between;
-    transform:translateY(-50%);
-    z-index:3;
+/* ================= CHAT ================= */
+.chat-btn{
+position:fixed;
+bottom:80px;
+right:20px;
+background:#3b82f6;
+color:white;
+padding:15px;
+border-radius:50%;
+cursor:pointer;
 }
 
-.controls span {
-    cursor:pointer;
-    background:rgba(0,0,0,0.5);
-    color:white;
-    padding:10px 15px;
-    border-radius:50%;
+.chat-box{
+position:fixed;
+bottom:140px;
+right:20px;
+width:260px;
+height:300px;
+background:#0b1220;
+display:none;
+flex-direction:column;
+border-radius:10px;
+overflow:hidden;
 }
 
-/* DOTS */
-.dots {
-    position:absolute;
-    bottom:10px;
-    width:100%;
-    text-align:center;
-    z-index:3;
+.chat-header{
+background:#111827;
+padding:10px;
+font-weight:bold;
 }
 
-.dot {
-    height:10px;
-    width:10px;
-    margin:5px;
-    background:#64748b;
-    display:inline-block;
-    border-radius:50%;
-    cursor:pointer;
+.chat-body{
+flex:1;
+padding:10px;
+font-size:12px;
+overflow:auto;
 }
 
-.dot.active {
-    background:var(--primary);
+.chat-box input{
+border:none;
+padding:10px;
+width:100%;
+outline:none;
+background:#0f172a;
+color:white;
 }
 
-/* CONTAINER */
-.container {
-    max-width:1100px;
-    margin:60px auto;
-    padding:0 20px;
+/* ================= WHATSAPP ================= */
+.whats{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px;
+border-radius:50%;
+text-decoration:none;
 }
-
-.section {
-    margin-bottom:60px;
-}
-
-/* TÍTULO PREMIUM */
-.section h2 {
-    font-size:1.8rem;
-    margin-bottom:20px;
-    background: linear-gradient(90deg,#3b82f6,#22c55e);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    border-left:5px solid var(--primary);
-    padding-left:10px;
-}
-
-/* CARDS PREMIUM */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-}
-
-.card {
-    background: var(--card);
-    backdrop-filter: blur(10px);
-    border:1px solid rgba(255,255,255,0.1);
-    padding:25px;
-    border-radius:16px;
-    text-align:center;
-    transition:0.4s;
-}
-
-.card:hover {
-    transform:translateY(-10px) scale(1.03);
-}
-
-.card i {
-    font-size:30px;
-    margin-bottom:10px;
-    color:var(--primary);
-}
-
-/* BARRAS */
-.bar {
-    background:#334155;
-    height:10px;
-    border-radius:5px;
-    margin-bottom:15px;
-    overflow:hidden;
-}
-
-.bar div {
-    height:10px;
-    background:var(--primary);
-}
-
-/* FOOTER */
-footer {
-    text-align:center;
-    padding:30px;
-    opacity:0.7;
-}
-
-/* BOTÃO TO TOP */
-.top {
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:var(--primary);
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:50%;
-    cursor:pointer;
-    display:none;
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- MENU -->
-<nav>
-<a href="#inicio">Início</a>
-<a href="#sobre">Profissão</a>
-<a href="#dicas">Dicas</a>
-<a href="#ods">ODS</a>
-<a href="#contato">Contato</a>
-
-<div class="toggle" onclick="toggleMode()">🌙</div>
-</nav>
-
-<!-- BANNER -->
-<div class="banner">
-
-<div class="slide active" data-link="#sobre" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
-<div class="slide-content">
-<h1>Carreira em Suporte Técnico</h1>
-<p>Entre no mundo da TI</p>
-</div>
+<!-- ================= MENU ================= -->
+<div class="menu">
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('system')">Sistema</a>
+<a onclick="showPage('support')">Suporte</a>
+<a onclick="showPage('about')">Sobre</a>
 </div>
 
-<div class="slide" data-link="#dicas" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
-<div class="slide-content">
-<h1>Mercado em Alta</h1>
-<p>Alta demanda por profissionais</p>
-</div>
-</div>
+<!-- ================= HOME ================= -->
+<div id="home" class="page active">
 
-<div class="slide" data-link="#contato" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
-<div class="slide-content">
-<h1>Comece Hoje</h1>
-<p>Inicie sua carreira</p>
-</div>
-</div>
+<div class="slider">
 
-<div class="controls">
-<span onclick="prevSlide()">❮</span>
-<span onclick="nextSlide()">❯</span>
+<div class="slide active">NEXUS SYSTEM<br>Plataforma de Gestão TI</div>
+<div class="slide">Monitoramento e Suporte Inteligente</div>
+<div class="slide">Infraestrutura Digital Modular</div>
+
+<div class="nav">
+<span onclick="prev(event)">‹</span>
+<span onclick="next(event)">›</span>
 </div>
 
 <div class="dots">
-<span class="dot active" onclick="goSlide(0)"></span>
-<span class="dot" onclick="goSlide(1)"></span>
-<span class="dot" onclick="goSlide(2)"></span>
+<span onclick="go(0)" class="active"></span>
+<span onclick="go(1)"></span>
+<span onclick="go(2)"></span>
 </div>
 
 </div>
 
-<!-- CONTEÚDO -->
-<div class="container">
-
-<div id="inicio" class="section" data-aos="fade-up">
-<h2>Bem-vindo</h2>
-<p>Carreira profissional em suporte técnico e tecnologia da informação.</p>
 </div>
 
-<div id="sobre" class="section" data-aos="fade-up">
-<h2>Sobre</h2>
-<p>Profissional responsável por resolver problemas de tecnologia.</p>
+<!-- ================= SISTEMA ================= -->
+<div id="system" class="page">
+<h2>Descrição do Sistema</h2>
+<p>
+O NEXUS SYSTEM é uma plataforma acadêmica de simulação de gestão de TI,
+com módulos de suporte, monitoramento e interação em tempo real.
+</p>
 </div>
 
-<div id="dicas" class="section" data-aos="fade-up">
-<h2>Dicas</h2>
-
-<div class="grid">
-
-<div class="card"><i class="fas fa-laptop"></i><p>Informática</p></div>
-<div class="card"><i class="fas fa-graduation-cap"></i><p>Cursos</p></div>
-<div class="card"><i class="fas fa-network-wired"></i><p>Redes</p></div>
-<div class="card"><i class="fas fa-comments"></i><p>Comunicação</p></div>
-
-</div>
+<!-- ================= SUPORTE ================= -->
+<div id="support" class="page">
+<h2>Suporte Técnico</h2>
+<p>Aqui o usuário pode interagir via chat interno e solicitar ajuda.</p>
 </div>
 
-<div class="section" data-aos="fade-up">
-<h2>Habilidades</h2>
-
-<p>Hardware</p>
-<div class="bar"><div style="width:80%"></div></div>
-
-<p>Redes</p>
-<div class="bar"><div style="width:70%"></div></div>
-
-<p>Programação</p>
-<div class="bar"><div style="width:85%"></div></div>
-
+<!-- ================= SOBRE ================= -->
+<div id="about" class="page">
+<h2>Sobre o Projeto</h2>
+<p>
+Projeto acadêmico desenvolvido para simulação de sistema SaaS de gestão TI.
+</p>
 </div>
 
-<div id="ods" class="section" data-aos="fade-up">
-<h2>ODS 9</h2>
-<p>Inovação e tecnologia.</p>
+<!-- ================= CHAT ================= -->
+<div class="chat-btn" onclick="toggleChat()">💬</div>
+
+<div class="chat-box" id="chatBox">
+<div class="chat-header">Suporte NEXUS</div>
+<div class="chat-body" id="chatBody"></div>
+<input id="chatInput" placeholder="Digite...">
 </div>
 
-<div id="contato" class="section" data-aos="fade-up">
-<h2>Contato</h2>
-<p>LinkedIn | GitHub</p>
-</div>
+<!-- ================= WHATSAPP ================= -->
+<a class="whats" href="https://wa.me/550000000000">📱</a>
 
-</div>
-
-<footer>
-Projeto Acadêmico | Caique Costa Silva
-</footer>
-
-<button class="top" onclick="topo()">↑</button>
-
-<!-- SCRIPTS -->
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
-AOS.init();
+
+/* MENU */
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+document.getElementById(id).classList.add("active");
+}
 
 /* SLIDER */
-let slides=document.querySelectorAll('.slide');
-let dots=document.querySelectorAll('.dot');
-let i=0;
+let slides=document.querySelectorAll(".slide");
+let dots=document.querySelectorAll(".dots span");
+let current=0;
 
-function showSlide(n){
-slides.forEach(s=>s.classList.remove('active'));
-dots.forEach(d=>d.classList.remove('active'));
-slides[n].classList.add('active');
-dots[n].classList.add('active');
+function show(i){
+slides.forEach(s=>s.classList.remove("active"));
+dots.forEach(d=>d.classList.remove("active"));
+
+slides[i].classList.add("active");
+dots[i].classList.add("active");
+
+current=i;
 }
 
-function nextSlide(){i=(i+1)%slides.length;showSlide(i);}
-function prevSlide(){i=(i-1+slides.length)%slides.length;showSlide(i);}
-function goSlide(n){i=n;showSlide(i);}
+function next(e){
+if(e) e.stopPropagation();
+show((current+1)%slides.length);
+}
 
-slides.forEach(s=>{
-s.onclick=()=>window.location.href=s.dataset.link;
+function prev(e){
+if(e) e.stopPropagation();
+show((current-1+slides.length)%slides.length);
+}
+
+function go(i){
+show(i);
+}
+
+setInterval(()=>next(),5000);
+
+/* CHAT */
+function toggleChat(){
+let box=document.getElementById("chatBox");
+box.style.display = box.style.display==="flex"?"none":"flex";
+}
+
+document.getElementById("chatInput").addEventListener("keydown",(e)=>{
+if(e.key==="Enter"){
+let msg=e.target.value;
+if(!msg) return;
+
+let div=document.createElement("div");
+div.textContent="Você: "+msg;
+
+document.getElementById("chatBody").appendChild(div);
+e.target.value="";
+}
 });
 
-setInterval(nextSlide,4000);
-
-/* DARK MODE */
-function toggleMode(){
-document.body.classList.toggle('light');
-}
-
-/* TOP BUTTON */
-let topBtn=document.querySelector('.top');
-
-window.onscroll=()=>{
-topBtn.style.display=window.scrollY>300?'block':'none';
-}
-
-function topo(){
-window.scrollTo({top:0,behavior:'smooth'});
-}
 </script>
 
 </body>
