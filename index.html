@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Support | Sistema TI</title>
+<title>Nexus Support | Plataforma TI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -35,28 +35,18 @@ z-index:10;
 
 nav{
 display:flex;
-gap:15px;
+gap:14px;
 }
 
 nav a{
 color:#cbd5e1;
 text-decoration:none;
-cursor:pointer;
 font-weight:600;
+cursor:pointer;
 }
 
 nav a:hover{
 color:#3b82f6;
-}
-
-/* ================= BUTTON ================= */
-.btn{
-padding:10px 14px;
-background:#3b82f6;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
 }
 
 /* ================= HERO ================= */
@@ -66,7 +56,7 @@ text-align:center;
 background:linear-gradient(120deg,#0f172a,#1e3a8a);
 }
 
-/* ================= APP ================= */
+/* ================= SECTIONS ================= */
 .container{
 max-width:1100px;
 margin:40px auto;
@@ -80,6 +70,12 @@ margin-bottom:40px;
 
 section.active{
 display:block;
+}
+
+h3{
+border-left:4px solid #3b82f6;
+padding-left:10px;
+margin-bottom:10px;
 }
 
 /* ================= CARDS ================= */
@@ -110,7 +106,7 @@ border-left:4px solid #3b82f6;
 .login{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
 display:none;
 align-items:center;
 justify-content:center;
@@ -125,7 +121,7 @@ display:flex;
 background:#0f172a;
 padding:25px;
 border-radius:12px;
-width:320px;
+width:340px;
 text-align:center;
 }
 
@@ -139,30 +135,27 @@ background:#0b1220;
 color:white;
 }
 
-/* ================= WHATSAPP FLOAT ================= */
+/* ================= BUTTON ================= */
+.btn{
+padding:10px 14px;
+background:#3b82f6;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* ================= WHATSAPP ================= */
 .whatsapp{
 position:fixed;
 bottom:20px;
 right:20px;
 background:#25d366;
 color:white;
-padding:14px 16px;
+padding:14px;
 border-radius:50px;
-font-weight:bold;
 text-decoration:none;
-box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-
-.whatsapp:hover{
-transform:scale(1.05);
-}
-
-/* ================= FOOTER ================= */
-footer{
-text-align:center;
-padding:20px;
-background:#0f172a;
-margin-top:40px;
+font-weight:bold;
 }
 
 </style>
@@ -179,71 +172,90 @@ margin-top:40px;
 <a onclick="show('home')">Início</a>
 <a onclick="show('sobre')">Sobre</a>
 <a onclick="show('servicos')">Serviços</a>
-<a onclick="show('tickets')">Chamados</a>
-<a onclick="show('admin')">Admin</a>
+<a onclick="show('dicas')">Dicas</a>
+<a onclick="show('contato')">Contato</a>
+<a onclick="openLogin()">Login</a>
 </nav>
-
-<button class="btn" onclick="openLogin()">Login</button>
 
 </header>
 
 <!-- HERO -->
 <div class="hero">
-<h2>Suporte Técnico Profissional</h2>
-<p>Sistema de atendimento e infraestrutura TI</p>
+<h2>Plataforma de Suporte em Tecnologia</h2>
+<p>Atendimento para clientes e empresas</p>
 </div>
 
 <!-- CONTAINER -->
 <div class="container">
 
-<!-- HOME -->
+<!-- PÚBLICO -->
 <section id="home" class="active">
-<h2>Bem-vindo</h2>
-<p>Central de suporte técnico empresarial.</p>
+<h3>Bem-vindo</h3>
+<p>Portal de suporte técnico e serviços de TI.</p>
 </section>
 
-<!-- SOBRE -->
 <section id="sobre">
-<h2>Sobre</h2>
-<p>Empresa de TI focada em suporte, redes e infraestrutura.</p>
+<h3>Sobre</h3>
+<p>Empresa especializada em suporte e infraestrutura de TI.</p>
 </section>
 
-<!-- SERVIÇOS -->
 <section id="servicos">
-
-<h2>Serviços</h2>
+<h3>Serviços</h3>
 
 <div class="grid">
-<div class="card">Suporte Remoto</div>
+<div class="card">Suporte Técnico</div>
 <div class="card">Redes</div>
 <div class="card">Servidores</div>
-<div class="card">Consultoria TI</div>
+<div class="card">Consultoria</div>
 </div>
 
 </section>
 
-<!-- TICKETS -->
-<section id="tickets">
+<section id="dicas">
+<h3>Dicas</h3>
 
-<h2>Chamados</h2>
+<div class="grid">
+<div class="card">Segurança Digital</div>
+<div class="card">Backup</div>
+<div class="card">Redes</div>
+<div class="card">Boas práticas</div>
+</div>
 
-<div class="ticket">Internet fora do ar - ABERTO</div>
-<div class="ticket">Instalação sistema - EM ANDAMENTO</div>
-<div class="ticket">Backup servidor - RESOLVIDO</div>
+</section>
+
+<section id="contato">
+<h3>Contato</h3>
+<p>Email: suporte@nexus.com</p>
+<p>WhatsApp: +55 21 98104-8950</p>
+</section>
+
+<!-- CLIENTE -->
+<section id="cliente">
+
+<h3>Área do Cliente</h3>
+
+<div>
+<input id="titulo" placeholder="Título do chamado">
+<input id="desc" placeholder="Descrição">
+<button class="btn" onclick="criarTicket()">Abrir Chamado</button>
+</div>
+
+<div id="ticketsCliente"></div>
 
 </section>
 
 <!-- ADMIN -->
 <section id="admin">
 
-<h2>Painel Admin</h2>
+<h3>Painel Administrativo</h3>
 
 <div class="grid">
-<div class="card">👥 Clientes: 128</div>
-<div class="card">🎫 Tickets: 34</div>
-<div class="card">⚙️ Sistema: Online</div>
-<div class="card">🔒 Segurança: Ativa</div>
+<div class="card">Total Clientes</div>
+<div class="card">Chamados Abertos</div>
+<div class="card">Sistema Online</div>
 </div>
+
+<div id="ticketsAdmin"></div>
 
 </section>
 
@@ -253,10 +265,9 @@ margin-top:40px;
 <div class="login" id="login">
 
 <div class="login-box">
+<h3>Login</h3>
 
-<h3>Login Sistema</h3>
-
-<input type="text" id="user" placeholder="Usuário">
+<input id="user" placeholder="Usuário">
 <input type="password" placeholder="Senha">
 
 <button class="btn" onclick="login()">Entrar</button>
@@ -265,49 +276,39 @@ margin-top:40px;
 
 </div>
 
-<!-- WHATSAPP FLOAT -->
+<!-- WHATSAPP -->
 <a class="whatsapp" href="https://wa.me/5521981048950" target="_blank">
 💬 SAC
 </a>
 
-<!-- FOOTER -->
-<footer>
-© 2026 Nexus Support TI
-</footer>
-
 <script>
 
 let role = "guest";
+let tickets = [];
 
-/* LOGIN SIMULADO */
+/* LOGIN */
 function login(){
 
 let u = document.getElementById("user").value;
 
 if(u === "admin"){
 role = "admin";
-alert("Login ADM realizado");
 show("admin");
+alert("Entrou como ADMIN");
 }
 else{
 role = "client";
-alert("Login cliente realizado");
-show("home");
+show("cliente");
+alert("Entrou como CLIENTE");
 }
 
 document.getElementById("login").classList.remove("active");
 }
 
-/* NAV */
+/* SEÇÕES */
 function show(id){
 
 document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-
-/* cliente não vê admin */
-if(role !== "admin" && id === "admin"){
-alert("Acesso restrito ao administrador");
-return;
-}
 
 document.getElementById(id).classList.add("active");
 }
@@ -315,6 +316,35 @@ document.getElementById(id).classList.add("active");
 /* LOGIN OPEN */
 function openLogin(){
 document.getElementById("login").classList.add("active");
+}
+
+/* CRIAR TICKET */
+function criarTicket(){
+
+let t = document.getElementById("titulo").value;
+let d = document.getElementById("desc").value;
+
+tickets.push({t,d});
+
+render();
+}
+
+/* CLIENTE VÊ SÓ OS DELE */
+function render(){
+
+let c = document.getElementById("ticketsCliente");
+let a = document.getElementById("ticketsAdmin");
+
+c.innerHTML="";
+a.innerHTML="";
+
+tickets.forEach(x=>{
+
+c.innerHTML += `<div class="ticket">${x.t} - aberto</div>`;
+a.innerHTML += `<div class="ticket">${x.t} - aguardando atendimento</div>`;
+
+});
+
 }
 
 </script>
