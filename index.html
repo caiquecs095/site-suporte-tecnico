@@ -3,259 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS CORE | Global Operations</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<title>NEXUS CORE 2.0 | Global System Simulator</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
-
-:root{
---bg:#050814;
---panel:#0b1220;
---text:#d6e2f0;
---muted:#93a4b8;
---accent:#22c55e;
---accent2:#3b82f6;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
-background: radial-gradient(circle at top, #0b1a2e, #050814 60%, #020308);
-color:var(--text);
+background:#050814;
+color:#d6e2f0;
 overflow:hidden;
 }
 
-/* ================= INTRO ================= */
-.intro{
-position:fixed;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:1000;
+/* ===== LAYOUT ===== */
+.container{
+display:grid;
+grid-template-columns: 2fr 1fr;
+height:100vh;
 }
 
-.intro-video{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-object-fit:cover;
-opacity:0;
-transition:1s;
+/* ===== MAPA ===== */
+#map{
+background: radial-gradient(circle at center,#0b1a2e,#050814);
+position:relative;
+overflow:hidden;
 }
 
-.intro-video.active{opacity:1;}
-
-.fallback-bg{
+/* pontos globais fake */
+.dot{
 position:absolute;
-inset:0;
-background: radial-gradient(circle at 30% 20%, #1b2a4a, #050814 70%);
-animation: pulse 6s infinite alternate;
+width:6px;
+height:6px;
+background:#22c55e;
+border-radius:50%;
+box-shadow:0 0 10px #22c55e;
+animation:pulse 2s infinite;
 }
 
 @keyframes pulse{
-0%{filter:brightness(1)}
-100%{filter:brightness(1.4)}
+0%{transform:scale(1);opacity:1}
+50%{transform:scale(2);opacity:0.5}
+100%{transform:scale(1);opacity:1}
 }
 
-.intro-overlay{
+/* linhas de ataque */
+.line{
 position:absolute;
-inset:0;
-background:rgba(0,0,0,0.65);
+height:2px;
+background:linear-gradient(90deg,transparent,#3b82f6,transparent);
+animation:move 2s linear infinite;
 }
 
-.intro-box{
-position:relative;
-z-index:2;
-text-align:center;
-max-width:600px;
+@keyframes move{
+0%{transform:translateX(-200px);opacity:0}
+50%{opacity:1}
+100%{transform:translateX(600px);opacity:0}
 }
 
-.intro-box h1{
-font-size:34px;
-margin-bottom:10px;
+/* ===== PAINEL LATERAL ===== */
+.panel{
+background:#0b1220;
+border-left:1px solid rgba(255,255,255,0.1);
+padding:15px;
+display:flex;
+flex-direction:column;
+gap:10px;
 }
 
-.intro-box p{
-color:var(--muted);
-font-size:14px;
-margin-bottom:20px;
-}
-
-.btn{
-padding:12px 18px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-weight:600;
-color:white;
-background:linear-gradient(90deg,var(--accent2),#2563eb);
-}
-
-/* ================= SECURE LOGIN ================= */
-.secure-access{
-position:fixed;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,0.85);
-z-index:900;
-backdrop-filter:blur(10px);
-}
-
-.login-box{
-background:var(--panel);
-padding:30px;
-border-radius:12px;
-border:1px solid rgba(255,255,255,0.1);
-width:320px;
-text-align:center;
-}
-
-.login-box input{
-width:100%;
+/* status */
+.box{
+background:#0f1a2b;
 padding:10px;
-margin-top:10px;
 border-radius:8px;
-border:none;
-outline:none;
 }
 
-.login-box button{
-margin-top:15px;
-width:100%;
+/* logs */
+.logs{
+flex:1;
+overflow:auto;
+font-size:12px;
+background:#070b14;
+padding:10px;
+border-radius:8px;
 }
 
-/* ================= DASHBOARD ================= */
-.dashboard{
-display:none;
-padding:20px;
-}
-
-.card{
-background:var(--panel);
-padding:20px;
-border-radius:12px;
-margin-top:10px;
+/* IA console */
+.ai{
+background:#0f1a2b;
+padding:10px;
+border-radius:8px;
+font-size:12px;
+color:#93a4b8;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= INTRO ================= -->
-<div class="intro" id="intro">
+<div class="container">
 
-<div class="fallback-bg"></div>
+<!-- ===== MAPA GLOBAL ===== -->
+<div id="map"></div>
 
-<video class="intro-video active" id="v1" autoplay muted playsinline>
-<source src="intro1.mp4" type="video/mp4">
-</video>
+<!-- ===== PAINEL ===== -->
+<div class="panel">
 
-<video class="intro-video" id="v2" muted playsinline>
-<source src="intro2.mp4" type="video/mp4">
-</video>
+<h3>GLOBAL SYSTEM STATUS</h3>
 
-<div class="intro-overlay"></div>
+<div class="box">Nodes Online: <span id="nodes">1284</span></div>
+<div class="box">Threat Level: <span style="color:#22c55e">LOW</span></div>
+<div class="box">Latency: 12ms</div>
 
-<div class="intro-box">
-<h1>NEXUS CORE</h1>
-<p>Global Infrastructure Operations System</p>
-<button class="btn" onclick="openLogin()">Enter Secure Access</button>
+<div class="ai" id="ai">
+AI CORE: Initializing systems...
 </div>
 
-</div>
+<div class="logs" id="logs"></div>
 
-<!-- ================= SECURE LOGIN ================= -->
-<div class="secure-access" id="login">
-<div class="login-box">
-<h3>SECURE ACCESS</h3>
-<input type="text" placeholder="User ID">
-<input type="password" placeholder="Password">
-<button class="btn" onclick="enterSystem()">Authenticate</button>
-</div>
-</div>
-
-<!-- ================= DASHBOARD ================= -->
-<div class="dashboard" id="dashboard">
-
-<h2>Global Operations Dashboard</h2>
-
-<div class="card">
-Status: ONLINE
-</div>
-
-<div class="card">
-Nodes Active: 1,284
-</div>
-
-<div class="card">
-Security Level: MAXIMUM
 </div>
 
 </div>
 
 <script>
-let state = {
-introDone:false,
-logged:false
-};
 
-/* ================= INTRO SEQUENCE ================= */
-const videos = [
-document.getElementById("v1"),
-document.getElementById("v2")
+/* ===== MAPA DINÂMICO ===== */
+const map = document.getElementById("map");
+
+function createDot(){
+const dot = document.createElement("div");
+dot.className="dot";
+dot.style.left = Math.random()*window.innerWidth*0.6 + "px";
+dot.style.top = Math.random()*window.innerHeight + "px";
+map.appendChild(dot);
+}
+
+for(let i=0;i<25;i++) createDot();
+
+/* ===== ATAQUES SIMULADOS ===== */
+function attack(){
+const line = document.createElement("div");
+line.className="line";
+line.style.top = Math.random()*window.innerHeight + "px";
+line.style.width = Math.random()*300 + 200 + "px";
+map.appendChild(line);
+
+setTimeout(()=>line.remove(),2000);
+}
+
+/* ===== LOG SYSTEM ===== */
+const logs = document.getElementById("logs");
+
+function addLog(msg){
+const div = document.createElement("div");
+div.textContent = "> " + msg;
+logs.prepend(div);
+}
+
+/* ===== IA SIMULADA ===== */
+const ai = document.getElementById("ai");
+
+const aiMsgs = [
+"Scanning global network...",
+"All nodes synchronized.",
+"Threat detection active.",
+"Firewall integrity: 99.8%",
+"Monitoring dark traffic routes...",
+"System stable."
 ];
 
-let index = 0;
+let aiIndex = 0;
 
-function playSequence(){
-videos.forEach(v => v.classList.remove("active"));
-
-videos[index].classList.add("active");
-videos[index].play().catch(()=>{});
-
-videos[index].onended = () => {
-index++;
-if(index < videos.length){
-playSequence();
-}else{
-state.introDone = true;
-}
-};
-}
-
-playSequence();
-
-/* ================= FALLBACK ================= */
-setTimeout(()=>{
-// se vídeo falhar, ativa fallback automaticamente
-if(!state.introDone){
-document.querySelector(".fallback-bg").style.display="block";
-}
-},4000);
-
-/* ================= LOGIN ================= */
-function openLogin(){
-document.getElementById("login").style.display="flex";
-}
-
-function enterSystem(){
-state.logged = true;
-
-document.getElementById("intro").style.display="none";
-document.getElementById("login").style.display="none";
-document.getElementById("dashboard").style.display="block";
-}
-
-/* segurança extra: bloquear dashboard sem login */
+/* ===== LOOP SIMULAÇÃO ===== */
 setInterval(()=>{
-if(!state.logged){
-document.getElementById("dashboard").style.display="none";
-}
-},500);
+attack();
+
+addLog("Connection traced from unknown node");
+document.getElementById("nodes").textContent = 1200 + Math.floor(Math.random()*200);
+
+ai.textContent = "AI CORE: " + aiMsgs[aiIndex];
+aiIndex = (aiIndex+1)%aiMsgs.length;
+
+},1200);
+
 </script>
 
 </body>
