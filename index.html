@@ -10,6 +10,7 @@
 
 <style>
 
+/* ================= RESET ================= */
 *{
 margin:0;
 padding:0;
@@ -28,6 +29,9 @@ background:white;
 padding:15px;
 text-align:center;
 box-shadow:0 2px 10px rgba(0,0,0,0.05);
+position:sticky;
+top:0;
+z-index:10;
 }
 
 nav a{
@@ -35,6 +39,7 @@ margin:0 15px;
 color:#1e293b;
 font-weight:600;
 text-decoration:none;
+transition:0.2s;
 }
 
 nav a:hover{
@@ -76,11 +81,11 @@ margin-top:10px;
 opacity:0.85;
 }
 
-/* imagem ilustrativa */
+/* imagem lateral */
 .banner img{
 position:absolute;
 right:40px;
-bottom:30px;
+bottom:20px;
 width:220px;
 opacity:0.9;
 }
@@ -92,6 +97,7 @@ margin:50px auto;
 padding:0 20px;
 }
 
+/* ================= SEÇÕES ================= */
 .section{
 margin-bottom:60px;
 }
@@ -134,6 +140,7 @@ border-radius:8px;
 text-decoration:none;
 display:inline-block;
 margin-right:10px;
+transition:0.2s;
 }
 
 .btn:hover{
@@ -166,7 +173,7 @@ transform:translateY(0);
 
 <body>
 
-<!-- NAV -->
+<!-- ================= NAV ================= -->
 <nav>
 <a href="#inicio">Início</a>
 <a href="#sobre">Profissão</a>
@@ -175,7 +182,7 @@ transform:translateY(0);
 <a href="#contato">Contato</a>
 </nav>
 
-<!-- BANNER -->
+<!-- ================= BANNER ================= -->
 <div class="banner">
 
 <div class="slide active">
@@ -189,58 +196,60 @@ transform:translateY(0);
 </div>
 
 <div class="slide">
-<h1>Comece na Tecnologia</h1>
-<p>Uma das melhores carreiras atuais</p>
+<h1>Carreira em Tecnologia</h1>
+<p>Oportunidades reais no mercado atual</p>
 </div>
 
-<img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="Suporte Técnico">
+<img src="https://cdn-icons-png.flaticon.com/512/3062/3062634.png" alt="TI">
 
 </div>
 
-<!-- CONTEÚDO -->
+<!-- ================= CONTEÚDO ================= -->
 <div class="container">
 
 <div class="section" id="inicio">
 <h2>Bem-vindo</h2>
-<p>Este site apresenta informações sobre a carreira em Suporte Técnico.</p>
+<p>Este site apresenta informações sobre a carreira em Suporte Técnico na área de Tecnologia da Informação.</p>
 </div>
 
 <div class="section" id="sobre">
 <h2>Sobre a Profissão</h2>
-<p>Profissionais de suporte técnico resolvem problemas de hardware, software e redes.</p>
+<p>O profissional de suporte técnico resolve problemas de hardware, software e redes, garantindo o funcionamento da infraestrutura tecnológica.</p>
 </div>
 
 <div class="section" id="dicas">
 <h2>Dicas e Tendências</h2>
 
 <div class="grid">
-<a class="card" href="#sobre">💻 Aprenda Informática</a>
-<a class="card" href="#dicas">🎓 Cursos Técnicos</a>
-<a class="card" href="#dicas">🌐 Redes de Computadores</a>
-<a class="card" href="#dicas">🗣️ Comunicação</a>
+<a class="card" href="#sobre">💻 Informática básica</a>
+<a class="card" href="#dicas">🎓 Cursos técnicos</a>
+<a class="card" href="#dicas">🌐 Redes de computadores</a>
+<a class="card" href="#dicas">🗣️ Comunicação profissional</a>
 </div>
 
 </div>
 
 <div class="section" id="ods">
-<h2>ODS 9 - Tecnologia e Inovação</h2>
-<p>O suporte técnico contribui para inovação e infraestrutura tecnológica.</p>
+<h2>ODS 9 - Indústria e Inovação</h2>
+<p>O suporte técnico contribui para a inovação e o desenvolvimento de infraestrutura tecnológica no mundo moderno.</p>
 </div>
 
 <div class="section" id="contato">
 <h2>Contato</h2>
-<a class="btn" href="#">LinkedIn</a>
-<a class="btn" href="#">GitHub</a>
+<a class="btn" href="https://linkedin.com" target="_blank">LinkedIn</a>
+<a class="btn" href="https://github.com" target="_blank">GitHub</a>
 </div>
 
 </div>
 
+<!-- ================= FOOTER ================= -->
 <footer>
 <p>Projeto Acadêmico | Caique Costa Silva</p>
 </footer>
 
-<!-- SCRIPT -->
+<!-- ================= SCRIPT BANNER ================= -->
 <script>
+
 let slides = document.querySelectorAll('.slide');
 let index = 0;
 
@@ -249,6 +258,7 @@ slides[index].classList.remove('active');
 index = (index + 1) % slides.length;
 slides[index].classList.add('active');
 },3000);
+
 </script>
 
 </body>
