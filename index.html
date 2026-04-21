@@ -21,7 +21,7 @@ a {text-decoration:none;color:inherit;}
 /* ===== BANNER ===== */
 .banner {
     position: relative;
-    height: 300px; /* altura reduzida */
+    height: 300px;
     overflow: hidden;
 }
 
@@ -38,6 +38,7 @@ a {text-decoration:none;color:inherit;}
     background-position:center;
     opacity:0;
     transition:opacity 0.8s ease;
+    cursor:pointer;
 }
 
 /* overlay escuro */
@@ -63,7 +64,7 @@ a {text-decoration:none;color:inherit;}
 
 .active {opacity:1;}
 
-/* ===== BOTÕES ===== */
+/* ===== CONTROLES ===== */
 .controls {
     position:absolute;
     width:100%;
@@ -145,6 +146,11 @@ nav a {
     border-radius:12px;
     text-align:center;
     box-shadow:0 5px 20px rgba(0,0,0,0.05);
+    transition:0.3s;
+}
+
+.card:hover {
+    transform:translateY(-8px);
 }
 
 /* FOOTER */
@@ -162,26 +168,26 @@ footer {
 <!-- ===== BANNER ===== -->
 <div class="banner">
 
-<a href="#sobre" class="slide active" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
+<div class="slide active" data-link="#sobre" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
     <div class="slide-content">
         <h1>Carreira em Suporte Técnico</h1>
         <p>Entre no mundo da TI</p>
     </div>
-</a>
+</div>
 
-<a href="#dicas" class="slide" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
+<div class="slide" data-link="#dicas" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
     <div class="slide-content">
         <h1>Mercado em Alta</h1>
         <p>Alta demanda por profissionais</p>
     </div>
-</a>
+</div>
 
-<a href="#contato" class="slide" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
+<div class="slide" data-link="#contato" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
     <div class="slide-content">
         <h1>Comece Hoje</h1>
         <p>Inicie sua carreira</p>
     </div>
-</a>
+</div>
 
 <!-- BOTÕES -->
 <div class="controls">
@@ -272,6 +278,14 @@ function goSlide(index){
     i = index;
     showSlide(i);
 }
+
+/* CLIQUE NO BANNER TODO */
+slides.forEach((slide) => {
+    slide.addEventListener("click", () => {
+        let link = slide.getAttribute("data-link");
+        if(link) window.location.href = link;
+    });
+});
 
 /* automático */
 setInterval(nextSlide, 4000);
