@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Support | Suporte Técnico Profissional</title>
+<title>Nexus Support | Central de Atendimento TI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
-/* ================= BASE ================= */
 *{
 margin:0;
 padding:0;
@@ -34,13 +33,9 @@ top:0;
 z-index:10;
 }
 
-header h1{
-font-size:18px;
-}
-
 nav{
 display:flex;
-gap:16px;
+gap:15px;
 }
 
 nav a{
@@ -48,7 +43,6 @@ color:#cbd5e1;
 text-decoration:none;
 font-weight:600;
 cursor:pointer;
-transition:0.2s;
 }
 
 nav a:hover{
@@ -57,7 +51,7 @@ color:#3b82f6;
 
 /* ================= HERO ================= */
 .hero{
-padding:60px 20px;
+padding:50px 20px;
 text-align:center;
 background:linear-gradient(120deg,#0f172a,#1e3a8a);
 }
@@ -66,18 +60,13 @@ background:linear-gradient(120deg,#0f172a,#1e3a8a);
 font-size:2em;
 }
 
-.hero p{
-margin-top:10px;
-opacity:0.85;
-}
-
 /* ================= BUTTON ================= */
 .btn{
 padding:10px 14px;
-border:none;
-border-radius:8px;
 background:#3b82f6;
 color:white;
+border:none;
+border-radius:8px;
 cursor:pointer;
 }
 
@@ -103,10 +92,10 @@ padding-left:10px;
 margin-bottom:10px;
 }
 
-/* ================= GRID ================= */
+/* ================= CARDS ================= */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
 margin-top:15px;
 }
@@ -116,60 +105,34 @@ background:#0f172a;
 padding:18px;
 border-radius:12px;
 border:1px solid rgba(255,255,255,0.05);
-text-decoration:none;
-color:#e5edf7;
-cursor:pointer;
-transition:0.2s;
 }
 
-.card:hover{
-transform:translateY(-6px);
-border-color:#3b82f6;
-}
-
-/* ================= SLIDER ================= */
-.slider{
-margin:30px auto;
-max-width:900px;
+/* ================= TICKETS ================= */
+.ticket{
 background:#0f172a;
+padding:15px;
 border-radius:12px;
-padding:40px;
-text-align:center;
-position:relative;
+margin-top:10px;
+border-left:4px solid #3b82f6;
 }
 
-.slide{
-display:none;
+.status{
+font-size:12px;
+padding:3px 8px;
+border-radius:6px;
+display:inline-block;
+margin-top:8px;
 }
 
-.slide.active{
-display:block;
-}
-
-.dots{
-margin-top:20px;
-display:flex;
-justify-content:center;
-gap:8px;
-}
-
-.dot{
-width:10px;
-height:10px;
-border-radius:50%;
-background:#334155;
-cursor:pointer;
-}
-
-.dot.active{
-background:#3b82f6;
-}
+.open{background:#f59e0b;color:#000;}
+.progress{background:#3b82f6;}
+.done{background:#22c55e;}
 
 /* ================= LOGIN ================= */
 .login{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,0.75);
+background:rgba(0,0,0,0.8);
 display:none;
 align-items:center;
 justify-content:center;
@@ -196,7 +159,6 @@ border:none;
 border-radius:8px;
 background:#0b1220;
 color:white;
-outline:none;
 }
 
 /* ================= FOOTER ================= */
@@ -221,8 +183,7 @@ margin-top:40px;
 <a onclick="show('home')">Início</a>
 <a onclick="show('sobre')">Sobre</a>
 <a onclick="show('servicos')">Serviços</a>
-<a onclick="show('dicas')">Dicas</a>
-<a onclick="show('ods')">ODS</a>
+<a onclick="show('tickets')">Chamados</a>
 <a onclick="show('contato')">Contato</a>
 </nav>
 
@@ -232,77 +193,62 @@ margin-top:40px;
 
 <!-- HERO -->
 <div class="hero">
-<h2>Suporte Técnico Profissional</h2>
-<p>Infraestrutura, redes e atendimento corporativo de TI</p>
+<h2>Central de Suporte Técnico</h2>
+<p>Atendimento profissional para infraestrutura de TI</p>
 </div>
 
-<!-- SLIDER -->
-<div class="slider">
-
-<div class="slide active">
-<h2>Suporte Ágil e Eficiente</h2>
-</div>
-
-<div class="slide">
-<h2>Infraestrutura Corporativa</h2>
-</div>
-
-<div class="slide">
-<h2>Atendimento Empresarial 24/7</h2>
-</div>
-
-<div class="dots">
-<div class="dot active" onclick="go(0)"></div>
-<div class="dot" onclick="go(1)"></div>
-<div class="dot" onclick="go(2)"></div>
-</div>
-
-</div>
-
-<!-- CONTENT -->
+<!-- CONTAINER -->
 <div class="container">
 
+<!-- HOME -->
 <section id="home" class="active">
 <h3>Início</h3>
-<p>Bem-vindo ao sistema de suporte técnico empresarial.</p>
+<p>Bem-vindo à central de suporte técnico empresarial.</p>
 </section>
 
+<!-- SOBRE -->
 <section id="sobre">
 <h3>Sobre</h3>
-<p>Empresa especializada em TI, redes, servidores e suporte corporativo.</p>
+<p>Empresa especializada em suporte técnico, redes, servidores e infraestrutura TI.</p>
 </section>
 
+<!-- SERVIÇOS -->
 <section id="servicos">
 
 <h3>Serviços</h3>
 
 <div class="grid">
 <div class="card">Suporte Remoto</div>
-<div class="card">Redes e Servidores</div>
-<div class="card">Manutenção Corporativa</div>
+<div class="card">Redes Corporativas</div>
+<div class="card">Servidores Cloud</div>
 <div class="card">Consultoria TI</div>
 </div>
 
 </section>
 
-<section id="dicas">
+<!-- TICKETS -->
+<section id="tickets">
 
-<h3>Dicas</h3>
+<h3>Chamados (Tickets)</h3>
 
-<div class="grid">
-<a class="card">Segurança Digital</a>
-<a class="card">Redes Avançadas</a>
-<a class="card">Backup de Dados</a>
-<a class="card">Boas Práticas TI</a>
+<div class="ticket">
+Problema com internet corporativa
+<div class="status open">ABERTO</div>
+</div>
+
+<div class="ticket">
+Instalação de sistema interno
+<div class="status progress">EM ANDAMENTO</div>
+</div>
+
+<div class="ticket">
+Atualização de servidor
+<div class="status done">RESOLVIDO</div>
 </div>
 
 </section>
 
-<section id="ods">
-<h3>ODS 9</h3>
-<p>Inovação, tecnologia e infraestrutura sustentável.</p>
-</section>
-
+<!-- CONTATO -->
 <section id="contato">
 <h3>Contato</h3>
 <p>Email: suporte@nexus.com</p>
@@ -318,14 +264,14 @@ margin-top:40px;
 <h3>Portal Cliente</h3>
 <input type="text" placeholder="Usuário">
 <input type="password" placeholder="Senha">
-<button class="btn" onclick="closeLogin()">Entrar</button>
+<button class="btn" onclick="closeLogin()" style="margin-top:10px;">Entrar</button>
 </div>
 
 </div>
 
 <!-- FOOTER -->
 <footer>
-© 2026 Nexus Support TI - Todos os direitos reservados
+© 2026 Nexus Support TI - Central de Atendimento
 </footer>
 
 <script>
@@ -344,25 +290,6 @@ function show(id){
 document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
-
-/* SLIDER */
-let slides = document.querySelectorAll(".slide");
-let dots = document.querySelectorAll(".dot");
-let i = 0;
-
-function go(n){
-slides.forEach(s=>s.classList.remove("active"));
-dots.forEach(d=>d.classList.remove("active"));
-
-slides[n].classList.add("active");
-dots[n].classList.add("active");
-i = n;
-}
-
-setInterval(()=>{
-i = (i+1)%slides.length;
-go(i);
-},4000);
 
 </script>
 
