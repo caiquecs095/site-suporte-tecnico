@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus SaaS TI</title>
+<title>Nexus SaaS TI - Base</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -11,137 +11,148 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-getAuth,
-onAuthStateChanged,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-onSnapshot
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 SUA CONFIG REAL */
+/* 🔥 CONFIG FIREBASE */
 const firebaseConfig = {
-apiKey: "SUA_API_KEY",
-authDomain: "nexus-saas-54337.firebaseapp.com",
-projectId: "nexus-saas-54337",
-appId: "1:31279431377:web:1c70f4fa42253a7f824ff0"
+  apiKey: "SUA_API_KEY",
+  authDomain: "nexus-saas-54337.firebaseapp.com",
+  projectId: "nexus-saas-54337",
+  appId: "1:31279431377:web:1c70f4fa42253a7f824ff0"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-let user = null;
-
-/* ================= UI ================= */
-window.login = async () => {
-try {
-await signInWithEmailAndPassword(auth, email.value, pass.value);
-} catch (e) {
-alert(e.message);
-}
+/* ================= USER FIXO (SEM LOGIN) ================= */
+const user = {
+  email: "admin@nexus.local"
 };
 
-window.register = async () => {
-try {
-await createUserWithEmailAndPassword(auth, email.value, pass.value);
-alert("Conta criada!");
-} catch (e) {
-alert(e.message);
-}
-};
-
-window.logout = () => signOut(auth);
-
+/* ================= CRIAR TICKET ================= */
 window.createTicket = async () => {
-if (!user) return;
+  const title = document.getElementById("title").value;
+  const desc = document.getElementById("desc").value;
 
-await addDoc(collection(db, "tickets"), {
-user: user.email,
-title: title.value,
-desc: desc.value,
-status: "ABERTO",
-created: Date.now()
-});
+  if (!title || !desc) {
+    alert("Preencha todos os campos");
+    return;
+  }
+
+  await addDoc(collection(db, "tickets"), {
+    user: user.email,
+    title,
+    desc,
+    status: "ABERTO",
+    created: Date.now()
+  });
+
+  document.getElementById("title").value = "";
+  document.getElementById("desc").value = "";
 };
 
-/* ================= AUTH ================= */
-onAuthStateChanged(auth, (u) => {
-user = u;
-
-if (user) {
-loginBox.style.display = "none";
-app.style.display = "block";
-loadTickets();
-} else {
-loginBox.style.display = "flex";
-app.style.display = "none";
-}
-});
-
-/* ================= LOAD ================= */
+/* ================= CARREGAR TICKETS ================= */
 function loadTickets() {
-onSnapshot(collection(db, "tickets"), (snap) => {
-tickets.innerHTML = "";
+  onSnapshot(collection(db, "tickets"), (snap) => {
+    const box = document.getElementById("tickets");
+    box.innerHTML = "";
 
-snap.forEach(doc => {
-let t = doc.data();
+    snap.forEach(doc => {
+      const t = doc.data();
 
-tickets.innerHTML += `
-<div style="background:#0f172a;padding:10px;margin:10px;border-radius:8px">
-<b>${t.user}</b><br>
-${t.title}<br>
-${t.desc}<br>
-<span>${t.status}</span>
-</div>
-`;
-});
-});
+      box.innerHTML += `
+        <div class="card">
+          <b>${t.user}</b>
+          <h4>${t.title}</h4>
+          <p>${t.desc}</p>
+          <span class="status">${t.status}</span>
+        </div>
+      `;
+    });
+  });
 }
+
+window.onload = loadTickets;
 
 </script>
 
 <style>
-body{margin:0;font-family:Poppins;background:#0b1220;color:white}
-input,textarea{width:100%;padding:10px;margin:5px 0;border-radius:6px}
-button{padding:10px;background:#3b82f6;color:white;border:none;cursor:pointer}
-#loginBox,#app{padding:20px}
-#app{display:none}
+body{
+  margin:0;
+  font-family:Poppins;
+  background:#0b1220;
+  color:white;
+}
+
+.container{
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  background:#111827;
+  color:white;
+}
+
+button{
+  padding:12px 16px;
+  background:#3b82f6;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  background:#2563eb;
+}
+
+.card{
+  background:#0f172a;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid #1e293b;
+}
+
+.status{
+  display:inline-block;
+  margin-top:8px;
+  padding:4px 8px;
+  background:#22c55e;
+  border-radius:6px;
+  font-size:12px;
+}
 </style>
 
 </head>
 
 <body>
 
-<div id="loginBox">
-<h2>Login SaaS</h2>
+<div class="container">
 
-<input id="email" placeholder="email">
-<input id="pass" type="password" placeholder="senha">
-
-<button onclick="login()">Login</button>
-<button onclick="register()">Criar Conta</button>
-</div>
-
-<div id="app">
-
-<h2>Dashboard</h2>
-
-<button onclick="logout()">Sair</button>
+<h2>🚀 Nexus SaaS TI - Dashboard</h2>
 
 <h3>Novo Ticket</h3>
-<input id="title" placeholder="titulo">
-<textarea id="desc"></textarea>
 
-<button onclick="createTicket()">Enviar</button>
+<input id="title" placeholder="Título do ticket">
+<textarea id="desc" placeholder="Descrição"></textarea>
 
-<h3>Tickets</h3>
+<button onclick="createTicket()">Criar Ticket</button>
+
+<h3 style="margin-top:30px">📌 Tickets</h3>
 <div id="tickets"></div>
 
 </div>
