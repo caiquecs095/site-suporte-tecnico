@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus Core | Enterprise TI</title>
+<title>Suporte Técnico | Portal TI Enterprise</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -17,7 +17,7 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#050814;
+background:#0b1220;
 color:#e5edf7;
 overflow:hidden;
 }
@@ -38,7 +38,7 @@ inset:0;
 width:100%;
 height:100%;
 object-fit:cover;
-filter:brightness(0.4);
+filter:brightness(0.45);
 }
 
 .overlay{
@@ -71,7 +71,7 @@ inset:0;
 display:none;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,0.8);
+background:rgba(0,0,0,0.85);
 backdrop-filter:blur(10px);
 z-index:9999;
 }
@@ -84,7 +84,7 @@ display:flex;
 background:#0b1220;
 padding:30px;
 border-radius:12px;
-width:320px;
+width:340px;
 text-align:center;
 border:1px solid rgba(255,255,255,0.08);
 }
@@ -97,6 +97,7 @@ border:none;
 border-radius:8px;
 background:#0f1a2b;
 color:white;
+outline:none;
 }
 
 /* ================= DASHBOARD ================= */
@@ -110,14 +111,18 @@ padding:20px;
 display:block;
 }
 
+.header{
+margin-bottom:15px;
+}
+
 /* ================= SLIDER ================= */
 .slider{
 position:relative;
-height:300px;
-margin-top:20px;
-overflow:hidden;
-border-radius:12px;
+height:280px;
 background:#0b1220;
+border-radius:12px;
+overflow:hidden;
+margin-bottom:20px;
 }
 
 .slide{
@@ -129,16 +134,27 @@ justify-content:center;
 align-items:center;
 text-align:center;
 opacity:0;
-transition:1s;
+transition:1s ease;
+padding:20px;
 }
 
 .slide.active{
 opacity:1;
 }
 
+.slide h2{
+font-size:1.8em;
+}
+
+.slide p{
+margin-top:10px;
+opacity:0.8;
+}
+
+/* dots */
 .dots{
 position:absolute;
-bottom:10px;
+bottom:12px;
 left:50%;
 transform:translateX(-50%);
 display:flex;
@@ -157,12 +173,11 @@ cursor:pointer;
 background:#3b82f6;
 }
 
-/* ================= CARDS ================= */
+/* ================= GRID ================= */
 .grid{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
-margin-top:20px;
 }
 
 .card{
@@ -172,8 +187,12 @@ border-radius:12px;
 border:1px solid rgba(255,255,255,0.06);
 }
 
-</style>
+/* ================= OVERLAY CLEAN ================= */
+h1,h2{
+font-weight:600;
+}
 
+</style>
 </head>
 
 <body>
@@ -188,9 +207,9 @@ border:1px solid rgba(255,255,255,0.06);
 <div class="overlay"></div>
 
 <div class="intro-box">
-<h1>NEXUS CORE</h1>
-<p>Enterprise Infrastructure System</p>
-<button class="btn" onclick="openLogin()">Secure Access</button>
+<h1>SUPORTE TÉCNICO</h1>
+<p>Portal Institucional de Tecnologia da Informação</p>
+<button class="btn" onclick="openLogin()">Acesso ao Sistema</button>
 </div>
 
 </div>
@@ -200,12 +219,12 @@ border:1px solid rgba(255,255,255,0.06);
 
 <div class="login-box">
 
-<h3>Admin Access</h3>
+<h3>Área Administrativa</h3>
 
 <input type="text" placeholder="ADM_USER">
-<input type="password" placeholder="Password">
+<input type="password" placeholder="Senha">
 
-<button class="btn" onclick="enter()">Login ADM</button>
+<button class="btn" onclick="enterSystem()">Entrar</button>
 
 </div>
 
@@ -214,24 +233,26 @@ border:1px solid rgba(255,255,255,0.06);
 <!-- ================= DASHBOARD ================= -->
 <div class="dashboard" id="dashboard">
 
-<h2>Control Panel</h2>
+<div class="header">
+<h2>Painel de Suporte Técnico</h2>
+</div>
 
 <!-- SLIDER -->
 <div class="slider">
 
 <div class="slide active">
-<h2>Infraestrutura Global</h2>
-<p>Monitoramento em tempo real</p>
+<h2>Bem-vindo ao Sistema TI</h2>
+<p>Gestão de suporte e infraestrutura</p>
 </div>
 
 <div class="slide">
-<h2>Segurança Ativa</h2>
-<p>Sistemas protegidos 24/7</p>
+<h2>Mercado de Tecnologia</h2>
+<p>Crescimento contínuo na área de TI</p>
 </div>
 
 <div class="slide">
-<h2>Cloud Systems</h2>
-<p>Alta performance enterprise</p>
+<h2>Profissão em Alta</h2>
+<p>Suporte técnico é porta de entrada para tecnologia</p>
 </div>
 
 <!-- DOTS -->
@@ -246,9 +267,10 @@ border:1px solid rgba(255,255,255,0.06);
 <!-- CARDS -->
 <div class="grid">
 
-<div class="card">Nodes: 1.284</div>
-<div class="card">Latency: 11ms</div>
-<div class="card">Security: MAX</div>
+<div class="card">📡 Redes: Ativo</div>
+<div class="card">🖥️ Sistemas: Online</div>
+<div class="card">🔒 Segurança: Protegido</div>
+<div class="card">⚙️ Suporte: Operacional</div>
 
 </div>
 
@@ -261,7 +283,7 @@ function openLogin(){
 document.getElementById("login").classList.add("active");
 }
 
-function enter(){
+function enterSystem(){
 document.getElementById("intro").style.display="none";
 document.getElementById("login").classList.remove("active");
 document.getElementById("dashboard").classList.add("active");
@@ -270,26 +292,26 @@ document.getElementById("dashboard").classList.add("active");
 /* ================= SLIDER ================= */
 let slides = document.querySelectorAll(".slide");
 let dots = document.querySelectorAll(".dot");
-let i = 0;
+let index = 0;
 
-function show(n){
+function show(i){
 slides.forEach(s=>s.classList.remove("active"));
 dots.forEach(d=>d.classList.remove("active"));
 
-slides[n].classList.add("active");
-dots[n].classList.add("active");
+slides[i].classList.add("active");
+dots[i].classList.add("active");
 
-i = n;
+index = i;
 }
 
-function go(n){
-show(n);
+function go(i){
+show(i);
 }
 
 /* AUTO SLIDE */
 setInterval(()=>{
-i = (i+1)%slides.length;
-show(i);
+index = (index+1)%slides.length;
+show(index);
 },4000);
 
 </script>
