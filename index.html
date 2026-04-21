@@ -3,187 +3,399 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS CORE 2.0 | Global System Simulator</title>
+<title>Suporte Técnico | Carreira em TI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-body{
-background:#050814;
-color:#d6e2f0;
-overflow:hidden;
+:root {
+    --bg: #0f172a;
+    --card: rgba(255,255,255,0.05);
+    --text: #e2e8f0;
+    --primary: #3b82f6;
 }
 
-/* ===== LAYOUT ===== */
-.container{
-display:grid;
-grid-template-columns: 2fr 1fr;
-height:100vh;
+body.light {
+    --bg: #f8fafc;
+    --card: white;
+    --text: #0f172a;
 }
 
-/* ===== MAPA ===== */
-#map{
-background: radial-gradient(circle at center,#0b1a2e,#050814);
-position:relative;
-overflow:hidden;
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+    transition:0.3s;
 }
 
-/* pontos globais fake */
-.dot{
-position:absolute;
-width:6px;
-height:6px;
-background:#22c55e;
-border-radius:50%;
-box-shadow:0 0 10px #22c55e;
-animation:pulse 2s infinite;
+body {
+    background: var(--bg);
+    color: var(--text);
 }
 
-@keyframes pulse{
-0%{transform:scale(1);opacity:1}
-50%{transform:scale(2);opacity:0.5}
-100%{transform:scale(1);opacity:1}
+/* ===== MENU FIXO PREMIUM ===== */
+nav {
+    position:sticky;
+    top:0;
+    background: rgba(15,23,42,0.7);
+    backdrop-filter: blur(10px);
+    padding:15px;
+    text-align:center;
+    z-index:10;
 }
 
-/* linhas de ataque */
-.line{
-position:absolute;
-height:2px;
-background:linear-gradient(90deg,transparent,#3b82f6,transparent);
-animation:move 2s linear infinite;
+body.light nav {
+    background: rgba(255,255,255,0.7);
 }
 
-@keyframes move{
-0%{transform:translateX(-200px);opacity:0}
-50%{opacity:1}
-100%{transform:translateX(600px);opacity:0}
+nav a {
+    margin:0 15px;
+    font-weight:600;
+    color:var(--text);
 }
 
-/* ===== PAINEL LATERAL ===== */
-.panel{
-background:#0b1220;
-border-left:1px solid rgba(255,255,255,0.1);
-padding:15px;
-display:flex;
-flex-direction:column;
-gap:10px;
+.toggle {
+    position:absolute;
+    right:20px;
+    top:15px;
+    cursor:pointer;
+    padding:5px 10px;
+    border-radius:20px;
+    background:var(--primary);
+    color:white;
 }
 
-/* status */
-.box{
-background:#0f1a2b;
-padding:10px;
-border-radius:8px;
+/* ===== BANNER PREMIUM ===== */
+.banner {
+    position: relative;
+    height: 320px;
+    overflow: hidden;
 }
 
-/* logs */
-.logs{
-flex:1;
-overflow:auto;
-font-size:12px;
-background:#070b14;
-padding:10px;
-border-radius:8px;
+.slide {
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transform:scale(1.05);
+    transition:opacity 1s ease, transform 1s ease;
+    cursor:pointer;
 }
 
-/* IA console */
-.ai{
-background:#0f1a2b;
-padding:10px;
-border-radius:8px;
-font-size:12px;
-color:#93a4b8;
+.slide::after {
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
 }
+
+.slide-content {
+    position:relative;
+    z-index:2;
+    max-width:600px;
+}
+
+.slide h1 {
+    font-size:2.2em;
+}
+
+.active {
+    opacity:1;
+    transform:scale(1);
+}
+
+/* CONTROLES */
+.controls {
+    position:absolute;
+    width:100%;
+    top:50%;
+    display:flex;
+    justify-content:space-between;
+    transform:translateY(-50%);
+    z-index:3;
+}
+
+.controls span {
+    cursor:pointer;
+    background:rgba(0,0,0,0.5);
+    color:white;
+    padding:10px 15px;
+    border-radius:50%;
+}
+
+/* DOTS */
+.dots {
+    position:absolute;
+    bottom:10px;
+    width:100%;
+    text-align:center;
+    z-index:3;
+}
+
+.dot {
+    height:10px;
+    width:10px;
+    margin:5px;
+    background:#64748b;
+    display:inline-block;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.dot.active {
+    background:var(--primary);
+}
+
+/* CONTAINER */
+.container {
+    max-width:1100px;
+    margin:60px auto;
+    padding:0 20px;
+}
+
+.section {
+    margin-bottom:60px;
+}
+
+/* TÍTULO PREMIUM */
+.section h2 {
+    font-size:1.8rem;
+    margin-bottom:20px;
+    background: linear-gradient(90deg,#3b82f6,#22c55e);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    border-left:5px solid var(--primary);
+    padding-left:10px;
+}
+
+/* CARDS PREMIUM */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.card {
+    background: var(--card);
+    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:25px;
+    border-radius:16px;
+    text-align:center;
+    transition:0.4s;
+}
+
+.card:hover {
+    transform:translateY(-10px) scale(1.03);
+}
+
+.card i {
+    font-size:30px;
+    margin-bottom:10px;
+    color:var(--primary);
+}
+
+/* BARRAS */
+.bar {
+    background:#334155;
+    height:10px;
+    border-radius:5px;
+    margin-bottom:15px;
+    overflow:hidden;
+}
+
+.bar div {
+    height:10px;
+    background:var(--primary);
+}
+
+/* FOOTER */
+footer {
+    text-align:center;
+    padding:30px;
+    opacity:0.7;
+}
+
+/* BOTÃO TO TOP */
+.top {
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:var(--primary);
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:50%;
+    cursor:pointer;
+    display:none;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- MENU -->
+<nav>
+<a href="#inicio">Início</a>
+<a href="#sobre">Profissão</a>
+<a href="#dicas">Dicas</a>
+<a href="#ods">ODS</a>
+<a href="#contato">Contato</a>
+
+<div class="toggle" onclick="toggleMode()">🌙</div>
+</nav>
+
+<!-- BANNER -->
+<div class="banner">
+
+<div class="slide active" data-link="#sobre" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
+<div class="slide-content">
+<h1>Carreira em Suporte Técnico</h1>
+<p>Entre no mundo da TI</p>
+</div>
+</div>
+
+<div class="slide" data-link="#dicas" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
+<div class="slide-content">
+<h1>Mercado em Alta</h1>
+<p>Alta demanda por profissionais</p>
+</div>
+</div>
+
+<div class="slide" data-link="#contato" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
+<div class="slide-content">
+<h1>Comece Hoje</h1>
+<p>Inicie sua carreira</p>
+</div>
+</div>
+
+<div class="controls">
+<span onclick="prevSlide()">❮</span>
+<span onclick="nextSlide()">❯</span>
+</div>
+
+<div class="dots">
+<span class="dot active" onclick="goSlide(0)"></span>
+<span class="dot" onclick="goSlide(1)"></span>
+<span class="dot" onclick="goSlide(2)"></span>
+</div>
+
+</div>
+
+<!-- CONTEÚDO -->
 <div class="container">
 
-<!-- ===== MAPA GLOBAL ===== -->
-<div id="map"></div>
-
-<!-- ===== PAINEL ===== -->
-<div class="panel">
-
-<h3>GLOBAL SYSTEM STATUS</h3>
-
-<div class="box">Nodes Online: <span id="nodes">1284</span></div>
-<div class="box">Threat Level: <span style="color:#22c55e">LOW</span></div>
-<div class="box">Latency: 12ms</div>
-
-<div class="ai" id="ai">
-AI CORE: Initializing systems...
+<div id="inicio" class="section" data-aos="fade-up">
+<h2>Bem-vindo</h2>
+<p>Carreira profissional em suporte técnico e tecnologia da informação.</p>
 </div>
 
-<div class="logs" id="logs"></div>
+<div id="sobre" class="section" data-aos="fade-up">
+<h2>Sobre</h2>
+<p>Profissional responsável por resolver problemas de tecnologia.</p>
+</div>
 
+<div id="dicas" class="section" data-aos="fade-up">
+<h2>Dicas</h2>
+
+<div class="grid">
+
+<div class="card"><i class="fas fa-laptop"></i><p>Informática</p></div>
+<div class="card"><i class="fas fa-graduation-cap"></i><p>Cursos</p></div>
+<div class="card"><i class="fas fa-network-wired"></i><p>Redes</p></div>
+<div class="card"><i class="fas fa-comments"></i><p>Comunicação</p></div>
+
+</div>
+</div>
+
+<div class="section" data-aos="fade-up">
+<h2>Habilidades</h2>
+
+<p>Hardware</p>
+<div class="bar"><div style="width:80%"></div></div>
+
+<p>Redes</p>
+<div class="bar"><div style="width:70%"></div></div>
+
+<p>Programação</p>
+<div class="bar"><div style="width:85%"></div></div>
+
+</div>
+
+<div id="ods" class="section" data-aos="fade-up">
+<h2>ODS 9</h2>
+<p>Inovação e tecnologia.</p>
+</div>
+
+<div id="contato" class="section" data-aos="fade-up">
+<h2>Contato</h2>
+<p>LinkedIn | GitHub</p>
 </div>
 
 </div>
 
+<footer>
+Projeto Acadêmico | Caique Costa Silva
+</footer>
+
+<button class="top" onclick="topo()">↑</button>
+
+<!-- SCRIPTS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>
+AOS.init();
 
-/* ===== MAPA DINÂMICO ===== */
-const map = document.getElementById("map");
+/* SLIDER */
+let slides=document.querySelectorAll('.slide');
+let dots=document.querySelectorAll('.dot');
+let i=0;
 
-function createDot(){
-const dot = document.createElement("div");
-dot.className="dot";
-dot.style.left = Math.random()*window.innerWidth*0.6 + "px";
-dot.style.top = Math.random()*window.innerHeight + "px";
-map.appendChild(dot);
+function showSlide(n){
+slides.forEach(s=>s.classList.remove('active'));
+dots.forEach(d=>d.classList.remove('active'));
+slides[n].classList.add('active');
+dots[n].classList.add('active');
 }
 
-for(let i=0;i<25;i++) createDot();
+function nextSlide(){i=(i+1)%slides.length;showSlide(i);}
+function prevSlide(){i=(i-1+slides.length)%slides.length;showSlide(i);}
+function goSlide(n){i=n;showSlide(i);}
 
-/* ===== ATAQUES SIMULADOS ===== */
-function attack(){
-const line = document.createElement("div");
-line.className="line";
-line.style.top = Math.random()*window.innerHeight + "px";
-line.style.width = Math.random()*300 + 200 + "px";
-map.appendChild(line);
+slides.forEach(s=>{
+s.onclick=()=>window.location.href=s.dataset.link;
+});
 
-setTimeout(()=>line.remove(),2000);
+setInterval(nextSlide,4000);
+
+/* DARK MODE */
+function toggleMode(){
+document.body.classList.toggle('light');
 }
 
-/* ===== LOG SYSTEM ===== */
-const logs = document.getElementById("logs");
+/* TOP BUTTON */
+let topBtn=document.querySelector('.top');
 
-function addLog(msg){
-const div = document.createElement("div");
-div.textContent = "> " + msg;
-logs.prepend(div);
+window.onscroll=()=>{
+topBtn.style.display=window.scrollY>300?'block':'none';
 }
 
-/* ===== IA SIMULADA ===== */
-const ai = document.getElementById("ai");
-
-const aiMsgs = [
-"Scanning global network...",
-"All nodes synchronized.",
-"Threat detection active.",
-"Firewall integrity: 99.8%",
-"Monitoring dark traffic routes...",
-"System stable."
-];
-
-let aiIndex = 0;
-
-/* ===== LOOP SIMULAÇÃO ===== */
-setInterval(()=>{
-attack();
-
-addLog("Connection traced from unknown node");
-document.getElementById("nodes").textContent = 1200 + Math.floor(Math.random()*200);
-
-ai.textContent = "AI CORE: " + aiMsgs[aiIndex];
-aiIndex = (aiIndex+1)%aiMsgs.length;
-
-},1200);
-
+function topo(){
+window.scrollTo({top:0,behavior:'smooth'});
+}
 </script>
 
 </body>
