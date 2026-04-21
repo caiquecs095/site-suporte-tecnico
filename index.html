@@ -27,6 +27,47 @@ color:var(--text);
 overflow-x:hidden;
 }
 
+/* LOGIN */
+.login{
+position:fixed;
+top:0;left:0;
+width:100%;height:100vh;
+background:rgba(0,0,0,0.85);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.login-box{
+background:var(--panel);
+padding:30px;
+border-radius:14px;
+width:300px;
+border:1px solid var(--border);
+text-align:center;
+}
+
+.login-box input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+background:#0f1a2b;
+color:white;
+}
+
+.login-box button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:linear-gradient(90deg,var(--accent2),#2563eb);
+color:white;
+cursor:pointer;
+}
+
 /* SIDEBAR */
 .sidebar{
 position:fixed;
@@ -41,8 +82,6 @@ padding:22px;
 .sidebar h2{
 color:var(--accent2);
 margin-bottom:25px;
-letter-spacing:1px;
-font-weight:600;
 }
 
 .sidebar a{
@@ -51,23 +90,19 @@ margin:16px 0;
 color:var(--muted);
 text-decoration:none;
 font-size:14px;
-transition:0.3s;
 }
 
 .sidebar a:hover{
-color:var(--text);
-transform:translateX(4px);
+color:white;
 }
 
-.sidebar i{
-margin-right:8px;
-color:var(--accent2);
-}
+.sidebar i{margin-right:8px;color:var(--accent2);}
 
 /* CONTENT */
 .content{
 margin-left:230px;
 padding:25px;
+display:none;
 }
 
 /* TOPBAR */
@@ -80,17 +115,6 @@ background:rgba(255,255,255,0.02);
 padding:18px;
 border:1px solid var(--border);
 border-radius:12px;
-backdrop-filter:blur(10px);
-}
-
-.topbar h1{
-font-size:18px;
-font-weight:600;
-}
-
-.topbar p{
-font-size:12px;
-color:var(--muted);
 }
 
 .topbar button{
@@ -100,14 +124,6 @@ padding:10px 14px;
 border-radius:10px;
 color:white;
 cursor:pointer;
-font-weight:500;
-transition:0.3s;
-box-shadow:0 0 20px rgba(59,130,246,0.15);
-}
-
-.topbar button:hover{
-transform:translateY(-2px);
-box-shadow:0 0 30px rgba(59,130,246,0.25);
 }
 
 /* CARDS */
@@ -122,13 +138,13 @@ background:linear-gradient(180deg,var(--panel2),rgba(255,255,255,0.02));
 border:1px solid var(--border);
 padding:22px;
 border-radius:14px;
+cursor:pointer;
 transition:0.3s;
 }
 
 .card:hover{
 transform:translateY(-6px);
-border-color:rgba(59,130,246,0.3);
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
+border-color:rgba(59,130,246,0.4);
 }
 
 .card i{
@@ -137,49 +153,23 @@ color:var(--accent);
 margin-bottom:10px;
 }
 
-.card h3{
-font-size:15px;
-margin-bottom:5px;
-}
-
-.card p{
-font-size:13px;
-color:var(--muted);
-}
-
-/* INDICADOR DE SEGURANÇA */
-.security-bar{
-margin-top:30px;
-background:var(--panel2);
-padding:18px;
-border-radius:12px;
-border:1px solid var(--border);
-}
-
-.bar{
-background:#111827;
-height:8px;
-border-radius:10px;
-overflow:hidden;
-}
-
-.bar div{
-height:100%;
-background:linear-gradient(90deg,var(--accent),#16a34a);
-}
-
-/* MOBILE */
-@media(max-width:768px){
-.sidebar{width:90px;}
-.content{margin-left:90px;}
-.sidebar a{font-size:11px;}
-.sidebar h2{font-size:13px;}
-}
+.card p{color:var(--muted);font-size:13px;}
 
 </style>
 </head>
 
 <body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+<div class="login-box">
+<h3>Login Administrativo</h3>
+<input id="user" placeholder="Usuário">
+<input id="pass" type="password" placeholder="Senha">
+<button onclick="entrar()">Acessar Sistema</button>
+<p style="font-size:11px;color:#93a4b8;margin-top:10px">Admin: admin / 1234</p>
+</div>
+</div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -191,40 +181,40 @@ background:linear-gradient(90deg,var(--accent),#16a34a);
 </div>
 
 <!-- CONTENT -->
-<div class="content">
+<div class="content" id="content">
 
 <div class="topbar">
 <div>
 <h1>Sistema de Segurança TI</h1>
-<p>Monitoramento e controle de infraestrutura</p>
+<p>Monitoramento em tempo real</p>
 </div>
 
-<button onclick="alert('Login administrativo')">
-<i class="fas fa-lock"></i> Acesso
+<button onclick="alert('Área administrativa')">
+<i class="fas fa-lock"></i> Admin
 </button>
 </div>
 
 <div class="cards">
 
-<div class="card">
+<div class="card" onclick="alert('Abrindo Segurança')">
 <i class="fas fa-shield-halved"></i>
 <h3>Segurança</h3>
 <p>Sistema protegido</p>
 </div>
 
-<div class="card">
+<div class="card" onclick="alert('Abrindo Servidores')">
 <i class="fas fa-server"></i>
 <h3>Servidores</h3>
 <p>Estabilidade 99.9%</p>
 </div>
 
-<div class="card">
+<div class="card" onclick="alert('Abrindo Rede')">
 <i class="fas fa-network-wired"></i>
 <h3>Rede</h3>
 <p>Tráfego monitorado</p>
 </div>
 
-<div class="card">
+<div class="card" onclick="alert('Abrindo Acessos')">
 <i class="fas fa-user-shield"></i>
 <h3>Acessos</h3>
 <p>Controle ativo</p>
@@ -232,13 +222,21 @@ background:linear-gradient(90deg,var(--accent),#16a34a);
 
 </div>
 
-<div class="security-bar">
-<h3>Índice de Segurança</h3>
-<p style="color:var(--muted);font-size:12px">Monitoramento em tempo real</p>
-<div class="bar"><div style="width:92%"></div></div>
 </div>
 
-</div>
+<script>
+function entrar(){
+let u=document.getElementById('user').value;
+let p=document.getElementById('pass').value;
+
+if(u==='admin' && p==='1234'){
+    document.getElementById('login').style.display='none';
+    document.getElementById('content').style.display='block';
+}else{
+    alert('Acesso negado');
+}
+}
+</script>
 
 </body>
 </html>
