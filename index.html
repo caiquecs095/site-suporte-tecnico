@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus CORE | Admin Painel</title>
+<title>Nexus SaaS TI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -12,11 +12,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
 body{background:#0b1220;color:#e5edf7;}
 
-/* HEADER */
 header{
 background:#0f172a;
 padding:15px;
@@ -34,28 +32,30 @@ border-radius:8px;
 cursor:pointer;
 }
 
-/* LAYOUT */
 .container{
-max-width:1100px;
+max-width:900px;
 margin:30px auto;
 padding:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
 }
 
 .card{
 background:#0f172a;
 padding:15px;
-border-radius:12px;
+border-radius:10px;
 margin-top:10px;
 border-left:4px solid #3b82f6;
 }
 
-/* LOGIN */
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:none;
+background:#0b1220;
+color:white;
+}
+
 .login{
 position:fixed;
 inset:0;
@@ -72,29 +72,17 @@ border-radius:12px;
 width:340px;
 }
 
-input,select{
-width:100%;
-padding:10px;
-margin-top:8px;
-border-radius:8px;
-border:none;
-background:#0b1220;
-color:white;
-}
+.hidden{display:none;}
 
-/* STATUS */
 .status{
-padding:5px 10px;
-border-radius:8px;
+padding:4px 10px;
+border-radius:6px;
 font-size:12px;
-display:inline-block;
 }
 
 .aberto{background:#f59e0b;color:black;}
 .andamento{background:#3b82f6;}
 .resolvido{background:#22c55e;}
-
-.hidden{display:none;}
 
 </style>
 </head>
@@ -102,8 +90,8 @@ display:inline-block;
 <body>
 
 <header>
-<h2>Nexus SaaS Admin</h2>
-<button id="authBtn" onclick="toggleAuth()">Login</button>
+<h2>Nexus SaaS TI</h2>
+<button id="authBtn" onclick="logout()">Logoff</button>
 </header>
 
 <!-- LOGIN -->
@@ -111,7 +99,7 @@ display:inline-block;
 
 <div class="box">
 
-<h3>Login SaaS</h3>
+<h3>Login / Cadastro</h3>
 
 <input id="email" placeholder="Email">
 <input id="pass" type="password" placeholder="Senha">
@@ -126,21 +114,14 @@ display:inline-block;
 <!-- APP -->
 <div id="app" class="container hidden">
 
-<h3>Dashboard SaaS</h3>
+<h3>Bem-vindo <span id="userEmail"></span></h3>
 
-<div class="grid">
+<h3>Abrir Chamado</h3>
 
-<div class="card">
-<h4>Chamados Totais</h4>
-<span id="total">0</span>
-</div>
+<input id="title" placeholder="Título">
+<textarea id="desc"></textarea>
 
-<div class="card">
-<h4>Usuário Logado</h4>
-<span id="userEmail"></span>
-</div>
-
-</div>
+<button onclick="createTicket()">Enviar</button>
 
 <h3>Chamados</h3>
 <div id="tickets"></div>
@@ -149,84 +130,129 @@ display:inline-block;
 
 <script>
 
-/* FIREBASE CONFIG (SUBSTITUIR) */
+/* ================= FIREBASE CONFIG ================= */
+/* 🔴 SUBSTITUA AQUI PELO SEU FIREBASE REAL */
 const firebaseConfig = {
-apiKey: "SUA_API",
-authDomain: "SEU.firebaseapp.com",
-projectId: "SEU",
-appId: "SEU"
+apiKey: "SUA_API_KEY",
+authDomain: "SEU_PROJETO.firebaseapp.com",
+projectId: "SEU_PROJECT_ID",
+appId: "SEU_APP_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-let currentUser = null;
-
-/* ADMIN EMAIL FIXO */
+/* ADMIN FIXO */
 const ADMIN_EMAIL = "admin@nexus.com";
 
-/* AUTH STATE */
+let currentUser = null;
+
+/* ================= LOGIN PERSISTENTE ================= */
 auth.onAuthStateChanged(user=>{
+
 if(user){
 currentUser = user;
 
 loginBox.classList.add("hidden");
 app.classList.remove("hidden");
-authBtn.innerText = "Logoff";
 
+authBtn.innerText = "Logoff";
 userEmail.innerText = user.email;
 
 loadTickets();
 
 }else{
+currentUser = null;
+
 app.classList.add("hidden");
 loginBox.classList.remove("hidden");
+
 authBtn.innerText = "Login";
 }
+
 });
 
-/* TOGGLE */
-function toggleAuth(){
-if(currentUser){
-auth.signOut();
-}else{
-loginBox.classList.remove("hidden");
-}
-}
-
-/* REGISTER */
-function register(){
-auth.createUserWithEmailAndPassword(email.value, pass.value);
-}
-
-/* LOGIN */
+/* ================= LOGIN ================= */
 function login(){
-auth.signInWithEmailAndPassword(email.value, pass.value);
+
+let emailVal = email.value.trim();
+let passVal = pass.value.trim();
+
+if(!emailVal || !passVal){
+alert("Preencha todos os campos");
+return;
 }
 
-/* LOAD TICKETS */
-function loadTickets(){
+auth.signInWithEmailAndPassword(emailVal, passVal)
+.catch(err=>{
+alert("Erro login: " + err.message);
+console.log(err);
+});
 
-let box = document.getElementById("tickets");
-box.innerHTML="";
+}
+
+/* ================= CADASTRO ================= */
+function register(){
+
+let emailVal = email.value.trim();
+let passVal = pass.value.trim();
+
+if(!emailVal || !passVal){
+alert("Preencha todos os campos");
+return;
+}
+
+auth.createUserWithEmailAndPassword(emailVal, passVal)
+.then(()=>{
+alert("Conta criada com sucesso!");
+})
+.catch(err=>{
+alert("Erro cadastro: " + err.message);
+console.log(err);
+});
+
+}
+
+/* ================= LOGOUT ================= */
+function logout(){
+auth.signOut();
+}
+
+/* ================= CRIAR TICKET ================= */
+function createTicket(){
+
+if(!currentUser) return;
+
+db.collection("tickets").add({
+user: currentUser.email,
+title: title.value,
+desc: desc.value,
+status: "ABERTO",
+created: Date.now()
+});
+
+}
+
+/* ================= CARREGAR TICKETS ================= */
+function loadTickets(){
 
 db.collection("tickets").onSnapshot(snapshot=>{
 
-let count = 0;
-box.innerHTML="";
+tickets.innerHTML = "";
 
 snapshot.forEach(doc=>{
-let t = doc.data();
-count++;
 
+let t = doc.data();
 let isAdmin = currentUser.email === ADMIN_EMAIL;
 
-box.innerHTML += `
+tickets.innerHTML += `
 <div class="card">
 
 <b>${t.user}</b><br>
 ${t.title}<br>
+${t.desc}<br>
 
 <span class="status ${t.status.toLowerCase()}">${t.status}</span>
 
@@ -240,15 +266,14 @@ ${isAdmin ? `
 ` : ""}
 
 </div>`;
-});
 
-total.innerText = count;
+});
 
 });
 
 }
 
-/* UPDATE STATUS */
+/* ================= STATUS ADMIN ================= */
 function updateStatus(id,status){
 db.collection("tickets").doc(id).update({status});
 }
