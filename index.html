@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS SYSTEM - Gestão e Suporte TI</title>
+<title>NEXUS SYSTEM - Gestão TI</title>
 
 <style>
 *{
@@ -18,7 +18,7 @@ background:#050814;
 color:#d6e2f0;
 }
 
-/* ================= HEADER MENU ================= */
+/* ================= MENU ================= */
 .menu{
 position:fixed;
 top:0;
@@ -39,10 +39,6 @@ color:#d6e2f0;
 text-decoration:none;
 font-size:14px;
 cursor:pointer;
-}
-
-.menu a:hover{
-color:#3b82f6;
 }
 
 /* ================= PAGES ================= */
@@ -77,14 +73,12 @@ font-size:22px;
 opacity:0;
 transition:0.5s;
 text-align:center;
-padding:20px;
 }
 
 .slide.active{
 opacity:1;
 }
 
-/* setas */
 .nav span{
 position:absolute;
 top:50%;
@@ -97,7 +91,6 @@ color:white;
 .nav span:first-child{left:10px;}
 .nav span:last-child{right:10px;}
 
-/* dots */
 .dots{
 position:absolute;
 bottom:10px;
@@ -119,7 +112,7 @@ cursor:pointer;
 background:#3b82f6;
 }
 
-/* ================= CHAT ================= */
+/* ================= CHAT CHAMADOS ================= */
 .chat-btn{
 position:fixed;
 bottom:80px;
@@ -129,19 +122,23 @@ color:white;
 padding:15px;
 border-radius:50%;
 cursor:pointer;
+user-select:none;
+z-index:1000;
 }
 
 .chat-box{
 position:fixed;
 bottom:140px;
 right:20px;
-width:260px;
-height:300px;
+width:280px;
+height:340px;
 background:#0b1220;
 display:none;
 flex-direction:column;
 border-radius:10px;
 overflow:hidden;
+z-index:1000;
+border:1px solid #1e293b;
 }
 
 .chat-header{
@@ -166,7 +163,7 @@ background:#0f172a;
 color:white;
 }
 
-/* ================= WHATSAPP ================= */
+/* ================= WHATSAPP FLUTUANTE ================= */
 .whats{
 position:fixed;
 bottom:20px;
@@ -176,6 +173,21 @@ color:white;
 padding:15px;
 border-radius:50%;
 text-decoration:none;
+font-size:18px;
+z-index:1000;
+}
+
+/* ================= BOTÃO CHAMADO ================= */
+.call-btn{
+position:fixed;
+bottom:150px;
+right:20px;
+background:#ef4444;
+color:white;
+padding:15px;
+border-radius:50%;
+cursor:pointer;
+z-index:1000;
 }
 </style>
 
@@ -197,8 +209,8 @@ text-decoration:none;
 <div class="slider">
 
 <div class="slide active">NEXUS SYSTEM<br>Plataforma de Gestão TI</div>
-<div class="slide">Monitoramento e Suporte Inteligente</div>
-<div class="slide">Infraestrutura Digital Modular</div>
+<div class="slide">Monitoramento Inteligente</div>
+<div class="slide">Infraestrutura Modular</div>
 
 <div class="nav">
 <span onclick="prev(event)">‹</span>
@@ -218,33 +230,31 @@ text-decoration:none;
 <!-- ================= SISTEMA ================= -->
 <div id="system" class="page">
 <h2>Descrição do Sistema</h2>
-<p>
-O NEXUS SYSTEM é uma plataforma acadêmica de simulação de gestão de TI,
-com módulos de suporte, monitoramento e interação em tempo real.
-</p>
+<p>NEXUS é uma plataforma acadêmica de gestão e suporte em TI.</p>
 </div>
 
 <!-- ================= SUPORTE ================= -->
 <div id="support" class="page">
 <h2>Suporte Técnico</h2>
-<p>Aqui o usuário pode interagir via chat interno e solicitar ajuda.</p>
+<p>Aqui ficam os chamados e atendimento ao usuário.</p>
 </div>
 
 <!-- ================= SOBRE ================= -->
 <div id="about" class="page">
 <h2>Sobre o Projeto</h2>
-<p>
-Projeto acadêmico desenvolvido para simulação de sistema SaaS de gestão TI.
-</p>
+<p>Projeto acadêmico de simulação de sistema SaaS de gestão TI.</p>
 </div>
 
-<!-- ================= CHAT ================= -->
+<!-- ================= BOTÃO CHAMADO ================= -->
+<div class="call-btn" onclick="openCall()">🧾</div>
+
+<!-- ================= CHAT SUPORTE ================= -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
 <div class="chat-box" id="chatBox">
-<div class="chat-header">Suporte NEXUS</div>
+<div class="chat-header">Chamados NEXUS</div>
 <div class="chat-body" id="chatBody"></div>
-<input id="chatInput" placeholder="Digite...">
+<input id="chatInput" placeholder="Abrir chamado...">
 </div>
 
 <!-- ================= WHATSAPP ================= -->
@@ -291,19 +301,25 @@ show(i);
 
 setInterval(()=>next(),5000);
 
-/* CHAT */
+/* CHAT CHAMADOS */
 function toggleChat(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
+/* ABRIR CHAMADO (botão extra) */
+function openCall(){
+document.getElementById("chatBox").style.display="flex";
+}
+
+/* INPUT CHAMADOS */
 document.getElementById("chatInput").addEventListener("keydown",(e)=>{
 if(e.key==="Enter"){
 let msg=e.target.value;
 if(!msg) return;
 
 let div=document.createElement("div");
-div.textContent="Você: "+msg;
+div.textContent="🧾 Chamado: "+msg;
 
 document.getElementById("chatBody").appendChild(div);
 e.target.value="";
