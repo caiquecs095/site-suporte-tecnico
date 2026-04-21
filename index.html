@@ -21,7 +21,7 @@ a {text-decoration:none;color:inherit;}
 /* ===== BANNER ===== */
 .banner {
     position: relative;
-    height: 420px;
+    height: 300px; /* altura reduzida */
     overflow: hidden;
 }
 
@@ -37,10 +37,10 @@ a {text-decoration:none;color:inherit;}
     background-size:cover;
     background-position:center;
     opacity:0;
-    transition:opacity 1s ease;
+    transition:opacity 0.8s ease;
 }
 
-/* ESCURECER IMAGEM */
+/* overlay escuro */
 .slide::after {
     content:"";
     position:absolute;
@@ -51,30 +51,60 @@ a {text-decoration:none;color:inherit;}
     left:0;
 }
 
-/* CONTEÚDO */
 .slide-content {
     position:relative;
     z-index:2;
     max-width:600px;
+    padding:20px;
 }
 
-.slide h1 {
-    font-size:2.5em;
-}
+.slide h1 {font-size:2em;}
+.slide p {margin:10px 0;}
 
-.slide p {
-    margin:15px 0;
-}
-
-.slide a {
-    background:#3b82f6;
-    padding:12px 25px;
-    border-radius:8px;
-    color:white;
-}
-
-/* ATIVO */
 .active {opacity:1;}
+
+/* ===== BOTÕES ===== */
+.controls {
+    position:absolute;
+    width:100%;
+    top:50%;
+    display:flex;
+    justify-content:space-between;
+    transform:translateY(-50%);
+    z-index:3;
+}
+
+.controls span {
+    cursor:pointer;
+    background:rgba(0,0,0,0.5);
+    color:white;
+    padding:10px 15px;
+    border-radius:50%;
+    margin:0 10px;
+}
+
+/* ===== BOLINHAS ===== */
+.dots {
+    position:absolute;
+    bottom:10px;
+    width:100%;
+    text-align:center;
+    z-index:3;
+}
+
+.dot {
+    height:10px;
+    width:10px;
+    margin:5px;
+    background:#ccc;
+    display:inline-block;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.dot.active {
+    background:#3b82f6;
+}
 
 /* NAV */
 nav {
@@ -86,10 +116,6 @@ nav {
 nav a {
     margin:0 15px;
     font-weight:600;
-}
-
-nav a:hover {
-    color:#3b82f6;
 }
 
 /* CONTEÚDO */
@@ -119,11 +145,6 @@ nav a:hover {
     border-radius:12px;
     text-align:center;
     box-shadow:0 5px 20px rgba(0,0,0,0.05);
-    transition:0.3s;
-}
-
-.card:hover {
-    transform:translateY(-8px);
 }
 
 /* FOOTER */
@@ -141,28 +162,38 @@ footer {
 <!-- ===== BANNER ===== -->
 <div class="banner">
 
-<div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
+<a href="#sobre" class="slide active" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475');">
     <div class="slide-content">
         <h1>Carreira em Suporte Técnico</h1>
-        <p>Entre no mundo da Tecnologia da Informação</p>
-        <a href="#sobre">Saiba mais</a>
+        <p>Entre no mundo da TI</p>
     </div>
-</div>
+</a>
 
-<div class="slide" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
+<a href="#dicas" class="slide" style="background-image:url('https://images.unsplash.com/photo-1526378722484-bd91ca387e72');">
     <div class="slide-content">
         <h1>Mercado em Alta</h1>
-        <p>Profissionais de TI são cada vez mais requisitados</p>
-        <a href="#dicas">Ver dicas</a>
+        <p>Alta demanda por profissionais</p>
     </div>
-</div>
+</a>
 
-<div class="slide" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
+<a href="#contato" class="slide" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c');">
     <div class="slide-content">
         <h1>Comece Hoje</h1>
-        <p>Aprenda habilidades essenciais para iniciar na área</p>
-        <a href="#contato">Começar</a>
+        <p>Inicie sua carreira</p>
     </div>
+</a>
+
+<!-- BOTÕES -->
+<div class="controls">
+    <span onclick="prevSlide()">❮</span>
+    <span onclick="nextSlide()">❯</span>
+</div>
+
+<!-- BOLINHAS -->
+<div class="dots">
+    <span class="dot active" onclick="goSlide(0)"></span>
+    <span class="dot" onclick="goSlide(1)"></span>
+    <span class="dot" onclick="goSlide(2)"></span>
 </div>
 
 </div>
@@ -171,7 +202,7 @@ footer {
 <a href="#inicio">Início</a>
 <a href="#sobre">Profissão</a>
 <a href="#dicas">Dicas</a>
-<a href="#ods">ODS 9</a>
+<a href="#ods">ODS</a>
 <a href="#contato">Contato</a>
 </nav>
 
@@ -179,21 +210,21 @@ footer {
 
 <div id="inicio" class="section">
 <h2>Bem-vindo</h2>
-<p>Este site apresenta a carreira em Suporte Técnico e suas oportunidades.</p>
+<p>Informações sobre a carreira em Suporte Técnico.</p>
 </div>
 
 <div id="sobre" class="section">
-<h2>Sobre a Profissão</h2>
-<p>Responsável por resolver problemas de tecnologia e manter sistemas funcionando.</p>
+<h2>Sobre</h2>
+<p>Profissional que resolve problemas de tecnologia.</p>
 </div>
 
 <div id="dicas" class="section">
-<h2>Dicas e Tendências</h2>
+<h2>Dicas</h2>
 
 <div class="grid">
-<div class="card">💻 Aprenda Informática</div>
-<div class="card">🎓 Faça Cursos Técnicos</div>
-<div class="card">🌐 Estude Redes</div>
+<div class="card">💻 Informática</div>
+<div class="card">🎓 Cursos</div>
+<div class="card">🌐 Redes</div>
 <div class="card">🗣️ Comunicação</div>
 </div>
 
@@ -201,7 +232,7 @@ footer {
 
 <div id="ods" class="section">
 <h2>ODS 9</h2>
-<p>Contribui para inovação e infraestrutura tecnológica.</p>
+<p>Inovação e tecnologia.</p>
 </div>
 
 <div id="contato" class="section">
@@ -217,13 +248,33 @@ footer {
 
 <script>
 let slides = document.querySelectorAll('.slide');
+let dots = document.querySelectorAll('.dot');
 let i = 0;
 
-setInterval(() => {
-    slides[i].classList.remove('active');
+function showSlide(index){
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+}
+
+function nextSlide(){
     i = (i + 1) % slides.length;
-    slides[i].classList.add('active');
-}, 4000);
+    showSlide(i);
+}
+
+function prevSlide(){
+    i = (i - 1 + slides.length) % slides.length;
+    showSlide(i);
+}
+
+function goSlide(index){
+    i = index;
+    showSlide(i);
+}
+
+/* automático */
+setInterval(nextSlide, 4000);
 </script>
 
 </body>
