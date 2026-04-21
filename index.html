@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TI Pro | Dashboard Seguro</title>
+<title>NEXUS CORE | Global Operations</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -11,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
 
 :root{
---bg:#070b14;
+--bg:#04060c;
 --panel:#0b1220;
 --panel2:#0f1a2b;
 --text:#d6e2f0;
@@ -22,28 +22,103 @@
 }
 
 body{
-background: radial-gradient(1200px 600px at 20% 0%, #0b1a2e 0%, var(--bg) 50%, #05070d 100%);
+background: radial-gradient(1200px 600px at 20% 0%, #0b1a2e 0%, var(--bg) 50%, #020308 100%);
 color:var(--text);
 overflow-x:hidden;
 }
 
-/* LOGIN */
+/* ===== INTRO ===== */
+.intro{
+position:fixed;
+top:0;left:0;
+width:100%;height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.intro-video{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+object-fit:cover;
+opacity:0;
+transition:1.5s;
+}
+
+.intro-video.active{opacity:1;}
+
+.intro-overlay{
+position:absolute;
+width:100%;height:100%;
+background:rgba(0,0,0,0.7);
+}
+
+.intro-box{
+position:relative;
+z-index:2;
+text-align:center;
+max-width:720px;
+padding:30px;
+}
+
+.intro h1{
+font-size:34px;
+letter-spacing:1px;
+margin-bottom:10px;
+}
+
+.intro p{
+color:var(--muted);
+font-size:14px;
+margin-bottom:20px;
+}
+
+.intro button{
+background:linear-gradient(90deg,var(--accent2),#2563eb);
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* ===== LOGIN ===== */
 .login{
 position:fixed;
 top:0;left:0;
 width:100%;height:100vh;
-background:rgba(0,0,0,0.85);
-display:flex;
+display:none;
 justify-content:center;
 align-items:center;
 z-index:999;
+overflow:hidden;
+}
+
+.login-video{
+position:absolute;
+top:0;left:0;
+width:100%;height:100%;
+object-fit:cover;
+}
+
+.login-overlay{
+position:absolute;
+width:100%;height:100%;
+background:rgba(0,0,0,0.72);
 }
 
 .login-box{
-background:var(--panel);
+position:relative;
+z-index:2;
+background:rgba(11,18,32,0.9);
+backdrop-filter:blur(10px);
 padding:30px;
 border-radius:14px;
-width:300px;
+width:330px;
 border:1px solid var(--border);
 text-align:center;
 }
@@ -52,8 +127,8 @@ text-align:center;
 width:100%;
 padding:10px;
 margin:10px 0;
-border:none;
 border-radius:8px;
+border:none;
 background:#0f1a2b;
 color:white;
 }
@@ -68,12 +143,14 @@ color:white;
 cursor:pointer;
 }
 
-/* SIDEBAR */
+/* ===== APP ===== */
+.app{display:none;}
+
 .sidebar{
 position:fixed;
 left:0;top:0;
 height:100vh;
-width:230px;
+width:240px;
 background:linear-gradient(180deg,var(--panel),#070b14);
 border-right:1px solid var(--border);
 padding:22px;
@@ -82,6 +159,7 @@ padding:22px;
 .sidebar h2{
 color:var(--accent2);
 margin-bottom:25px;
+letter-spacing:2px;
 }
 
 .sidebar a{
@@ -90,151 +168,193 @@ margin:16px 0;
 color:var(--muted);
 text-decoration:none;
 font-size:14px;
+transition:0.2s;
 }
 
-.sidebar a:hover{
-color:white;
-}
-
+.sidebar a:hover{color:white;transform:translateX(4px);}
 .sidebar i{margin-right:8px;color:var(--accent2);}
 
-/* CONTENT */
-.content{
-margin-left:230px;
-padding:25px;
-display:none;
-}
+.content{margin-left:240px;padding:20px;}
 
 /* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:25px;
-background:rgba(255,255,255,0.02);
-padding:18px;
+background:rgba(255,255,255,0.03);
 border:1px solid var(--border);
+padding:12px 18px;
 border-radius:12px;
+margin-bottom:20px;
+backdrop-filter:blur(10px);
 }
 
-.topbar button{
-background:linear-gradient(90deg,var(--accent2),#2563eb);
-border:none;
-padding:10px 14px;
-border-radius:10px;
-color:white;
-cursor:pointer;
+.search{flex:1;margin:0 20px;}
+.search input{
+width:100%;padding:10px 12px;border-radius:8px;border:none;background:#0f1a2b;color:white;
 }
 
-/* CARDS */
-.cards{
+.top-icons i{margin-left:15px;cursor:pointer;color:var(--muted);}
+
+/* METRICS */
+.metrics{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
 }
 
-.card{
+.metric{
 background:linear-gradient(180deg,var(--panel2),rgba(255,255,255,0.02));
 border:1px solid var(--border);
-padding:22px;
+padding:18px;
 border-radius:14px;
-cursor:pointer;
-transition:0.3s;
 }
 
-.card:hover{
-transform:translateY(-6px);
-border-color:rgba(59,130,246,0.4);
+.metric h3{font-size:13px;color:var(--muted);}
+.metric p{font-size:22px;margin-top:5px;}
+
+/* CHART */
+.chart{
+margin-top:25px;
+background:var(--panel);
+padding:20px;
+border-radius:14px;
+border:1px solid var(--border);
 }
 
-.card i{
-font-size:22px;
-color:var(--accent);
-margin-bottom:10px;
+.bar-chart{
+display:flex;
+align-items:flex-end;
+gap:10px;
+height:140px;
+margin-top:15px;
 }
 
-.card p{color:var(--muted);font-size:13px;}
+.bar-chart div{
+width:20px;
+background:linear-gradient(180deg,var(--accent2),#1d4ed8);
+border-radius:6px 6px 0 0;
+}
 
+.show{display:flex !important;}
+
+@media(max-width:768px){
+.sidebar{width:90px;}
+.content{margin-left:90px;}
+.search{display:none;}
+}
 </style>
 </head>
 
 <body>
 
+<!-- INTRO -->
+<div class="intro" id="intro">
+
+<video class="intro-video active" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-working-in-it-office-4361/1080p.mp4">
+</video>
+
+<video class="intro-video" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-coding-on-laptop-1529/1080p.mp4">
+</video>
+
+<video class="intro-video" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-data-center-servers-1577/1080p.mp4">
+</video>
+
+<div class="intro-overlay"></div>
+
+<div class="intro-box">
+<h1>NEXUS CORE GLOBAL SYSTEM</h1>
+<p>Plataforma corporativa de infraestrutura, segurança e operações globais de tecnologia.</p>
+<button onclick="goLogin()">Acessar Sistema</button>
+</div>
+
+</div>
+
 <!-- LOGIN -->
 <div class="login" id="login">
+
+<video class="login-video" autoplay muted loop>
+<source src="https://cdn.coverr.co/videos/coverr-it-team-working-1555/1080p.mp4">
+</video>
+
+<div class="login-overlay"></div>
+
 <div class="login-box">
-<h3>Login Administrativo</h3>
+<h3>Secure Access</h3>
 <input id="user" placeholder="Usuário">
 <input id="pass" type="password" placeholder="Senha">
-<button onclick="entrar()">Acessar Sistema</button>
-<p style="font-size:11px;color:#93a4b8;margin-top:10px">Admin: admin / 1234</p>
-</div>
+<button onclick="login()">Entrar</button>
+<p style="font-size:11px;color:#93a4b8;margin-top:10px">admin / 1234</p>
 </div>
 
-<!-- SIDEBAR -->
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+
 <div class="sidebar">
-<h2>TI•SEC</h2>
-<a href="#"><i class="fas fa-shield"></i> Painel</a>
-<a href="#"><i class="fas fa-chart-line"></i> Monitoramento</a>
-<a href="#"><i class="fas fa-server"></i> Servidores</a>
-<a href="#"><i class="fas fa-user-lock"></i> Acessos</a>
+<h2>NEXUS</h2>
+<a href="#"><i class="fas fa-shield"></i> Security</a>
+<a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+<a href="#"><i class="fas fa-server"></i> Cloud</a>
+<a href="#"><i class="fas fa-user-lock"></i> Access</a>
 </div>
 
-<!-- CONTENT -->
-<div class="content" id="content">
+<div class="content">
 
 <div class="topbar">
-<div>
-<h1>Sistema de Segurança TI</h1>
-<p>Monitoramento em tempo real</p>
+<div><strong>Global Control Center</strong></div>
+<div class="search"><input placeholder="Search systems, logs, services..."></div>
+<div class="top-icons"><i class="fas fa-bell"></i><i class="fas fa-user"></i></div>
 </div>
 
-<button onclick="alert('Área administrativa')">
-<i class="fas fa-lock"></i> Admin
-</button>
+<div class="metrics">
+<div class="metric"><h3>Uptime</h3><p>99.999%</p></div>
+<div class="metric"><h3>Requests</h3><p>2.8M</p></div>
+<div class="metric"><h3>Latency</h3><p>18ms</p></div>
+<div class="metric"><h3>Security</h3><p>Ultra Stable</p></div>
 </div>
 
-<div class="cards">
-
-<div class="card" onclick="alert('Abrindo Segurança')">
-<i class="fas fa-shield-halved"></i>
-<h3>Segurança</h3>
-<p>Sistema protegido</p>
+<div class="chart">
+<strong>Global Traffic Intelligence</strong>
+<div class="bar-chart">
+<div style="height:50%"></div>
+<div style="height:75%"></div>
+<div style="height:60%"></div>
+<div style="height:95%"></div>
+<div style="height:70%"></div>
+<div style="height:85%"></div>
 </div>
-
-<div class="card" onclick="alert('Abrindo Servidores')">
-<i class="fas fa-server"></i>
-<h3>Servidores</h3>
-<p>Estabilidade 99.9%</p>
-</div>
-
-<div class="card" onclick="alert('Abrindo Rede')">
-<i class="fas fa-network-wired"></i>
-<h3>Rede</h3>
-<p>Tráfego monitorado</p>
-</div>
-
-<div class="card" onclick="alert('Abrindo Acessos')">
-<i class="fas fa-user-shield"></i>
-<h3>Acessos</h3>
-<p>Controle ativo</p>
 </div>
 
 </div>
-
 </div>
 
 <script>
-function entrar(){
+let videos=document.querySelectorAll('.intro-video');
+let v=0;
+setInterval(()=>{
+videos[v].classList.remove('active');
+v=(v+1)%videos.length;
+videos[v].classList.add('active');
+},6000);
+
+function goLogin(){
+document.getElementById('intro').style.display='none';
+document.getElementById('login').classList.add('show');
+}
+
+function login(){
 let u=document.getElementById('user').value;
 let p=document.getElementById('pass').value;
-
 if(u==='admin' && p==='1234'){
-    document.getElementById('login').style.display='none';
-    document.getElementById('content').style.display='block';
-}else{
-    alert('Acesso negado');
-}
+document.getElementById('login').style.display='none';
+document.getElementById('app').style.display='block';
+}else{alert('Acesso negado');}
 }
 </script>
 
