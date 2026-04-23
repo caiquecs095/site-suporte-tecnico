@@ -18,7 +18,7 @@ background:#050814;
 color:#d6e2f0;
 }
 
-/* ================= MENU ================= */
+/* MENU */
 .menu{
 position:fixed;
 top:0;
@@ -37,29 +37,27 @@ z-index:1000;
 .menu a{
 color:#d6e2f0;
 text-decoration:none;
-font-size:14px;
 cursor:pointer;
 }
 
-/* ================= PAGES ================= */
+/* PAGES */
 .page{
 display:none;
 padding:20px;
-margin-top:60px;
+margin-top:55px;
 }
 
 .page.active{
 display:block;
 }
 
-/* ================= SLIDER ================= */
+/* SLIDER */
 .slider{
 height:300px;
 background:#0b1220;
 position:relative;
 overflow:hidden;
-cursor:pointer;
-margin-top:50px;
+margin-top:10px;
 }
 
 .slide{
@@ -75,9 +73,7 @@ transition:0.5s;
 text-align:center;
 }
 
-.slide.active{
-opacity:1;
-}
+.slide.active{opacity:1;}
 
 .nav span{
 position:absolute;
@@ -108,11 +104,9 @@ margin:0 4px;
 cursor:pointer;
 }
 
-.dots span.active{
-background:#3b82f6;
-}
+.dots span.active{background:#3b82f6;}
 
-/* ================= CHAT CHAMADOS ================= */
+/* CHAT */
 .chat-btn{
 position:fixed;
 bottom:80px;
@@ -122,7 +116,6 @@ color:white;
 padding:15px;
 border-radius:50%;
 cursor:pointer;
-user-select:none;
 z-index:1000;
 }
 
@@ -131,13 +124,10 @@ position:fixed;
 bottom:140px;
 right:20px;
 width:280px;
-height:340px;
 background:#0b1220;
 display:none;
 flex-direction:column;
 border-radius:10px;
-overflow:hidden;
-z-index:1000;
 border:1px solid #1e293b;
 }
 
@@ -147,32 +137,42 @@ padding:10px;
 font-weight:bold;
 }
 
+.chat-body{
+padding:10px;
+display:flex;
+flex-direction:column;
+}
+
+.chat-body input,
+.chat-body textarea{
+background:#0f172a;
+color:white;
+border:none;
+padding:8px;
+margin-bottom:5px;
+border-radius:5px;
+}
+
 .chat-body textarea{
 resize:none;
 height:80px;
-background:#0f172a;
-color:white;
-}
-
-.chat-body input{
-background:#0f172a;
-color:white;
-margin-bottom:5px;
 }
 
 .chat-body button{
 background:#3b82f6;
 color:white;
-margin-top:10px;
+padding:10px;
+border:none;
+border-radius:5px;
 cursor:pointer;
 }
 
-.chat-box{
-display:none;
-flex-direction:column;
+#statusMsg{
+font-size:12px;
+margin-top:5px;
 }
 
-/* ================= WHATSAPP FLUTUANTE ================= */
+/* WHATS */
 .whats{
 position:fixed;
 bottom:20px;
@@ -182,21 +182,12 @@ color:white;
 padding:15px;
 border-radius:50%;
 text-decoration:none;
-font-size:18px;
-z-index:1000;
 }
 
-/* ================= BOTÃO CHAMADO ================= */
-.call-btn{
-position:fixed;
-bottom:150px;
-right:20px;
-background:#ef4444;
-color:white;
-padding:15px;
-border-radius:50%;
-cursor:pointer;
-z-index:1000;
+/* MOBILE */
+@media(max-width:600px){
+.slider{height:200px;}
+.chat-box{width:90%; right:5%;}
 }
 </style>
 
@@ -204,7 +195,7 @@ z-index:1000;
 
 <body>
 
-<!-- ================= MENU ================= -->
+<!-- MENU -->
 <div class="menu">
 <a onclick="showPage('home')">Home</a>
 <a onclick="showPage('system')">Sistema</a>
@@ -213,11 +204,9 @@ z-index:1000;
 <a onclick="showPage('course')">Cursos</a>
 </div>
 
-<!-- ================= HOME ================= -->
+<!-- HOME -->
 <div id="home" class="page active">
-
 <div class="slider">
-
 <div class="slide active">NEXUS SYSTEM<br>Plataforma de Gestão TI</div>
 <div class="slide">Monitoramento Inteligente</div>
 <div class="slide">Infraestrutura Modular</div>
@@ -232,91 +221,68 @@ z-index:1000;
 <span onclick="go(1)"></span>
 <span onclick="go(2)"></span>
 </div>
-
+</div>
 </div>
 
-</div>
-
-<!-- ================= SISTEMA ================= -->
+<!-- SISTEMA -->
 <div id="system" class="page">
 <h2>Painel do Sistema</h2>
-
 <p>Controle completo da infraestrutura de TI.</p>
-
 <ul>
-<li>✔ Monitoramento de servidores</li>
-<li>✔ Controle de usuários</li>
-<li>✔ Gestão de ativos</li>
-<li>✔ Relatórios em tempo real</li>
+<li>✔ Monitoramento</li>
+<li>✔ Usuários</li>
+<li>✔ Ativos</li>
+<li>✔ Relatórios</li>
 </ul>
-
 </div>
 
-<!-- ================= SUPORTE ================= -->
+<!-- SUPORTE -->
 <div id="support" class="page">
 <h2>Central de Suporte</h2>
-
-<p>Abra chamados rapidamente pelo botão de chat no canto da tela.</p>
-
-<div>
-<p>🧾 Chamados técnicos</p>
+<p>Abra chamados pelo botão de chat no canto da tela.</p>
 <p>💬 Atendimento em tempo real</p>
-<p>📱 Suporte via WhatsApp</p>
-<p>⚡ SLA de atendimento rápido</p>
+<p>📱 WhatsApp</p>
+<p>⚡ SLA rápido</p>
 </div>
 
-<!-- ================= SOBRE ================= -->
+<!-- SOBRE -->
 <div id="about" class="page">
 <h2>Sobre o NEXUS</h2>
-
-<p>O NEXUS SYSTEM é uma plataforma desenvolvida para gestão e suporte em Tecnologia da Informação, focada em eficiência, automação e experiência do usuário.</p>
-
-<p>Nosso objetivo é centralizar o suporte técnico e facilitar a comunicação entre usuários e equipes de TI.</p>
-
+<p>Plataforma de gestão e suporte em TI.</p>
 </div>
 
-<!-- ================= Curso ================= -->
+<!-- CURSOS -->
 <div id="course" class="page">
-<h2>Capacitação em TI</h2>
-
-<p>Desenvolva habilidades essenciais para o mercado de tecnologia.</p>
-
-<p>💻 Informática Profissional</p>
-<p>🌐 Redes e Infraestrutura</p>
-<p>🔐 Segurança da Informação</p>
-<p>📊 Suporte Corporativo</p>
-
+<h2>Cursos</h2>
+<p>💻 Informática</p>
+<p>🌐 Redes</p>
+<p>🔐 Segurança</p>
+<p>📊 Suporte</p>
 </div>
 
-<!-- ================= CHAT SUPORTE ================= -->
+<!-- CHAT -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
 <div class="chat-box" id="chatBox">
+<div class="chat-header">Abrir Chamado</div>
 
-  <div class="chat-header">Abrir Chamado</div>
-
-  <div class="chat-body">
-    <input id="nomeChat" placeholder="Seu nome">
-    <input id="emailChat" placeholder="Email">
-    <textarea id="problemaChat" placeholder="Descreva o problema"></textarea>
-
-    <button onclick="enviarChamado()">Enviar Chamado</button>
-
-    <div id="statusMsg"></div>
-  </div>
-
+<div class="chat-body">
+<input id="nomeChat" placeholder="Seu nome">
+<input id="emailChat" placeholder="Email">
+<textarea id="problemaChat" placeholder="Descreva o problema"></textarea>
+<button onclick="enviarChamado()">Enviar</button>
+<div id="statusMsg"></div>
+</div>
 </div>
 
-<!-- ================= WHATSAPP ================= -->
+<!-- WHATS -->
 <a class="whats" href="https://wa.me/+5521981048650" target="_blank">📱</a>
 
 <script>
 
 /* MENU */
 function showPage(id){
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("active");
-});
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
@@ -328,10 +294,8 @@ let current=0;
 function show(i){
 slides.forEach(s=>s.classList.remove("active"));
 dots.forEach(d=>d.classList.remove("active"));
-
 slides[i].classList.add("active");
 dots[i].classList.add("active");
-
 current=i;
 }
 
@@ -345,24 +309,16 @@ if(e) e.stopPropagation();
 show((current-1+slides.length)%slides.length);
 }
 
-function go(i){
-show(i);
-}
+function go(i){show(i);}
+setInterval(next,5000);
 
-setInterval(()=>next(),5000);
-
-/* CHAT CHAMADOS */
+/* CHAT */
 function toggleChat(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-/* ABRIR CHAMADO (botão extra) */
-function openCall(){
-document.getElementById("chatBox").style.display="flex";
-}
-
-/* INPUT CHAMADOS */
+/* ENVIAR */
 function enviarChamado(){
 
 let nome = document.getElementById("nomeChat").value;
@@ -370,23 +326,15 @@ let email = document.getElementById("emailChat").value;
 let problema = document.getElementById("problemaChat").value;
 
 if(!nome || !email || !problema){
-document.getElementById("statusMsg").innerText = "Preencha todos os campos";
+document.getElementById("statusMsg").innerText="Preencha todos os campos";
 return;
 }
 
-document.getElementById("statusMsg").innerText = "Chamado enviado com sucesso!";
+document.getElementById("statusMsg").innerText="Chamado enviado!";
 
 document.getElementById("nomeChat").value="";
 document.getElementById("emailChat").value="";
 document.getElementById("problemaChat").value="";
-}
-
-// SIMULAÇÃO (pode ligar com Firebase depois)
-document.getElementById("statusMsg").innerText = "Chamado enviado com sucesso!";
-
-document.getElementById("nome").value="";
-document.getElementById("email").value="";
-document.getElementById("problema").value="";
 }
 
 </script>
