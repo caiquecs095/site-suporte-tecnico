@@ -247,6 +247,31 @@ right:5%;
 
 <script>
 
+  <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
+  authDomain: "chamados-17bc3.firebaseapp.com",
+  projectId: "chamados-17bc3",
+  storageBucket: "chamados-17bc3.firebasestorage.app",
+  messagingSenderId: "352897852293",
+  appId: "1:352897852293:web:989ed88f0dfb9e2d561aec",
+  measurementId: "G-7BMJGH1QV8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// deixa global
+window.db = db;
+window.addDoc = addDoc;
+window.collection = collection;
+window.serverTimestamp = serverTimestamp;
+
+
 /* NAV */
 function showPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
