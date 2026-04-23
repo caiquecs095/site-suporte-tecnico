@@ -20,7 +20,7 @@ color:#d6e2f0;
 
 /* ================= MENU ================= */
 .menu{
-position:center;
+position:fixed;
 top:0;
 left:0;
 width:100%;
@@ -167,6 +167,11 @@ margin-top:10px;
 cursor:pointer;
 }
 
+.chat-box{
+display:none;
+flex-direction:column;
+}
+
 /* ================= WHATSAPP FLUTUANTE ================= */
 .whats{
 position:fixed;
@@ -251,35 +256,13 @@ z-index:1000;
 <div id="support" class="page">
 <h2>Central de Suporte</h2>
 
-<p>Abra chamados e acompanhe o atendimento.</p>
+<p>Abra chamados rapidamente pelo botão de chat no canto da tela.</p>
 
 <div>
 <p>🧾 Chamados técnicos</p>
 <p>💬 Atendimento em tempo real</p>
 <p>📱 Suporte via WhatsApp</p>
 <p>⚡ SLA de atendimento rápido</p>
-</div>
-
-<p>
-    
-<p>
-    
-</p>
-</p>
-   <p> <div class="chat-header">Abrir Chamado</div></p>
-
-  <div class="chat-body">
-
-    <p><input id="nome" placeholder="Seu nome"></p>
-   
-    <p><input id="email" placeholder="Email"></p>
-    <p><textarea id="problema" placeholder="Descreva o problema"></textarea></p>
-
-    <p><button onclick="enviarChamado()">Enviar Chamado</button></p>
-
-    <div id="statusMsg" style="margin-top:10px;font-size:12px;"></div>
-
-  </div>
 </div>
 
 <!-- ================= SOBRE ================= -->
@@ -306,20 +289,22 @@ z-index:1000;
 </div>
 
 <!-- ================= CHAT SUPORTE ================= -->
+<div class="chat-btn" onclick="toggleChat()">💬</div>
+
 <div class="chat-box" id="chatBox">
-    <div class="chat-header">Abrir Chamado</div>
+
+  <div class="chat-header">Abrir Chamado</div>
 
   <div class="chat-body">
-
-    <input id="nome" placeholder="Seu nome">
-    <input id="email" placeholder="Email">
-    <textarea id="problema" placeholder="Descreva o problema"></textarea>
+    <input id="nomeChat" placeholder="Seu nome">
+    <input id="emailChat" placeholder="Email">
+    <textarea id="problemaChat" placeholder="Descreva o problema"></textarea>
 
     <button onclick="enviarChamado()">Enviar Chamado</button>
 
-    <div id="statusMsg" style="margin-top:10px;font-size:12px;"></div>
-
+    <div id="statusMsg"></div>
   </div>
+
 </div>
 
 <!-- ================= WHATSAPP ================= -->
@@ -380,13 +365,20 @@ document.getElementById("chatBox").style.display="flex";
 /* INPUT CHAMADOS */
 function enviarChamado(){
 
-let nome = document.getElementById("nome").value;
-let email = document.getElementById("email").value;
-let problema = document.getElementById("problema").value;
+let nome = document.getElementById("nomeChat").value;
+let email = document.getElementById("emailChat").value;
+let problema = document.getElementById("problemaChat").value;
 
 if(!nome || !email || !problema){
 document.getElementById("statusMsg").innerText = "Preencha todos os campos";
 return;
+}
+
+document.getElementById("statusMsg").innerText = "Chamado enviado com sucesso!";
+
+document.getElementById("nomeChat").value="";
+document.getElementById("emailChat").value="";
+document.getElementById("problemaChat").value="";
 }
 
 // SIMULAÇÃO (pode ligar com Firebase depois)
@@ -396,7 +388,6 @@ document.getElementById("nome").value="";
 document.getElementById("email").value="";
 document.getElementById("problema").value="";
 }
-);
 
 </script>
 
