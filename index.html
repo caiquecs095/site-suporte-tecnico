@@ -262,19 +262,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* NAV */
+/* ================= NAV ================= */
 window.showPage = function(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* CHAT */
+/* ================= CHAT ================= */
 window.toggleChat = function(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-/* ENVIAR CHAMADO (AGORA COM FIREBASE) */
+/* ================= CHAMADO ================= */
 window.enviarChamado = async function(){
 
 let nome = document.getElementById("nomeChat").value;
