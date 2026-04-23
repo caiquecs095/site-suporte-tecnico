@@ -147,20 +147,24 @@ padding:10px;
 font-weight:bold;
 }
 
-.chat-body{
-flex:1;
-padding:10px;
-font-size:12px;
-overflow:auto;
-}
-
-.chat-box input{
-border:none;
-padding:10px;
-width:100%;
-outline:none;
+.chat-body textarea{
+resize:none;
+height:80px;
 background:#0f172a;
 color:white;
+}
+
+.chat-body input{
+background:#0f172a;
+color:white;
+margin-bottom:5px;
+}
+
+.chat-body button{
+background:#3b82f6;
+color:white;
+margin-top:10px;
+cursor:pointer;
 }
 
 /* ================= WHATSAPP FLUTUANTE ================= */
@@ -255,19 +259,20 @@ z-index:1000;
 <p>📱 Suporte via WhatsApp</p>
 <p>⚡ SLA de atendimento rápido</p>
 </div>
-<p>  
+<p>
+</p>
    <p> <div class="chat-header">Abrir Chamado</div></p>
 
   <div class="chat-body">
 
-    <p></p><input id="nome" placeholder="Seu nome"></p>
+    <p><input id="nome" placeholder="Seu nome"></p>
     <p><input id="email" placeholder="Email"></p>
     <p><textarea id="problema" placeholder="Descreva o problema"></textarea></p>
 
     <p><button onclick="enviarChamado()">Enviar Chamado</button></p>
 
     <div id="statusMsg" style="margin-top:10px;font-size:12px;"></div>
-</p>
+
   </div>
 </div>
 
@@ -367,18 +372,25 @@ document.getElementById("chatBox").style.display="flex";
 }
 
 /* INPUT CHAMADOS */
-document.getElementById("chatInput").addEventListener("keydown",(e)=>{
-if(e.key==="Enter"){
-let msg=e.target.value;
-if(!msg) return;
+function enviarChamado(){
 
-let div=document.createElement("div");
-div.textContent="🧾 Chamado: "+msg;
+let nome = document.getElementById("nome").value;
+let email = document.getElementById("email").value;
+let problema = document.getElementById("problema").value;
 
-document.getElementById("chatBody").appendChild(div);
-e.target.value="";
+if(!nome || !email || !problema){
+document.getElementById("statusMsg").innerText = "Preencha todos os campos";
+return;
 }
-});
+
+// SIMULAÇÃO (pode ligar com Firebase depois)
+document.getElementById("statusMsg").innerText = "Chamado enviado com sucesso!";
+
+document.getElementById("nome").value="";
+document.getElementById("email").value="";
+document.getElementById("problema").value="";
+}
+);
 
 </script>
 
