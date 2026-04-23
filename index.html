@@ -288,18 +288,24 @@ z-index:1000;
 <div class="card">📊 Suporte Corporativo</div>
 
 </div>
-<!-- ================= BOTÃO CHAMADO ================= -->
-function openCall(){
-window.open("chamados.html","_blank");
-}
 
 <!-- ================= CHAT SUPORTE ================= -->
-<div class="chat-btn" onclick="toggleChat()">💬</div>
-
 <div class="chat-box" id="chatBox">
-<div class="chat-header">Chamados NEXUS</div>
-<div class="chat-body" id="chatBody"></div>
-<input id="chatInput" placeholder="Abrir chamado...">
+
+  <div class="chat-header">Abrir Chamado</div>
+
+  <div class="chat-body">
+
+    <input id="nome" placeholder="Seu nome">
+    <input id="email" placeholder="Email">
+    <textarea id="problema" placeholder="Descreva o problema"></textarea>
+
+    <button onclick="enviarChamado()">Enviar Chamado</button>
+
+    <div id="statusMsg" style="margin-top:10px;font-size:12px;"></div>
+
+  </div>
+
 </div>
 
 <!-- ================= WHATSAPP ================= -->
