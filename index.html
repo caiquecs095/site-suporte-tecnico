@@ -245,9 +245,7 @@ right:5%;
 <!-- WHATS -->
 <a class="whats" href="https://wa.me/+5521981048650" target="_blank">📱</a>
 
-<script>
-
-  <script type="module">
+<script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -258,34 +256,26 @@ const firebaseConfig = {
   projectId: "chamados-17bc3",
   storageBucket: "chamados-17bc3.firebasestorage.app",
   messagingSenderId: "352897852293",
-  appId: "1:352897852293:web:989ed88f0dfb9e2d561aec",
-  measurementId: "G-7BMJGH1QV8"
+  appId: "1:352897852293:web:989ed88f0dfb9e2d561aec"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// deixa global
-window.db = db;
-window.addDoc = addDoc;
-window.collection = collection;
-window.serverTimestamp = serverTimestamp;
-
-
 /* NAV */
-function showPage(id){
+window.showPage = function(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
 /* CHAT */
-function toggleChat(){
+window.toggleChat = function(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-/* ENVIAR */
-function enviarChamado(){
+/* ENVIAR CHAMADO (AGORA COM FIREBASE) */
+window.enviarChamado = async function(){
 
 let nome = document.getElementById("nomeChat").value;
 let email = document.getElementById("emailChat").value;
@@ -296,14 +286,30 @@ document.getElementById("statusMsg").innerText="Preencha todos os campos";
 return;
 }
 
-document.getElementById("statusMsg").innerText="Chamado enviado!";
+document.getElementById("statusMsg").innerText="Enviando...";
+
+try{
+
+await addDoc(collection(db,"chamados"),{
+nome,
+email,
+problema,
+status:"aberto",
+data: serverTimestamp()
+});
+
+document.getElementById("statusMsg").innerText="Chamado enviado com sucesso!";
 
 document.getElementById("nomeChat").value="";
 document.getElementById("emailChat").value="";
 document.getElementById("problemaChat").value="";
+
+}catch(e){
+console.error(e);
+document.getElementById("statusMsg").innerText="Erro ao enviar";
+}
+
 }
 
 </script>
-
-</body>
 </html>
