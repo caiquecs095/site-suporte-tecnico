@@ -211,6 +211,7 @@ z-index:1000;
 <a onclick="showPage('system')">Sistema</a>
 <a onclick="showPage('support')">Suporte</a>
 <a onclick="showPage('about')">Sobre</a>
+<a onclick="showPage('course')">Cursos</a>
 </div>
 
 <!-- ================= HOME ================= -->
@@ -239,41 +240,62 @@ z-index:1000;
 
 <!-- ================= SISTEMA ================= -->
 <div id="system" class="page">
-<h2>Bem-vindo</h2>
-<p>NEXUS é uma plataforma acadêmica de gestão e suporte em TI.</p>
+<h2>Painel do Sistema</h2>
+
+<p>Controle completo da infraestrutura de TI.</p>
+
+<ul>
+<li>✔ Monitoramento de servidores</li>
+<li>✔ Controle de usuários</li>
+<li>✔ Gestão de ativos</li>
+<li>✔ Relatórios em tempo real</li>
+</ul>
+
 </div>
 
 <!-- ================= SUPORTE ================= -->
 <div id="support" class="page">
-<h2>Suporte Técnico</h2>
-<p>Aqui ficam os chamados e atendimento ao usuário.</p>
+<h2>Central de Suporte</h2>
+
+<p>Abra chamados e acompanhe o atendimento.</p>
+
+<div>
+<p>🧾 Chamados técnicos</p>
+<p>💬 Atendimento em tempo real</p>
+<p>📱 Suporte via WhatsApp</p>
+<p>⚡ SLA de atendimento rápido</p>
+</div>
+
 </div>
 
 <!-- ================= SOBRE ================= -->
-<div class="section" id="sobre">
-    <h2>Sobre a Profissão</h2>
-    <p>O profissional de suporte técnico é responsável por resolver problemas relacionados a computadores, redes e sistemas, garantindo o funcionamento adequado da tecnologia nas organizações.</p>
+<div id="about" class="page">
+<h2>Sobre o NEXUS</h2>
+
+<p>O NEXUS SYSTEM é uma plataforma desenvolvida para gestão e suporte em Tecnologia da Informação, focada em eficiência, automação e experiência do usuário.</p>
+
+<p>Nosso objetivo é centralizar o suporte técnico e facilitar a comunicação entre usuários e equipes de TI.</p>
+
 </div>
 
 <!-- ================= Curso ================= -->
-  <div class="section" id="sobre">
-    <h2>Sobre a Profissão</h2>
-    <p>O profissional de suporte técnico é responsável por resolver problemas relacionados a computadores, redes e sistemas, garantindo o funcionamento adequado da tecnologia nas organizações.</p>
-</div>
+  <div id="course" class="page">
 
-<div class="section" id="dicas">
-    <h2>Dicas e Tendências</h2>
+<h2>Capacitação em TI</h2>
 
-   <div class="grid">
-        <div class="card">💻 Aprenda Informática</div>
-        <div class="card">🎓 Faça Cursos Técnicos</div>
-        <div class="card">🌐 Estude Redes</div>
-        <div class="card">🗣️ Desenvolva Comunicação</div>
-    </div>
+<p>Desenvolva habilidades essenciais para o mercado de tecnologia.</p>
+
+<div class="grid">
+<div class="card">💻 Informática Profissional</div>
+<div class="card">🌐 Redes e Infraestrutura</div>
+<div class="card">🔐 Segurança da Informação</div>
+<div class="card">📊 Suporte Corporativo</div>
 
 </div>
 <!-- ================= BOTÃO CHAMADO ================= -->
-<div class="call-btn" onclick="openCall()">🧾</div>
+function openCall(){
+window.open("chamados.html","_blank");
+}
 
 <!-- ================= CHAT SUPORTE ================= -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
@@ -285,7 +307,7 @@ z-index:1000;
 </div>
 
 <!-- ================= WHATSAPP ================= -->
-<a class="whats" href="https://wa.me/550000000000">📱</a>
+<a class="whats" href="https://wa.me/+5521981048650" target="_blank">📱</a>
 
 <script>
 
