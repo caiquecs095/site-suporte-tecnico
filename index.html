@@ -431,44 +431,6 @@ const db = firebase.firestore();
     window.location.hash = id;
   }
 
-  /* =========================
-     SLIDER
-  ========================= */
-  function initSlider(){
-    slides = document.querySelectorAll(".slide");
-    render();
-  }
-
-  function render(){
-    if(!slides.length) return;
-    slides.forEach(s => s.classList.remove("active"));
-    if(slides[index]) slides[index].classList.add("active");
-    updateDots();
-  }
-
-  function next(){
-    if(!slides.length) return;
-    index = (index + 1) % slides.length;
-    render();
-  }
-
-  function prev(){
-    if(!slides.length) return;
-    index = (index - 1 + slides.length) % slides.length;
-    render();
-  }
-
-  function go(i){
-    index = i;
-    render();
-  }
-
-  function updateDots(){
-    const dots = document.querySelectorAll(".dots span");
-    dots.forEach(d => d.classList.remove("active"));
-    if(dots[index]) dots[index].classList.add("active");
-  }
-
   
 let index=0;
 const slides=document.querySelectorAll(".slide");
