@@ -119,7 +119,7 @@ cursor:pointer;
 .cards{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:20px;
+gap:15px;
 margin-top:10px;
 }
 
@@ -134,7 +134,7 @@ color:#3b82f6;
 
 .saas-cards{
 grid-template-columns:repeat(3,1fr);
-gap:20px;
+gap:15px;
 margin-bottom:15px;
 }
 
@@ -247,7 +247,6 @@ display:flex;
 gap:10px;
 cursor:pointer;
 transition:.3s;
-pointer-events:auto;
 }
 
 .social-card:hover{
@@ -399,7 +398,6 @@ align-items:center;
 justify-content:center;
 cursor:pointer;
 color:#fff;
-z-index: 99999;
 }
 
 .whats{
@@ -411,7 +409,6 @@ padding:15px;
 border-radius:50%;
 color:#fff;
 text-decoration:none;
-z-index: 99999;
 }
 </style>
 </head>
@@ -517,19 +514,20 @@ z-index: 99999;
 <!-- CONTATOS -->
 <div id="contato" class="page">
 <h2>Contatos</h2>
-  
+
 <div class="social-cards">
-  
+
 <div class="social-card">
-<a class="social-card" href="https://linkedin.com" target="_blank">
+<i class="fab fa-linkedin"></i>
 <div><b>LinkedIn</b><br>Perfil profissional</div>
 </div>
 
 <div class="social-card">
-<a class="social-card" href="https://github.com" target="_blank">
+<i class="fab fa-github"></i>
 <div><b>GitHub</b><br>Projetos</div>
 </div>
 
+</div>
 </div>
 
 <!-- CHAT -->
@@ -578,12 +576,6 @@ const App = (() => {
   let slides = [];
   let index = 0;
 
-  const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
-  localStorage.setItem("sessionId", sessionId);
-
-  /* =========================
-     INIT GERAL
-  ========================= */
   function init() {
     bindGlobal();
     initSlider();
@@ -591,27 +583,14 @@ const App = (() => {
     initChatRealtime();
     initTyping();
     initAutoIA();
-
-    // FIX: abrir página pelo URL
-    const hash = window.location.hash.replace("#","");
-    if(hash){
-      showPage(hash);
-    }
   }
 
-  /* =========================
-     NAV PAGES (CORRIGIDO)
-  ========================= */
   function showPage(id){
     document.querySelectorAll(".page").forEach(p=>{
       p.classList.remove("active");
     });
-
     const el = document.getElementById(id);
     if(el) el.classList.add("active");
-
-    // FIX: atualiza URL
-    window.location.hash = id;
   }
 
   /* =========================
@@ -653,7 +632,7 @@ const App = (() => {
   }
 
   /* =========================
-     IA
+     IA CLASSIFICAÇÃO
   ========================= */
   function classificarChamado(texto){
 
@@ -675,14 +654,14 @@ const App = (() => {
     texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug")){
-      return "Detectei um possível BUG. Encaminhando para análise técnica.";
+      return "Detectei um possível BUG. Já estou encaminhando para análise técnica.";
     }
 
     if(texto.includes("pagamento")){
-      return "Chamado financeiro identificado. Direcionando ao setor responsável.";
+      return "Problema financeiro identificado. Vou direcionar para o setor responsável.";
     }
 
-    return "Chamado registrado e em análise pela equipe.";
+    return "Seu chamado foi registrado e está sendo analisado pela equipe.";
   }
 
   /* =========================
@@ -698,7 +677,8 @@ const App = (() => {
 
         const d = doc.data();
 
-        if(d.iaRespondido || !d.mensagem) return;
+        if(d.iaRespondido) return;
+        if(!d.mensagem) return;
 
         setTimeout(() => {
 
@@ -708,10 +688,10 @@ const App = (() => {
           doc.ref.update({
             iaRespondido: true,
             respostaIA: resposta,
-            categoria
+            categoria: categoria
           });
 
-        }, 1200);
+        }, 2000);
 
       });
 
@@ -729,11 +709,13 @@ const App = (() => {
 
     if(!nome || !assunto || !msg) return;
 
+    const categoria = classificarChamado(msg);
+
     db.collection("chamados").add({
       nome,
       assunto,
       mensagem: msg,
-      categoria: classificarChamado(msg),
+      categoria,
       status: "aberto",
       data: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -742,7 +724,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAMADOS REALTIME
+     CHAMADOS REALTIME (CORRIGIDO FINAL)
   ========================= */
   function initChamadosRealtime(){
 
@@ -753,7 +735,9 @@ const App = (() => {
         const lista = document.getElementById("listaChamados");
         if(!lista) return;
 
-        let total = 0, aberto = 0, resolvido = 0;
+        let total = 0;
+        let aberto = 0;
+        let resolvido = 0;
 
         lista.innerHTML = "";
 
@@ -764,19 +748,18 @@ const App = (() => {
           if(d.status === "aberto") aberto++;
           if(d.status === "resolvido") resolvido++;
 
+          // FIX PRINCIPAL DAS CORES
+          const categoria = (d.categoria || "suporte").trim();
+
           lista.innerHTML += `
             <div class="chamado-card">
-
               <b> ${d.nome}</b><br>
               ${d.assunto || ""}<br>
 
-              <span class="tag ${d.categoria}">
-                ${d.categoria || ""}
-              </span><br>
+              <span class="tag ${categoria}">${categoria}</span><br>
 
               ${d.mensagem}<br>
               ${d.respostaIA || ""}
-
             </div>
           `;
         });
@@ -788,7 +771,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAT TOGGLE
+     CHAT
   ========================= */
   function toggleChat(){
     const box = document.getElementById("chatBox");
@@ -796,9 +779,6 @@ const App = (() => {
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
-  /* =========================
-     CHAT SEND
-  ========================= */
   function sendChat(){
 
     const nome = document.getElementById("chatNome")?.value;
@@ -809,21 +789,17 @@ const App = (() => {
     db.collection("chat").add({
       nome,
       mensagem: msg,
-      sessionId,
       data: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     document.getElementById("chatMsg").value = "";
 
-    db.collection("typing").doc(sessionId).set({
-      nome,
+    db.collection("typing").doc("status").set({
+      nome: "",
       typing: false
     });
   }
 
-  /* =========================
-     CHAT REALTIME (CORRIGIDO)
-  ========================= */
   function initChatRealtime(){
 
     db.collection("chat")
@@ -838,9 +814,6 @@ const App = (() => {
         snapshot.forEach(doc => {
           const d = doc.data();
 
-          // FIX: separação por usuário (não vira grupo)
-          if(d.sessionId !== sessionId) return;
-
           const isMe = d.nome === document.getElementById("chatNome")?.value;
 
           box.innerHTML += `
@@ -854,53 +827,48 @@ const App = (() => {
   }
 
   /* =========================
-     TYPING (CORRIGIDO)
+     TYPING (ESTÁVEL)
   ========================= */
   function initTyping(){
 
     const input = document.getElementById("chatMsg");
     if(!input) return;
 
-    let timer;
+    let typingTimer;
 
     input.addEventListener("input", () => {
 
-      const nome = document.getElementById("chatNome")?.value || "Usuário";
-
-      db.collection("typing").doc(sessionId).set({
-        nome,
+      db.collection("typing").doc("status").set({
+        nome: document.getElementById("chatNome")?.value || "Alguém",
         typing: true
       });
 
-      clearTimeout(timer);
+      clearTimeout(typingTimer);
 
-      timer = setTimeout(() => {
-        db.collection("typing").doc(sessionId).set({
-          nome,
+      typingTimer = setTimeout(() => {
+
+        db.collection("typing").doc("status").set({
+          nome: "",
           typing: false
         });
+
       }, 900);
     });
 
-    db.collection("typing")
-    .onSnapshot(snap => {
+    db.collection("typing").doc("status")
+    .onSnapshot(doc => {
 
-      let text = "";
-
-      snap.forEach(doc => {
-        const d = doc.data();
-        if(d.typing && doc.id !== sessionId){
-          text = `${d.nome} está digitando...`;
-        }
-      });
-
+      const d = doc.data();
       const el = document.getElementById("typing");
-      if(el) el.innerText = text;
+
+      if(!el) return;
+
+      el.innerText = d?.typing ? `${d.nome} está digitando...` : "";
     });
   }
 
   /* =========================
-     BIND GLOBAL
+     BIND
   ========================= */
   function bindGlobal(){
     window.showPage = showPage;
@@ -916,7 +884,6 @@ const App = (() => {
 
 })();
 
-/* START */
 window.addEventListener("load", App.init);
 
 </script>
@@ -943,3 +910,11 @@ window.addEventListener("load", App.init);
 <div class="chat-btn" onclick="toggleChat()"> </div>
 </body>
 </html>
+-- 
+
+
+
+
+@zerovinte1grafica
+
+CONTATO:(21) 98104-8950  - WhatsApp
