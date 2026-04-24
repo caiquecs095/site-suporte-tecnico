@@ -575,7 +575,6 @@ const App = (() => {
   let slides = [];
   let index = 0;
 
-  // 🔥 sessão local do usuário (CORRIGE CHAT GRUPO)
   const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
   localStorage.setItem("sessionId", sessionId);
 
@@ -589,10 +588,16 @@ const App = (() => {
     initChatRealtime();
     initTyping();
     initAutoIA();
+
+    // 🔥 FIX: abrir página pelo URL
+    const hash = window.location.hash.replace("#","");
+    if(hash){
+      showPage(hash);
+    }
   }
 
   /* =========================
-     NAV
+     NAV PAGES (CORRIGIDO)
   ========================= */
   function showPage(id){
     document.querySelectorAll(".page").forEach(p=>{
@@ -601,6 +606,9 @@ const App = (() => {
 
     const el = document.getElementById(id);
     if(el) el.classList.add("active");
+
+    // 🔥 FIX: atualiza URL
+    window.location.hash = id;
   }
 
   /* =========================
@@ -645,6 +653,7 @@ const App = (() => {
      IA
   ========================= */
   function classificarChamado(texto){
+
     texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug") || texto.includes("falha") || texto.includes("não funciona")){
@@ -659,6 +668,7 @@ const App = (() => {
   }
 
   function gerarRespostaIA(texto){
+
     texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug")){
@@ -673,7 +683,7 @@ const App = (() => {
   }
 
   /* =========================
-     AUTO IA
+     IA AUTO
   ========================= */
   function initAutoIA(){
 
@@ -729,7 +739,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAMADOS (COM CORES FIX)
+     CHAMADOS REALTIME
   ========================= */
   function initChamadosRealtime(){
 
@@ -746,7 +756,6 @@ const App = (() => {
 
         snapshot.forEach(doc => {
           const d = doc.data();
-          const id = doc.id;
 
           total++;
           if(d.status === "aberto") aberto++;
@@ -763,9 +772,7 @@ const App = (() => {
               </span><br>
 
               💬 ${d.mensagem}<br>
-              🤖 ${d.respostaIA || ""}<br>
-
-              <button onclick="deletarChamado('${id}')">🗑 apagar</button>
+              🤖 ${d.respostaIA || ""}
 
             </div>
           `;
@@ -778,14 +785,16 @@ const App = (() => {
   }
 
   /* =========================
-     DELETAR CHAMADO
+     CHAT TOGGLE
   ========================= */
-  function deletarChamado(id){
-    db.collection("chamados").doc(id).delete();
+  function toggleChat(){
+    const box = document.getElementById("chatBox");
+    if(!box) return;
+    box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
   /* =========================
-     CHAT (AGORA NÃO É GRUPO)
+     CHAT SEND
   ========================= */
   function sendChat(){
 
@@ -809,14 +818,8 @@ const App = (() => {
     });
   }
 
-  function toggleChat(){
-    const box = document.getElementById("chatBox");
-    if(!box) return;
-    box.style.display = (box.style.display === "flex") ? "none" : "flex";
-  }
-
   /* =========================
-     CHAT REAL (FILTRADO POR SESSÃO)
+     CHAT REALTIME (CORRIGIDO)
   ========================= */
   function initChatRealtime(){
 
@@ -832,17 +835,15 @@ const App = (() => {
         snapshot.forEach(doc => {
           const d = doc.data();
 
-          // 🔥 NÃO vira chat de grupo mais
+          // 🔥 FIX: separação por usuário (não vira grupo)
           if(d.sessionId !== sessionId) return;
 
           const isMe = d.nome === document.getElementById("chatNome")?.value;
 
           box.innerHTML += `
             <div class="chat-msg ${isMe ? 'me' : 'other'}">
-              ${!isMe ? `<div class="avatar">${d.nome.charAt(0)}</div>` : ``}
-              <div class="msg-content">
-                ${d.mensagem}
-              </div>
+              ${!isMe ? `<div class="avatar">${d.nome.charAt(0).toUpperCase()}</div>` : ``}
+              <div class="msg-content">${d.mensagem}</div>
             </div>
           `;
         });
@@ -890,12 +891,13 @@ const App = (() => {
         }
       });
 
-      document.getElementById("typing").innerText = text;
+      const el = document.getElementById("typing");
+      if(el) el.innerText = text;
     });
   }
 
   /* =========================
-     BIND
+     BIND GLOBAL
   ========================= */
   function bindGlobal(){
     window.showPage = showPage;
@@ -905,13 +907,13 @@ const App = (() => {
     window.criarChamado = criarChamado;
     window.toggleChat = toggleChat;
     window.sendChat = sendChat;
-    window.deletarChamado = deletarChamado;
   }
 
   return { init };
 
 })();
 
+/* START */
 window.addEventListener("load", App.init);
 
 </script>
