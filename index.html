@@ -148,7 +148,7 @@ cursor:pointer;
 /* CARDS */
 .cards{
 display:grid;
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(3,3fr);
 gap:20px;
 margin-top:10px;
 }
@@ -163,7 +163,7 @@ color:#3b82f6;
 }
 
 .saas-cards{
-grid-template-columns:repeat(3,1fr);
+grid-template-columns:repeat(3,3fr);
 gap:20px;
 margin-bottom:15px;
 }
@@ -210,7 +210,7 @@ display:flex;
 flex-direction:column;
 gap:30px;
 }
-
+  
 .suporte-card input,
 .suporte-card textarea{
 padding:10px;
@@ -218,6 +218,7 @@ border-radius:8px;
 border:1px solid #1e293b;
 background:#0f172a;
 color:#fff;
+flex-direction:column;
 }
 
 /* CHAMADOS */
@@ -356,10 +357,10 @@ z-index: 99999;
 <h2>Suporte</h2>
 
 <div class="suporte-card">
-<input id="nome" placeholder="Nome">
-<input id="assunto" placeholder="Assunto">
-<textarea id="msg" placeholder="Problema"></textarea>
-<button onclick="criarChamado()">Abrir Chamado</button>
+  <input id="nomeChamado" placeholder="Seu nome">
+  <input id="assuntoChamado" placeholder="Assunto do chamado">
+  <textarea id="msgChamado" placeholder="Descreva o problema"></textarea>
+  <button onclick="criarChamado()"> 🚀 Abrir Chamado</button>
 </div>
 
 <div id="lista" class="chamados-container"></div>
