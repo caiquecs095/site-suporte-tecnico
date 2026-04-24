@@ -205,6 +205,31 @@ padding:15px;
 border-radius:10px;
 }
 
+/* TAG */
+.tag{
+padding:3px 8px;
+border-radius:20px;
+font-size:11px;
+margin-left:5px;
+text-transform:uppercase;
+}
+
+/* cores por tipo */
+.tag.bug{
+background:#ef4444;
+color:#fff;
+}
+
+.tag.suporte{
+background:#3b82f6;
+color:#fff;
+}
+
+.tag.financeiro{
+background:#f59e0b;
+color:#000;
+}
+
 /* CONTATOS */
 .social-cards{
 display:flex;
@@ -572,11 +597,15 @@ function initAutoIA(){
 
           const resposta = gerarRespostaIA(d.mensagem);
 
-          db.collection("chat").add({
-            nome: "NEXUS IA",
-            mensagem: resposta,
-            data: firebase.firestore.FieldValue.serverTimestamp()
-          });
+         const categoria = classificarChamado(msg);
+
+db.collection("chamados").add({
+  nome,
+  mensagem: msg,
+  categoria, // 🔥 NOVO CAMPO
+  status: "aberto",
+  data: firebase.firestore.FieldValue.serverTimestamp()
+});
 
           // marca como respondido
           change.doc.ref.update({
@@ -591,6 +620,36 @@ function initAutoIA(){
 
   });
 }
+function classificarChamado(texto){
+
+  texto = texto.toLowerCase();
+
+  // 🐞 BUG
+  if(
+    texto.includes("erro") ||
+    texto.includes("bug") ||
+    texto.includes("não funciona") ||
+    texto.includes("travou") ||
+    texto.includes("falha")
+  ){
+    return "bug";
+  }
+
+  // 💰 FINANCEIRO
+  if(
+    texto.includes("pagamento") ||
+    texto.includes("cobrança") ||
+    texto.includes("boleto") ||
+    texto.includes("pix") ||
+    texto.includes("fatura") ||
+    texto.includes("reembolso")
+  ){
+    return "financeiro";
+  }
+
+  // 💬 SUPORTE (default)
+  return "suporte";
+}
   /* =========================
      INIT GERAL
   ========================= */
@@ -598,6 +657,23 @@ function initAutoIA(){
     bindGlobal();
     initSlider();
     initChamadosRealtime();
+    lista.innerHTML += `
+  <div class="chamado-card">
+
+    <b>👤 ${d.nome}</b><br>
+
+    <small>
+      🏷 Categoria:
+      <span class="tag ${d.categoria}">
+        ${d.categoria}
+      </span>
+    </small>
+
+    <br>
+    ${d.mensagem}
+
+  </div>
+`;
     initChatRealtime();
     initTyping();
     initAutoIA();
