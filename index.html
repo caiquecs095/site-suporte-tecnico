@@ -264,7 +264,7 @@ right:5%;
 <a onclick="showPage('support')">💬 Suporte</a>
 <a onclick="showPage('about')">📄 Sobre</a>
 <a onclick="showPage('course')">🎓 Cursos</a>
-<a onclick="showPage('ods')">⚙️ ODS 9</a>
+<a onclick="showPage('ods')">🌍 ODS 9</a>
 <a onclick="showPage('contato')">📲 Contatos</a>
 </div>
 
@@ -323,6 +323,12 @@ right:5%;
 <p>🔐 Segurança</p>
 </div>
 
+<!-- ODS 9 -->
+<div id="ods" class="page">
+<h2>🌍 Contribuição para os ODS</h2>
+<p>O suporte técnico ajuda no crescimento tecnológico das empresas, garantindo que sistemas funcionem e que a inovação aconteça de forma contínua.</p>
+</div>
+  
 <!-- CONTATOS -->
 <div id="contato" class="page">
 
@@ -378,52 +384,23 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 
 <script type="module">
 
-// 🔥 IMPORTS PRIMEIRO
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 🔥 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
   projectId: "chamados-17bc3",
-  storageBucket: "chamados-17bc3.firebasestorage.app",
-  messagingSenderId: "352897852293",
-  appId: "1:352897852293:web:989ed88f0dfb9e2d561aec"
 };
 
-// 🔥 INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-// ================= DASHBOARD =================
-async function carregarDashboard(){
-const querySnapshot = await getDocs(collection(db,"chamados"));
-
-let total = 0;
-let andamento = 0;
-let resolvidos = 0;
-
-querySnapshot.forEach(doc=>{
-let d = doc.data();
-
-total++;
-if(d.status === "aberto") andamento++;
-if(d.status === "resolvido") resolvidos++;
-});
-
-document.getElementById("totalChamados").innerText = total;
-document.getElementById("andamento").innerText = andamento;
-document.getElementById("resolvidos").innerText = resolvidos;
-}
-
-// 🔥 CHAMA AO CARREGAR
-carregarDashboard();
 
 // ================= NAV =================
 window.showPage = function(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+const el = document.getElementById(id);
+if(el) el.classList.add("active");
 }
 
 // ================= CHAT =================
@@ -431,6 +408,31 @@ window.toggleChat = function(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
+
+// ================= DASH =================
+async function carregarDashboard(){
+try{
+const querySnapshot = await getDocs(collection(db,"chamados"));
+
+let total=0, andamento=0, resolvidos=0;
+
+querySnapshot.forEach(doc=>{
+let d = doc.data();
+total++;
+if(d.status==="aberto") andamento++;
+if(d.status==="resolvido") resolvidos++;
+});
+
+document.getElementById("totalChamados").innerText = total;
+document.getElementById("andamento").innerText = andamento;
+document.getElementById("resolvidos").innerText = resolvidos;
+
+}catch(e){
+console.warn("Dashboard falhou (ok em teste)");
+}
+}
+
+carregarDashboard();
 
 // ================= ENVIAR =================
 window.enviarChamado = async function(){
@@ -444,32 +446,17 @@ document.getElementById("statusMsg").innerText="Preencha todos os campos";
 return;
 }
 
-document.getElementById("statusMsg").innerText="Enviando...";
-
 try{
-
 await addDoc(collection(db,"chamados"),{
-nome,
-email,
-problema,
-status:"aberto",
-data: serverTimestamp()
+nome,email,problema,status:"aberto",data: serverTimestamp()
 });
 
-document.getElementById("statusMsg").innerText="Chamado enviado!";
-
-document.getElementById("nomeChat").value="";
-document.getElementById("emailChat").value="";
-document.getElementById("problemaChat").value="";
-
-// 🔥 ATUALIZA DASH
+document.getElementById("statusMsg").innerText="Enviado!";
 carregarDashboard();
 
 }catch(e){
-console.error(e);
 document.getElementById("statusMsg").innerText="Erro ao enviar";
 }
-
 }
 
 // ================= SLIDER =================
@@ -478,11 +465,13 @@ let dots = document.querySelectorAll(".dots span");
 let current = 0;
 
 function show(i){
+if(!slides.length) return;
+
 slides.forEach(s=>s.classList.remove("active"));
 dots.forEach(d=>d.classList.remove("active"));
 
 slides[i].classList.add("active");
-dots[i].classList.add("active");
+if(dots[i]) dots[i].classList.add("active");
 
 current = i;
 }
@@ -501,7 +490,12 @@ window.go = function(i){
 show(i);
 }
 
-setInterval(()=>next(),5000);
+// 🔥 INICIA SLIDER COM SEGURANÇA
+setTimeout(()=>{
+if(slides.length > 0){
+setInterval(()=>next(),4000);
+}
+},500);
 
 </script>
 </html>
