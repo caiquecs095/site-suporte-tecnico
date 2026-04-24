@@ -378,14 +378,11 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 
 <script type="module">
 
-const db = getFirestore(app);
-carregarDashboard();
-  
+// 🔥 IMPORTS PRIMEIRO
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-
+// 🔥 CONFIG
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
@@ -395,11 +392,12 @@ const firebaseConfig = {
   appId: "1:352897852293:web:989ed88f0dfb9e2d561aec"
 };
 
+// 🔥 INIT
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ================= DASHBOARD =================
 async function carregarDashboard(){
-
 const querySnapshot = await getDocs(collection(db,"chamados"));
 
 let total = 0;
@@ -410,36 +408,31 @@ querySnapshot.forEach(doc=>{
 let d = doc.data();
 
 total++;
-
-if(d.status === "aberto"){
-andamento++;
-}
-
-if(d.status === "resolvido"){
-resolvidos++;
-}
+if(d.status === "aberto") andamento++;
+if(d.status === "resolvido") resolvidos++;
 });
 
 document.getElementById("totalChamados").innerText = total;
 document.getElementById("andamento").innerText = andamento;
 document.getElementById("resolvidos").innerText = resolvidos;
-
 }
 
+// 🔥 CHAMA AO CARREGAR
+carregarDashboard();
 
-/* ================= NAV ================= */
+// ================= NAV =================
 window.showPage = function(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* ================= CHAT ================= */
+// ================= CHAT =================
 window.toggleChat = function(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-/* ================= CHAMADO ================= */
+// ================= ENVIAR =================
 window.enviarChamado = async function(){
 
 let nome = document.getElementById("nomeChat").value;
@@ -463,21 +456,23 @@ status:"aberto",
 data: serverTimestamp()
 });
 
-document.getElementById("statusMsg").innerText="Chamado enviado com sucesso!";
+document.getElementById("statusMsg").innerText="Chamado enviado!";
 
-// LIMPA CAMPOS
 document.getElementById("nomeChat").value="";
 document.getElementById("emailChat").value="";
 document.getElementById("problemaChat").value="";
 
-// 🔥 AQUI (ITEM 5)
+// 🔥 ATUALIZA DASH
 carregarDashboard();
 
 }catch(e){
 console.error(e);
 document.getElementById("statusMsg").innerText="Erro ao enviar";
+}
 
-// SLIDER
+}
+
+// ================= SLIDER =================
 let slides = document.querySelectorAll(".slide");
 let dots = document.querySelectorAll(".dots span");
 let current = 0;
@@ -507,9 +502,6 @@ show(i);
 }
 
 setInterval(()=>next(),5000);
-}
-
-}
 
 </script>
 </html>
