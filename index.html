@@ -779,26 +779,29 @@ const App = (() => {
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
-  function sendChat(){
+function sendChat(){
 
-    const nome = document.getElementById("chatNome")?.value;
-    const msg = document.getElementById("chatMsg")?.value;
+  const nome = document.getElementById("chatNome")?.value;
+  const msg = document.getElementById("chatMsg")?.value;
 
-    if(!nome || !msg) return;
+  if(!nome || !msg) return;
 
-    db.collection("chat").add({
-      nome,
-      mensagem: msg,
-      data: firebase.firestore.FieldValue.serverTimestamp()
-    });
+  db.collection("chat").add({
+    nome,
+    mensagem: msg,
+    data: firebase.firestore.FieldValue.serverTimestamp()
+  });
 
-    document.getElementById("chatMsg").value = "";
+  document.getElementById("chatMsg").value = "";
 
-    db.collection("typing").doc("status").set({
-      nome: "",
-      typing: false
-    });
-  }
+  db.collection("typing").doc("status").set({
+    nome: "",
+    typing: false
+  });
+
+  // 🤖 IA RESPONDE AUTOMATICAMENTE
+  autoReplyChat(msg);
+}
 
   function initChatRealtime(){
 
@@ -866,7 +869,34 @@ const App = (() => {
       el.innerText = d?.typing ? `${d.nome} está digitando...` : "";
     });
   }
+ /* =========================
+     AUTO REPLY
+  ========================= */
+  function autoReplyChat(msg){
 
+  let texto = (msg || "").toLowerCase();
+
+  let resposta = "🤖 Recebi sua mensagem e já estou analisando.";
+
+  if(texto.includes("erro") || texto.includes("bug")){
+    resposta = "🤖 Detectei possível problema técnico. Já vou encaminhar para suporte.";
+  }
+
+  if(texto.includes("pagamento") || texto.includes("boleto") || texto.includes("pix")){
+    resposta = "🤖 Assunto financeiro identificado. Vou direcionar para o setor responsável.";
+  }
+
+  setTimeout(() => {
+
+    db.collection("chat").add({
+      nome: "IA NEXUS",
+      mensagem: resposta,
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+  }, 1500);
+}
+  
   /* =========================
      BIND
   ========================= */
