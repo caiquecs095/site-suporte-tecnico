@@ -428,6 +428,9 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 <!-- WHATS -->
 <a class="whats" href="https://wa.me/+5521981048650" target="_blank">📱</a>
 
+
+
+  
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -436,10 +439,10 @@ import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "http
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
-  projectId: "chamados-17bc3";
+  projectId: "chamados-17bc3",
+};
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-};
 
 // ================= NAV =================
 window.showPage = function(id){
@@ -507,10 +510,10 @@ document.getElementById("statusMsg").innerText="Erro ao enviar";
 // ================= SLIDER =================
 let slides = document.querySelectorAll(".slide");
 let dots = document.querySelectorAll(".dots span");
-let current = 0;
 
-function show(i){
-if(!slides.length) return;
+if(slides.length === 0){
+console.warn("Slider não encontrado");
+}
 
 slides.forEach(s=>s.classList.remove("active"));
 dots.forEach(d=>d.classList.remove("active"));
