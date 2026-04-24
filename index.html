@@ -119,16 +119,12 @@ cursor:pointer;
 .cards{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:20px;
-margin-top:20px;
+gap:15px;
+margin-top:10px;
 }
 
 .card{
-background:#0b1220;
-border:1px solid #1e293b;
-padding:20px;
-border-radius:12px;
-text-align:center;
+padding:15px;
 }
 
 .card b{
@@ -136,6 +132,44 @@ font-size:22px;
 color:#3b82f6;
 }
 
+.saas-cards{
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:15px;
+}
+
+.card.saas{
+position:relative;
+overflow:hidden;
+text-align:left;
+transition:.3s;
+}
+
+.card.saas b{
+display:block;
+font-size:26px;
+margin-top:5px;
+}
+
+/* CORES INTELIGENTES */
+.card.total{
+border-left:4px solid #3b82f6;
+}
+
+.card.aberto{
+border-left:4px solid #f59e0b;
+}
+
+.card.resolvido{
+border-left:4px solid #10b981;
+}
+
+/* HOVER MODERNO */
+.card.saas:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+  
 /* SUPORTE */
 .suporte-card{
 background:#0b1220;
@@ -408,6 +442,25 @@ text-decoration:none;
   <button onclick="criarChamado()">🚀 Abrir Chamado</button>
 </div>
 
+  <div class="cards saas-cards">
+
+  <div class="card saas total">
+    🧾 Total
+    <b id="totalChamados">0</b>
+  </div>
+
+  <div class="card saas aberto">
+    ⚡ Abertos
+    <b id="andamento">0</b>
+  </div>
+
+  <div class="card saas resolvido">
+    ✅ Resolvidos
+    <b id="resolvidos">0</b>
+  </div>
+
+</div>
+  
   <div class="cards">
   <div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
   <div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
@@ -623,9 +676,9 @@ const App = (() => {
           `;
         });
 
-        const t = document.getElementById("totalChamados");
-        const a = document.getElementById("andamento");
-        const r = document.getElementById("resolvidos");
+        const t = animateValue("totalChamados", 0, total, 600);
+        const a = animateValue("andamento", 0, aberto, 600);
+        const r = animateValue("resolvidos", 0, resolvido, 600);
 
         if(t) t.innerText = total;
         if(a) a.innerText = aberto;
@@ -762,6 +815,29 @@ const App = (() => {
    START APP
 ========================= */
 window.addEventListener("load", App.init);
+
+/* =========================
+   CARDS ANIMADOS
+========================= */
+function animateValue(id, start, end, duration) {
+  const obj = document.getElementById(id);
+  if(!obj) return;
+
+  let current = start;
+  let range = end - start;
+  let step = Math.ceil(range / (duration / 20));
+
+  const timer = setInterval(() => {
+    current += step;
+
+    if (current >= end) {
+      current = end;
+      clearInterval(timer);
+    }
+
+    obj.innerText = current;
+  }, 20);
+}
 
 </script>
   
