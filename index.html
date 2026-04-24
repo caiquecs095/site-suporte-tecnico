@@ -247,6 +247,7 @@ display:flex;
 gap:10px;
 cursor:pointer;
 transition:.3s;
+pointer-events:auto;
 }
 
 .social-card:hover{
@@ -398,6 +399,7 @@ align-items:center;
 justify-content:center;
 cursor:pointer;
 color:#fff;
+z-index: 99999;
 }
 
 .whats{
@@ -409,6 +411,7 @@ padding:15px;
 border-radius:50%;
 color:#fff;
 text-decoration:none;
+z-index: 99999;
 }
 </style>
 </head>
@@ -518,12 +521,12 @@ text-decoration:none;
 <div class="social-cards">
   
 <div class="social-card">
-<i class="fab fa-linkedin"></i>
+<a class="social-card" href="https://linkedin.com" target="_blank">
 <div><b>LinkedIn</b><br>Perfil profissional</div>
 </div>
 
 <div class="social-card">
-<i class="fab fa-github"></i>
+<a class="social-card" href="https://github.com" target="_blank">
 <div><b>GitHub</b><br>Projetos</div>
 </div>
 
