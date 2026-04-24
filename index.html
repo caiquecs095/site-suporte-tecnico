@@ -31,6 +31,7 @@ flex-direction:column;gap:15px;border-right:1px solid #1e293b;
 position:absolute;width:100%;height:100%;
 display:flex;align-items:center;justify-content:center;
 opacity:0;transition:.5s;
+font-size:22px;
 }
 .slide.active{opacity:1;}
 
@@ -86,13 +87,13 @@ color:white;text-decoration:none;
 <!-- MENU -->
 <div class="sidebar">
 <h2>NEXUS</h2>
-<a onclick="showPage('home')">Dashboard</a>
-<a onclick="showPage('system')">Sistema</a>
-<a onclick="showPage('support')">Suporte</a>
-<a onclick="showPage('about')">Sobre</a>
-<a onclick="showPage('course')">Cursos</a>
-<a onclick="showPage('ods')">ODS 9</a>
-<a onclick="showPage('contato')">Contatos</a>
+<a onclick="showPage('home')">🏠 Dashboard</a>
+<a onclick="showPage('system')">🖥 Sistema</a>
+<a onclick="showPage('support')">💬 Suporte</a>
+<a onclick="showPage('about')">📄 Sobre</a>
+<a onclick="showPage('course')">🎓 Cursos</a>
+<a onclick="showPage('ods')">🌍 ODS 9</a>
+<a onclick="showPage('contato')">📲 Contatos</a>
 </div>
 
 <!-- HOME -->
@@ -100,9 +101,9 @@ color:white;text-decoration:none;
 <h2>Dashboard</h2>
 
 <div class="slider">
-<div class="slide active">NEXUS SYSTEM</div>
-<div class="slide">Monitoramento Inteligente</div>
-<div class="slide">Infraestrutura TI</div>
+<div class="slide active">🚀 NEXUS SYSTEM</div>
+<div class="slide">📡 Monitoramento Inteligente</div>
+<div class="slide">💻 Infraestrutura TI</div>
 
 <div class="nav">
 <span onclick="prev()">‹</span>
@@ -130,7 +131,6 @@ color:white;text-decoration:none;
 
 <div class="chat-box" id="chatBox">
 <div class="chat-header">Chat</div>
-
 <div id="chatMessages" style="height:200px;overflow:auto;padding:10px;"></div>
 
 <div class="chat-body">
@@ -142,64 +142,57 @@ color:white;text-decoration:none;
 
 <a class="whats" href="https://wa.me/5521981048650" target="_blank">📱</a>
 
-<script type="module">
+<!-- FIREBASE NORMAL (SEM MODULE) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<script>
 
 /* FIREBASE */
-const app = initializeApp({
-apiKey: "SUA_API_KEY_AQUI",
-authDomain: "chamados-17bc3.firebaseapp.com",
-projectId: "chamados-17bc3"
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
+  authDomain: "chamados-17bc3.firebaseapp.com",
+  projectId: "chamados-17bc3",
+};
 
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 /* NAV */
-window.showPage = id=>{
+function showPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id)?.classList.add("active");
+document.getElementById(id).classList.add("active");
 }
 
 /* CHAT */
-window.toggleChat = ()=>{
+function toggleChat(){
 let box=document.getElementById("chatBox");
 box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-window.enviarMensagem = async ()=>{
+function enviarMensagem(){
 let nome = nomeChat.value;
 let msg = mensagemChat.value;
 
 if(!nome || !msg) return;
 
-await addDoc(collection(db,"chat"),{
-nome,
-mensagem:msg,
-data:serverTimestamp()
+db.collection("chat").add({
+nome: nome,
+mensagem: msg,
+data: firebase.firestore.FieldValue.serverTimestamp()
 });
 
 mensagemChat.value="";
 }
 
-const q = query(collection(db,"chat"), orderBy("data"));
-
-onSnapshot(q, snap=>{
+db.collection("chat").orderBy("data")
+.onSnapshot(snapshot=>{
 chatMessages.innerHTML="";
-snap.forEach(doc=>{
-let d = doc.data();
-chatMessages.innerHTML += `<div><b>${d.nome}:</b> ${d.mensagem}</div>`;
+snapshot.forEach(doc=>{
+let d=doc.data();
+chatMessages.innerHTML+=`<div><b>${d.nome}:</b> ${d.mensagem}</div>`;
 });
-chatMessages.scrollTop = chatMessages.scrollHeight;
+chatMessages.scrollTop=chatMessages.scrollHeight;
 });
 
 /* SLIDER */
@@ -215,11 +208,11 @@ dots[n].classList.add("active");
 i=n;
 }
 
-window.next=()=>show((i+1)%slides.length);
-window.prev=()=>show((i-1+slides.length)%slides.length);
-window.go=n=>show(n);
+function next(){ show((i+1)%slides.length); }
+function prev(){ show((i-1+slides.length)%slides.length); }
+function go(n){ show(n); }
 
-setInterval(()=>next(),4000);
+setInterval(next,4000);
 
 </script>
 
