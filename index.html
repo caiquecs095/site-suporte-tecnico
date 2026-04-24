@@ -267,7 +267,8 @@ garantindo que sistemas funcionem corretamente e permitindo inovação contínua
 <div id="contato" class="page">
 
 <h2>📲 Redes e Contatos</h2>
-
+<p> 
+</p>
 <div class="social-card linkedin"
 onclick="window.open('https://linkedin.com/in/seu-link','_blank')">
 <i class="fab fa-linkedin"></i>
@@ -276,7 +277,8 @@ onclick="window.open('https://linkedin.com/in/seu-link','_blank')">
 <small>Conecte-se profissionalmente</small>
 </div>
 </div>
-
+<p> 
+</p>
 <div class="social-card github"
 onclick="window.open('https://github.com/seu-user','_blank')">
 <i class="fab fa-github"></i>
@@ -341,13 +343,49 @@ let msg = document.getElementById("msgChamado").value;
 
 if(!nome || !msg) return;
 
-db.collection("chamados").add({
-nome:nome,
-mensagem:msg,
-status:"aberto",
-data: firebase.firestore.FieldValue.serverTimestamp()
-});
+db.collection("chamados")
+.onSnapshot(snapshot => {
 
+  const lista = document.getElementById("listaChamados");
+  lista.innerHTML = "";
+
+  let total = 0;
+  let andamento = 0;
+  let resolvidos = 0;
+
+  snapshot.forEach(doc => {
+    let d = doc.data();
+    total++;
+
+    if(d.status === "aberto") andamento++;
+    if(d.status === "resolvido") resolvidos++;
+
+    lista.innerHTML += `
+      <div class="chamado-card">
+
+        <div class="chamado-header">
+          <span class="chamado-nome">👤 ${d.nome}</span>
+          <span class="status ${d.status}">${d.status}</span>
+        </div>
+
+        <div class="chamado-msg">
+          ${d.mensagem}
+        </div>
+
+      </div>
+    `;
+  });
+
+  // 🔥 ATUALIZA DASHBOARD EM TEMPO REAL
+  const totalEl = document.getElementById("totalChamados");
+  const andamentoEl = document.getElementById("andamento");
+  const resolvidosEl = document.getElementById("resolvidos");
+
+  if(totalEl) totalEl.innerText = total;
+  if(andamentoEl) andamentoEl.innerText = andamento;
+  if(resolvidosEl) resolvidosEl.innerText = resolvidos;
+
+});
 document.getElementById("msgChamado").value="";
 }
 
