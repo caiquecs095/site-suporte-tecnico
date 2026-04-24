@@ -404,6 +404,101 @@ Chat
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
+
+/* =========================
+   FIREBASE INIT
+========================= */
+firebase.initializeApp({
+  apiKey: "xxx",
+  authDomain: "xxx",
+  projectId: "chamados-17bc3"
+});
+
+const db = firebase.firestore();
+
+/* =========================
+   ORQUESTRADOR APP
+========================= */
+const App = (() => {
+
+  let slides = [];
+  let index = 0;
+
+  const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
+  localStorage.setItem("sessionId", sessionId);
+
+  /* =========================
+     INIT GERAL
+  ========================= */
+  function init() {
+    bindGlobal();
+    initSlider();
+    initChamadosRealtime();
+    initChatRealtime();
+    initTyping();
+    initAutoIA();
+
+    // FIX: abrir página pelo URL
+    const hash = window.location.hash.replace("#","");
+    if(hash){
+      showPage(hash);
+    }
+  }
+
+  /* =========================
+     NAV PAGES (CORRIGIDO)
+  ========================= */
+  function showPage(id){
+    document.querySelectorAll(".page").forEach(p=>{
+      p.classList.remove("active");
+    });
+
+    const el = document.getElementById(id);
+    if(el) el.classList.add("active");
+
+    // FIX: atualiza URL
+    window.location.hash = id;
+  }
+
+  /* =========================
+     SLIDER
+  ========================= */
+  function initSlider(){
+    slides = document.querySelectorAll(".slide");
+    render();
+  }
+
+  function render(){
+    if(!slides.length) return;
+    slides.forEach(s => s.classList.remove("active"));
+    if(slides[index]) slides[index].classList.add("active");
+    updateDots();
+  }
+
+  function next(){
+    if(!slides.length) return;
+    index = (index + 1) % slides.length;
+    render();
+  }
+
+  function prev(){
+    if(!slides.length) return;
+    index = (index - 1 + slides.length) % slides.length;
+    render();
+  }
+
+  function go(i){
+    index = i;
+    render();
+  }
+
+  function updateDots(){
+    const dots = document.querySelectorAll(".dots span");
+    dots.forEach(d => d.classList.remove("active"));
+    if(dots[index]) dots[index].classList.add("active");
+  }
+
+  
 let index=0;
 const slides=document.querySelectorAll(".slide");
 
