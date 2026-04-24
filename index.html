@@ -416,17 +416,6 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-/* =========================
-   ORQUESTRADOR APP
-========================= */
-const App = (() => {
-
-  let slides = [];
-  let index = 0;
-
-  const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
-  localStorage.setItem("sessionId", sessionId);
-
  /* =========================
      NAV PAGES (CORRIGIDO)
   ========================= */
