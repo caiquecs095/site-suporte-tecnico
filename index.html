@@ -8,9 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* =========================
-   RESET
-========================= */
+/* ================= RESET ================= */
 *{
 margin:0;
 padding:0;
@@ -23,9 +21,7 @@ background:#050814;
 color:#d6e2f0;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
+/* ================= SIDEBAR ================= */
 .sidebar{
 position:fixed;
 left:0;
@@ -46,16 +42,14 @@ border-right:1px solid #1e293b;
 cursor:pointer;
 padding:8px;
 border-radius:5px;
-transition:0.3s;
+transition:.3s;
 }
 
 .sidebar a:hover{
 background:#1e293b;
 }
 
-/* =========================
-   PAGES
-========================= */
+/* ================= PAGES ================= */
 .page{
 display:none;
 margin-left:220px;
@@ -66,9 +60,31 @@ padding:20px;
 display:block;
 }
 
-/* =========================
-   DASHBOARD
-========================= */
+/* ================= SLIDER ================= */
+.slider{
+height:260px;
+background:#0b1220;
+position:relative;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+transition:.5s;
+font-size:22px;
+}
+
+.slide.active{opacity:1;}
+
+/* ================= CARDS ================= */
 .cards{
 display:grid;
 grid-template-columns:repeat(3,1fr);
@@ -82,22 +98,17 @@ border:1px solid #1e293b;
 padding:20px;
 border-radius:12px;
 text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-transition:0.3s;
+transition:.3s;
 }
 
-.card:hover{
-transform:translateY(-5px);
-}
+.card:hover{transform:translateY(-5px);}
 
 .card b{
 font-size:22px;
 color:#3b82f6;
 }
 
-/* =========================
-   SUPORTE
-========================= */
+/* ================= SUPORTE ================= */
 .suporte-card{
 background:#0b1220;
 border:1px solid #1e293b;
@@ -106,7 +117,6 @@ border-radius:12px;
 display:flex;
 flex-direction:column;
 gap:10px;
-margin-top:10px;
 }
 
 .suporte-card input,
@@ -116,7 +126,6 @@ border-radius:8px;
 border:1px solid #1e293b;
 background:#0f172a;
 color:#fff;
-outline:none;
 }
 
 .suporte-card textarea{
@@ -130,16 +139,9 @@ border:none;
 padding:10px;
 border-radius:8px;
 cursor:pointer;
-font-weight:bold;
 }
 
-.suporte-card button:hover{
-background:#2563eb;
-}
-
-/* =========================
-   CHAMADOS
-========================= */
+/* ================= CHAMADOS ================= */
 .chamados-container{
 margin-top:20px;
 display:flex;
@@ -152,55 +154,52 @@ background:#0b1220;
 border:1px solid #1e293b;
 padding:15px;
 border-radius:10px;
-transition:0.3s;
 }
 
-.chamado-card:hover{
-transform:translateY(-3px);
-}
-
-.chamado-header{
+/* ================= SOCIAL ================= */
+.social-cards{
 display:flex;
-justify-content:space-between;
-margin-bottom:8px;
+gap:20px;
+flex-wrap:wrap;
+margin-top:20px;
 }
 
-.chamado-nome{
-color:#3b82f6;
-font-weight:bold;
+.social-card{
+background:#0b1220;
+border:1px solid #1e293b;
+padding:20px;
+width:250px;
+border-radius:12px;
+display:flex;
+gap:10px;
+cursor:pointer;
+transition:.3s;
 }
 
-.status{
-font-size:12px;
-padding:3px 8px;
-border-radius:20px;
+.social-card:hover{
+transform:translateY(-5px);
+box-shadow:0 0 15px rgba(59,130,246,0.5);
 }
 
-.aberto{background:#f59e0b;color:#000;}
-.resolvido{background:#10b981;color:#000;}
+.linkedin i{color:#0A66C2;}
+.github i{color:#fff;}
 
-/* =========================
-   CHAT BOTÃO FLUTUANTE
-========================= */
+/* ================= FLOAT ================= */
 .chat-btn{
 position:fixed;
 bottom:80px;
 right:20px;
-background:#3b82f6;
 width:55px;
 height:55px;
 border-radius:50%;
+background:#3b82f6;
 display:flex;
 align-items:center;
 justify-content:center;
 cursor:pointer;
-color:white;
-z-index:999;
+color:#fff;
 }
 
-/* =========================
-   WHATSAPP
-========================= */
 .whats{
 position:fixed;
 bottom:20px;
@@ -208,7 +207,7 @@ right:20px;
 background:#25D366;
 padding:15px;
 border-radius:50%;
-color:white;
+color:#fff;
 text-decoration:none;
 }
 </style>
@@ -223,11 +222,20 @@ text-decoration:none;
 <a onclick="showPage('system')">🖥 Sistema</a>
 <a onclick="showPage('support')">💬 Suporte</a>
 <a onclick="showPage('about')">📄 Sobre</a>
+<a onclick="showPage('course')">🎓 Cursos</a>
+<a onclick="showPage('ods')">🌍 ODS 9</a>
+<a onclick="showPage('contato')">📲 Contatos</a>
 </div>
 
 <!-- DASHBOARD -->
 <div id="home" class="page active">
 <h2>🏠 Dashboard</h2>
+
+<div class="slider">
+  <div class="slide active">🚀 NEXUS SYSTEM</div>
+  <div class="slide">📡 Monitoramento Inteligente</div>
+  <div class="slide">💻 Infraestrutura TI</div>
+</div>
 
 <div class="cards">
   <div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
@@ -239,7 +247,7 @@ text-decoration:none;
 <!-- SISTEMA -->
 <div id="system" class="page">
 <h2>🖥 Sistema</h2>
-<p>Gestão de infraestrutura e suporte técnico.</p>
+<p>Infraestrutura e monitoramento de TI.</p>
 </div>
 
 <!-- SUPORTE -->
@@ -248,11 +256,11 @@ text-decoration:none;
 
 <div class="suporte-card">
 <input id="nomeChamado" placeholder="Seu nome">
-<textarea id="msgChamado" placeholder="Descreva o problema"></textarea>
-<button onclick="criarChamado()">🚀 Abrir Chamado</button>
+<textarea id="msgChamado" placeholder="Problema"></textarea>
+<button onclick="criarChamado()">Abrir Chamado</button>
 </div>
 
-<h3 style="margin-top:20px;">📋 Chamados</h3>
+<h3>📋 Chamados</h3>
 <div id="listaChamados" class="chamados-container"></div>
 </div>
 
@@ -262,46 +270,64 @@ text-decoration:none;
 <p>Sistema NEXUS de suporte técnico.</p>
 </div>
 
-<!-- BOTÃO FLUTUANTE -->
-<div class="chat-btn" onclick="alert('Chat aberto')">💬</div>
+<!-- CURSOS -->
+<div id="course" class="page">
+<h2>🎓 Cursos</h2>
+<p>TI • Redes • Segurança</p>
+</div>
 
-<a class="whats" href="https://wa.me/5521981048650" target="_blank">📱</a>
+<!-- ODS -->
+<div id="ods" class="page">
+<h2>🌍 ODS 9</h2>
+<p>Inovação e infraestrutura tecnológica.</p>
+</div>
+
+<!-- CONTATOS -->
+<div id="contato" class="page">
+<h2>📲 Contatos</h2>
+
+<div class="social-cards">
+<div class="social-card linkedin" onclick="window.open('#')">
+<i class="fab fa-linkedin"></i>
+<div>LinkedIn</div>
+</div>
+
+<div class="social-card github" onclick="window.open('#')">
+<i class="fab fa-github"></i>
+<div>GitHub</div>
+</div>
+</div>
+</div>
+
+<!-- FLOAT -->
+<div class="chat-btn">💬</div>
+<a class="whats" href="#">📱</a>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
-
-/* FIREBASE */
-const firebaseConfig = {
-  apiKey: "AIzaSyC0P6CwncDoEQnW8Yd",
-  authDomain: "chamados-17bc3.firebaseapp.com",
-  projectId: "chamados-17bc3",
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-/* =========================
-   NAV
-========================= */
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>{
-p.classList.remove("active");
+firebase.initializeApp({
+apiKey:"xxx",
+authDomain:"xxx",
+projectId:"chamados-17bc3"
 });
+
+const db=firebase.firestore();
+
+/* NAV */
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-/* =========================
-   CRIAR CHAMADO
-========================= */
+/* CRIAR CHAMADO */
 function criarChamado(){
+let nome=document.getElementById("nomeChamado").value;
+let msg=document.getElementById("msgChamado").value;
 
-let nome = document.getElementById("nomeChamado").value;
-let msg = document.getElementById("msgChamado").value;
-
-if(!nome || !msg) return;
+if(!nome||!msg)return;
 
 db.collection("chamados").add({
 nome,
@@ -313,47 +339,32 @@ data:firebase.firestore.FieldValue.serverTimestamp()
 document.getElementById("msgChamado").value="";
 }
 
-/* =========================
-   TEMPO REAL
-========================= */
+/* TEMPO REAL */
 db.collection("chamados").orderBy("data","desc")
-.onSnapshot(snapshot=>{
+.onSnapshot(snap=>{
 
-let total=0;
-let andamento=0;
-let resolvidos=0;
-
-const lista = document.getElementById("listaChamados");
+let total=0,aberto=0,res=0;
+let lista=document.getElementById("listaChamados");
 lista.innerHTML="";
 
-snapshot.forEach(doc=>{
-let d = doc.data();
-
+snap.forEach(d=>{
+let x=d.data();
 total++;
 
-if(d.status==="aberto")andamento++;
-if(d.status==="resolvido")resolvidos++;
+if(x.status=="aberto")aberto++;
+if(x.status=="resolvido")res++;
 
-lista.innerHTML += `
+lista.innerHTML+=`
 <div class="chamado-card">
-
-<div class="chamado-header">
-<span class="chamado-nome">👤 ${d.nome}</span>
-<span class="status ${d.status}">${d.status}</span>
-</div>
-
-<div>${d.mensagem}</div>
-
-</div>
-`;
+<b>${x.nome}</b><br>
+${x.mensagem}
+</div>`;
 });
 
 document.getElementById("totalChamados").innerText=total;
-document.getElementById("andamento").innerText=andamento;
-document.getElementById("resolvidos").innerText=resolvidos;
-
+document.getElementById("andamento").innerText=aberto;
+document.getElementById("resolvidos").innerText=res;
 });
-
 </script>
 
 </body>
