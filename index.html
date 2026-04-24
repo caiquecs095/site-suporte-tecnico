@@ -20,53 +20,84 @@ background: radial-gradient(circle at top, #0f172a, #050814);
 color:#d6e2f0;
 }
 
-/* SIDEBAR */
-.sidebar{
-position:fixed;
-left:0;
-top:0;
-width:200px;
-height:100%;
+/* ===== GLASSMORPHISM BASE ===== */
+.glass{
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
 
+/* ===== SIDEBAR FLUTUANTE ===== */
+.sidebar{
+  position: fixed;
+  left: 15px;
+  top: 15px;
+  width: 220px;
+  height: calc(100vh - 30px);
+  padding: 18px;
+  border-radius: 18px;
+  transition: 0.3s ease;
+  overflow: hidden;
+  z-index: 999;
+}
+
+/* estado encolhido */
+.sidebar.collapsed{
+  width: 70px;
+}
+
+.sidebar h2{
+  transition: 0.3s;
+}
+
+/* esconder texto quando colapsa */
+.sidebar.collapsed a span,
+.sidebar.collapsed h2{
+  opacity: 0;
+  transform: translateX(-10px);
+  position: absolute;
+}
+
+/* botões */
 .sidebar a{
-padding:10px;
-border-radius:10px;
-transition:.25s;
-color:#d6e2f0;
-background:transparent;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#d6e2f0;
+  text-decoration:none;
+  padding:10px;
+  border-radius:10px;
+  transition:0.2s;
 }
 
 .sidebar a:hover{
-background: rgba(59,130,246,0.15);
-backdrop-filter: blur(8px);
-transform: translateX(4px);
+  background: rgba(59,130,246,0.15);
 }
 
-/* GLASS REAL */
-background: rgba(15, 23, 42, 0.35);
-backdrop-filter: blur(18px);
--webkit-backdrop-filter: blur(18px);
-
-border-right: 1px solid rgba(255,255,255,0.08);
-box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:15px;
-z-index:1000;
+/* botão toggle */
+.sidebar-toggle{
+  position:absolute;
+  bottom:15px;
+  left:15px;
+  right:15px;
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+  text-align:center;
+  background: rgba(59,130,246,0.2);
 }
-
-/* PAGES */
+  
+/* ===== PAGES ===== */
 .page{
-display:none;
-margin-left:220px;
-padding:20px;
+  display:none;
+  margin-left:260px;
+  padding:25px;
 }
 
 .page.active{
-display:block;
-animation: fadeIn .25s ease;
+  display:block;
 }
 
 @keyframes fadeIn{
@@ -140,18 +171,16 @@ margin-top:10px;
 }
 
 .card{
-padding:15px;
-background: rgba(15, 23, 42, 0.45);
-backdrop-filter: blur(14px);
--webkit-backdrop-filter: blur(14px);
-border: 1px solid rgba(255,255,255,0.08);
-border-radius: 16px;
-transition:.3s;
-}
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: 0.3s;
 
 .card:hover{
-transform: translateY(-5px);
-box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
 .card b{color:#3b82f6;font-size:22px;}
@@ -181,13 +210,12 @@ box-shadow:0 10px 25px rgba(0,0,0,0.4);
 
 /* SUPORTE */
 .suporte-card{
-background:#0b1220;
-border:1px solid #1e293b;
-padding:20px;
-border-radius:12px;
-display:flex;
-flex-direction:column;
-gap:10px;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: 0.3s;
 }
 
 input,textarea{
@@ -216,10 +244,12 @@ gap:10px;
 }
 
 .chamado-card{
-background:#0b1220;
-border:1px solid #1e293b;
-padding:15px;
-border-radius:10px;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: 0.3s;
 }
 
 /* CONTATOS */
@@ -231,17 +261,12 @@ margin-top:10px;
 }
 
 .social-card{
-background: rgba(15, 23, 42, 0.45);
-backdrop-filter: blur(16px);
--webkit-backdrop-filter: blur(16px);
-border: 1px solid rgba(255,255,255,0.08);
-border-radius: 14px;
-padding: 18px;
-display:flex;
-gap:10px;
-text-decoration:none;
-color:#fff;
-transition:.3s;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: 0.3s;
 }
 
 .social-card a{
@@ -252,9 +277,8 @@ transition:.3s;
 }
 
 .social-card:hover{
-transform: translateY(-6px);
-box-shadow: 0 0 25px rgba(59,130,246,0.25);
-border: 1px solid rgba(59,130,246,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
 .linkedin i{color:#0A66C2;}
@@ -344,15 +368,22 @@ text-decoration:none;
 
 <body>
 
-<div class="sidebar">
-<h2>NEXUS</h2>
-<a onclick="showPage('home')">🏠 Dashboard</a>
-<a onclick="showPage('system')">🖥 Sistema</a>
-<a onclick="showPage('support')">💬 Suporte</a>
-<a onclick="showPage('about')">📄 Sobre</a>
-<a onclick="showPage('course')">🎓 Cursos</a>
-<a onclick="showPage('ods')">🌍 ODS 9</a>
-<a onclick="showPage('contato')">📲 Contatos</a>
+<div class="sidebar glass" id="sidebar">
+
+  <h2>NEXUS</h2>
+
+  <a onclick="showPage('home')">🏠 <span>Dashboard</span></a>
+  <a onclick="showPage('system')">⚙️ <span>Sistema</span></a>
+  <a onclick="showPage('support')">🛠️ <span>Suporte</span></a>
+  <a onclick="showPage('about')">ℹ️ <span>Sobre</span></a>
+  <a onclick="showPage('course')">🎓 <span>Cursos</span></a>
+  <a onclick="showPage('ods')">🌍 <span>ODS</span></a>
+  <a onclick="showPage('contato')">📞 <span>Contato</span></a>
+
+  <div class="sidebar-toggle" onclick="toggleSidebar()">
+    ⬅ / ➡
+  </div>
+
 </div>
 
 <!-- HOME -->
@@ -489,6 +520,33 @@ const db = firebase.firestore();
   }
 };
 
+/* ===== PÁGINAS FUNCIONANDO 100% ===== */
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const target = document.getElementById(id);
+  if(target){
+    target.classList.add("active");
+  }
+}
+
+/* ===== SIDEBAR COLAPSAR ===== */
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("collapsed");
+}
+
+/* ===== AUTO COLLAPSE AO SCROLL ===== */
+window.addEventListener("scroll", () => {
+  const sidebar = document.getElementById("sidebar");
+
+  if(window.scrollY > 50){
+    sidebar.classList.add("collapsed");
+  } else {
+    sidebar.classList.remove("collapsed");
+  }
+});
   
 let index=0;
 const slides=document.querySelectorAll(".slide");
