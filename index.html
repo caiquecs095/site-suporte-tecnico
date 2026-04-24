@@ -389,11 +389,6 @@ text-decoration:none;
   </div>
 </div>
 
-<div class="cards">
-  <div>🧾 <b id="totalChamados">0</b></div>
-  <div>⚡ <b id="andamento">0</b></div>
-  <div>✅ <b id="resolvidos">0</b></div>
-</div>
 </div>
 
 <!-- SISTEMA -->
@@ -413,6 +408,13 @@ text-decoration:none;
   <button onclick="criarChamado()">🚀 Abrir Chamado</button>
 </div>
 
+  <div class="cards">
+  <div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
+  <div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
+  <div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
+</div>
+  
+<h3>Lista de Chamados</h3>
 <div id="listaChamados" class="chamados-container"></div>
 </div>
 
