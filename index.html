@@ -575,81 +575,7 @@ const App = (() => {
 
   let slides = [];
   let index = 0;
-/* =========================
-   IA AUTO RESPONDEDORA
-========================= */
-function initAutoIA(){
 
-  db.collection("chamados")
-  .orderBy("data","desc")
-  .onSnapshot(snapshot => {
-
-    snapshot.docChanges().forEach(change => {
-
-      if(change.type === "added"){
-
-        const d = change.doc.data();
-
-        // evita spam em chamados antigos
-        if(d.iaRespondido) return;
-
-        setTimeout(() => {
-
-          const resposta = gerarRespostaIA(d.mensagem);
-
-         const categoria = classificarChamado(msg);
-
-db.collection("chamados").add({
-  nome,
-  mensagem: msg,
-  categoria, // 🔥 NOVO CAMPO
-  status: "aberto",
-  data: firebase.firestore.FieldValue.serverTimestamp()
-});
-
-          // marca como respondido
-          change.doc.ref.update({
-            iaRespondido: true
-          });
-
-        }, 2000); // delay natural
-
-      }
-
-    });
-
-  });
-}
-function classificarChamado(texto){
-
-  texto = texto.toLowerCase();
-
-  // 🐞 BUG
-  if(
-    texto.includes("erro") ||
-    texto.includes("bug") ||
-    texto.includes("não funciona") ||
-    texto.includes("travou") ||
-    texto.includes("falha")
-  ){
-    return "bug";
-  }
-
-  // 💰 FINANCEIRO
-  if(
-    texto.includes("pagamento") ||
-    texto.includes("cobrança") ||
-    texto.includes("boleto") ||
-    texto.includes("pix") ||
-    texto.includes("fatura") ||
-    texto.includes("reembolso")
-  ){
-    return "financeiro";
-  }
-
-  // 💬 SUPORTE (default)
-  return "suporte";
-}
   /* =========================
      INIT GERAL
   ========================= */
@@ -657,26 +583,9 @@ function classificarChamado(texto){
     bindGlobal();
     initSlider();
     initChamadosRealtime();
-    lista.innerHTML += `
-  <div class="chamado-card">
-
-    <b>👤 ${d.nome}</b><br>
-
-    <small>
-      🏷 Categoria:
-      <span class="tag ${d.categoria}">
-        ${d.categoria}
-      </span>
-    </small>
-
-    <br>
-    ${d.mensagem}
-
-  </div>
-`;
     initChatRealtime();
     initTyping();
-    initAutoIA();
+    initAutoIA(); // ✅ IA ATIVADA
   }
 
   /* =========================
@@ -735,7 +644,79 @@ function classificarChamado(texto){
   }
 
   /* =========================
-     CRIAR CHAMADO (CORRIGIDO)
+     CLASSIFICAÇÃO IA
+  ========================= */
+  function classificarChamado(texto){
+
+    texto = texto.toLowerCase();
+
+    if(texto.includes("erro") || texto.includes("bug") || texto.includes("falha") || texto.includes("não funciona")){
+      return "bug";
+    }
+
+    if(texto.includes("pagamento") || texto.includes("boleto") || texto.includes("pix") || texto.includes("cobrança")){
+      return "financeiro";
+    }
+
+    return "suporte";
+  }
+
+  function gerarRespostaIA(texto){
+
+    texto = texto.toLowerCase();
+
+    if(texto.includes("erro") || texto.includes("bug")){
+      return "Detectei um possível BUG. Já estou encaminhando para análise técnica.";
+    }
+
+    if(texto.includes("pagamento")){
+      return "Problema financeiro identificado. Vou direcionar para o setor responsável.";
+    }
+
+    return "Seu chamado foi registrado e está sendo analisado pela equipe.";
+  }
+
+  /* =========================
+     AUTO IA (CORRIGIDO)
+  ========================= */
+  function initAutoIA(){
+
+    db.collection("chamados")
+    .orderBy("data","desc")
+    .onSnapshot(snapshot => {
+
+      snapshot.docChanges().forEach(change => {
+
+        if(change.type === "added"){
+
+          const d = change.doc.data();
+
+          if(d.iaRespondido) return;
+
+          setTimeout(() => {
+
+            const resposta = gerarRespostaIA(d.mensagem || "");
+
+            const categoria = classificarChamado(d.mensagem || "");
+
+            // salva resposta IA dentro do próprio chamado
+            change.doc.ref.update({
+              iaRespondido: true,
+              respostaIA: resposta,
+              categoria: categoria
+            });
+
+          }, 2000);
+
+        }
+
+      });
+
+    });
+  }
+
+  /* =========================
+     CRIAR CHAMADO
   ========================= */
   function criarChamado(){
 
@@ -745,10 +726,13 @@ function classificarChamado(texto){
 
     if(!nome || !assunto || !msg) return;
 
+    const categoria = classificarChamado(msg);
+
     db.collection("chamados").add({
       nome,
       assunto,
       mensagem: msg,
+      categoria,
       status: "aberto",
       data: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -757,7 +741,7 @@ function classificarChamado(texto){
   }
 
   /* =========================
-     CHAMADOS REALTIME (CORRIGIDO)
+     CHAMADOS REALTIME
   ========================= */
   function initChamadosRealtime(){
 
@@ -785,18 +769,16 @@ function classificarChamado(texto){
             <div class="chamado-card">
               <b>👤 ${d.nome}</b><br>
               📌 ${d.assunto || ""}<br>
-              💬 ${d.mensagem}
+              🏷 <span class="tag ${d.categoria}">${d.categoria || ""}</span><br>
+              💬 ${d.mensagem}<br>
+              🤖 ${d.respostaIA ? d.respostaIA : ""}
             </div>
           `;
         });
 
-        const t = animateValue("totalChamados", 0, total, 600);
-        const a = animateValue("andamento", 0, aberto, 600);
-        const r = animateValue("resolvidos", 0, resolvido, 600);
-
-        if(t) t.innerText = total;
-        if(a) a.innerText = aberto;
-        if(r) r.innerText = resolvido;
+        document.getElementById("totalChamados").innerText = total;
+        document.getElementById("andamento").innerText = aberto;
+        document.getElementById("resolvidos").innerText = resolvido;
       });
   }
 
@@ -806,20 +788,16 @@ function classificarChamado(texto){
   function toggleChat(){
     const box = document.getElementById("chatBox");
     if(!box) return;
-
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
   /* =========================
-     ENVIAR CHAT
+     CHAT SEND
   ========================= */
   function sendChat(){
 
-    const nome =
-      document.getElementById("chatNome")?.value;
-
-    const msg =
-      document.getElementById("chatMsg")?.value;
+    const nome = document.getElementById("chatNome")?.value;
+    const msg = document.getElementById("chatMsg")?.value;
 
     if(!nome || !msg) return;
 
@@ -833,7 +811,7 @@ function classificarChamado(texto){
   }
 
   /* =========================
-     CHAT REALTIME (COM HORA + AVATAR)
+     CHAT REALTIME (WHATSAPP STYLE)
   ========================= */
   function initChatRealtime(){
 
@@ -849,17 +827,7 @@ function classificarChamado(texto){
         snapshot.forEach(doc => {
           const d = doc.data();
 
-          let hora = "";
-
-          if (d.data?.toDate) {
-            const date = d.data.toDate();
-            hora =
-              date.getHours().toString().padStart(2,'0') + ":" +
-              date.getMinutes().toString().padStart(2,'0');
-          }
-
-          const isMe =
-            d.nome === document.getElementById("chatNome")?.value;
+          const isMe = d.nome === document.getElementById("chatNome")?.value;
 
           box.innerHTML += `
             <div class="chat-msg ${isMe ? 'me' : 'other'}">
@@ -869,8 +837,6 @@ function classificarChamado(texto){
               <div class="msg-content">
                 ${!isMe ? `<b>${d.nome}</b><br>` : ``}
                 ${d.mensagem}
-
-                <div class="time">${hora}</div>
               </div>
 
             </div>
@@ -880,7 +846,7 @@ function classificarChamado(texto){
   }
 
   /* =========================
-     TYPING INDICATOR
+     TYPING
   ========================= */
   function initTyping() {
 
@@ -909,7 +875,7 @@ function classificarChamado(texto){
   }
 
   /* =========================
-     BIND GLOBAL
+     BIND
   ========================= */
   function bindGlobal(){
     window.showPage = showPage;
@@ -925,33 +891,8 @@ function classificarChamado(texto){
 
 })();
 
-/* =========================
-   START APP
-========================= */
+/* START */
 window.addEventListener("load", App.init);
-
-/* =========================
-   CARDS ANIMADOS
-========================= */
-function animateValue(id, start, end, duration) {
-  const obj = document.getElementById(id);
-  if(!obj) return;
-
-  let current = start;
-  let range = end - start;
-  let step = Math.ceil(range / (duration / 20));
-
-  const timer = setInterval(() => {
-    current += step;
-
-    if (current >= end) {
-      current = end;
-      clearInterval(timer);
-    }
-
-    obj.innerText = current;
-  }, 20);
-}
 
 </script>
   
