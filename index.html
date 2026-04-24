@@ -284,75 +284,27 @@ margin-top:10px;
 .linkedin i{color:#0A66C2;}
 .github i{color:#fff;}
 
-/* CHAT */
-.chat-box{
-position:fixed;
-bottom:120px;
-right:20px;
-width:300px;
-height:380px;
-background:#0b1220;
-border:1px solid #1e293b;
-border-radius:12px;
-display:none;
-flex-direction:column;
-}
-
-.chat-box.active{display:flex;}
-
-.chat-header{
-padding:10px;
-background:#111827;
-display:flex;
-justify-content:space-between;
-}
-
-.chat-messages{
-flex:1;
-padding:10px;
-overflow-y:auto;
-display:flex;
-flex-direction:column;
-gap:8px;
-}
-
-.msg{
-padding:8px;
-border-radius:8px;
-background:#1e293b;
-}
-
-.chat-input{
-display:flex;
-flex-direction:column;
-gap:5px;
-padding:10px;
-}
-
-.chat-btn{
-position:fixed;
-bottom:80px;
-right:20px;
-width:55px;
-height:55px;
-border-radius:50%;
-background:#3b82f6;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-color:#fff;
-}
-
 .whats{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-padding:15px;
-border-radius:50%;
-color:#fff;
-text-decoration:none;
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:55px;
+  height:55px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#25D366;
+  color:#fff;
+  font-size:26px;
+  text-decoration:none;
+  z-index:9999;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+
+.whats:hover{
+  transform:scale(1.1);
 }
 
 .glass{
@@ -381,7 +333,7 @@ text-decoration:none;
   <a onclick="showPage('contato')">📞 <span>Contato</span></a>
 
   <div class="sidebar-toggle" onclick="toggleSidebar()">
-    ⬅ / ➡
+    ☰
   </div>
 
 </div>
@@ -577,16 +529,6 @@ document.getElementById("lista").innerHTML+=
 `<div class="chamado-card"><b>${n}</b><br>${a}<br>${m}</div>`;
 }
 
-function toggleChat(){
-document.getElementById("chat").classList.toggle("active");
-}
-
-function sendChat(){
-const m=document.getElementById("chatMsg").value;
-const box=document.getElementById("msgs");
-box.innerHTML+=`<div class="msg">${m}</div>`;
-document.getElementById("chatMsg").value="";
-}
 </script>
 
 </body>
