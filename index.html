@@ -382,74 +382,247 @@ text-decoration:none;
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
+
+/* =========================
+   FIREBASE INIT
+========================= */
 firebase.initializeApp({
-apiKey:"xxx",
-authDomain:"xxx",
-projectId:"chamados-17bc3"
+  apiKey: "xxx",
+  authDomain: "xxx",
+  projectId: "chamados-17bc3"
 });
 
-const db=firebase.firestore();
+const db = firebase.firestore();
 
-/* NAV */
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
+/* =========================
+   ORQUESTRADOR APP
+========================= */
+const App = (() => {
 
-/* CHAMADO */
-function criarChamado(){
-db.collection("chamados").add({
-nome:document.getElementById("nomeChamado").value,
-mensagem:document.getElementById("msgChamado").value,
-status:"aberto",
-data:firebase.firestore.FieldValue.serverTimestamp()
-});
-}
+  let slides = [];
+  let index = 0;
 
-/* REALTIME */
-db.collection("chamados").orderBy("data","desc")
-.onSnapshot(snap=>{
-let t=0,a=0,r=0;
-const lista=document.getElementById("listaChamados");
-lista.innerHTML="";
+  /* =========================
+     INIT GERAL
+  ========================= */
+  function init() {
+    bindGlobal();
+    initSlider();
+    initChamadosRealtime();
+    initChatRealtime();
+  }
 
-snap.forEach(d=>{
-const x=d.data();
-t++;
-if(x.status=="aberto")a++;
-if(x.status=="resolvido")r++;
+  /* =========================
+     NAV PAGES
+  ========================= */
+  function showPage(id){
+    document.querySelectorAll(".page").forEach(p=>{
+      p.classList.remove("active");
+    });
 
-lista.innerHTML+=`<div class="chamado-card">${x.nome}<br>${x.mensagem}</div>`;
-});
+    const el = document.getElementById(id);
+    if(el) el.classList.add("active");
+  }
 
-document.getElementById("totalChamados").innerText=t;
-document.getElementById("andamento").innerText=a;
-document.getElementById("resolvidos").innerText=r;
-});
+  /* =========================
+     SLIDER (PROTEGIDO)
+  ========================= */
+  function initSlider(){
+    slides = document.querySelectorAll(".slide");
+    render();
+  }
 
-/* CHAT */
-function toggleChat(){
-const c=document.getElementById("chatBox");
-c.style.display=c.style.display==="flex"?"none":"flex";
-}
+  function render(){
+    if(!slides.length) return;
 
-function enviarMensagem(){
-db.collection("chat").add({
-nome:chatNome.value,
-mensagem:chatMsg.value,
-data:firebase.firestore.FieldValue.serverTimestamp()
-});
-chatMsg.value="";
-}
+    slides.forEach(s => s.classList.remove("active"));
 
-db.collection("chat").orderBy("data","asc")
-.onSnapshot(s=>{
-const box=document.getElementById("chatMessages");
-box.innerHTML="";
-s.forEach(d=>{
-box.innerHTML+=`<div class="chat-msg"><b>${d.data().nome}:</b> ${d.data().mensagem}</div>`;
-});
-});
+    if(slides[index]){
+      slides[index].classList.add("active");
+    }
+
+    updateDots();
+  }
+
+  function next(){
+    if(!slides.length) return;
+    index = (index + 1) % slides.length;
+    render();
+  }
+
+  function prev(){
+    if(!slides.length) return;
+    index = (index - 1 + slides.length) % slides.length;
+    render();
+  }
+
+  function go(i){
+    index = i;
+    render();
+  }
+
+  function updateDots(){
+    const dots = document.querySelectorAll(".dots span");
+    dots.forEach(d => d.classList.remove("active"));
+    if(dots[index]) dots[index].classList.add("active");
+  }
+
+  /* =========================
+     CRIAR CHAMADO
+  ========================= */
+  function criarChamado(){
+
+    const nome = document.getElementById("nomeChamado")?.value;
+    const msg  = document.getElementById("msgChamado")?.value;
+
+    if(!nome || !msg) return;
+
+    db.collection("chamados").add({
+      nome,
+      mensagem: msg,
+      status: "aberto",
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("msgChamado").value = "";
+  }
+
+  /* =========================
+     CHAMADOS REALTIME (1 LISTENER)
+  ========================= */
+  function initChamadosRealtime(){
+
+    db.collection("chamados")
+      .orderBy("data","desc")
+      .onSnapshot(snapshot => {
+
+        const lista = document.getElementById("listaChamados");
+        if(!lista) return;
+
+        let total = 0;
+        let aberto = 0;
+        let resolvido = 0;
+
+        lista.innerHTML = "";
+
+        snapshot.forEach(doc => {
+          const d = doc.data();
+
+          total++;
+
+          if(d.status === "aberto") aberto++;
+          if(d.status === "resolvido") resolvido++;
+
+          lista.innerHTML += `
+            <div class="chamado-card">
+              <b>👤 ${d.nome}</b><br>
+              ${d.mensagem}
+            </div>
+          `;
+        });
+
+        const t = document.getElementById("totalChamados");
+        const a = document.getElementById("andamento");
+        const r = document.getElementById("resolvidos");
+
+        if(t) t.innerText = total;
+        if(a) a.innerText = aberto;
+        if(r) r.innerText = resolvido;
+      });
+  }
+
+  /* =========================
+     CHAT TOGGLE
+  ========================= */
+  function toggleChat(){
+    const box = document.getElementById("chatBox");
+    if(!box) return;
+
+    box.style.display = (box.style.display === "flex") ? "none" : "flex";
+  }
+
+  /* =========================
+     ENVIAR CHAT (COMPATÍVEL)
+  ========================= */
+  function sendChat(){
+
+    const nome =
+      document.getElementById("chatNome")?.value ||
+      document.getElementById("nomeChat")?.value;
+
+    const msg =
+      document.getElementById("chatMsg")?.value ||
+      document.getElementById("mensagemChat")?.value;
+
+    if(!nome || !msg) return;
+
+    db.collection("chat").add({
+      nome,
+      mensagem: msg,
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    const input =
+      document.getElementById("chatMsg") ||
+      document.getElementById("mensagemChat");
+
+    if(input) input.value = "";
+  }
+
+  /* =========================
+     CHAT REALTIME
+  ========================= */
+  function initChatRealtime(){
+
+    db.collection("chat")
+      .orderBy("data","asc")
+      .onSnapshot(snapshot => {
+
+        const box = document.getElementById("chatMessages");
+        if(!box) return;
+
+        box.innerHTML = "";
+
+        snapshot.forEach(doc => {
+          const d = doc.data();
+
+          box.innerHTML += `
+            <div class="chat-msg">
+              <b>${d.nome}:</b> ${d.mensagem}
+            </div>
+          `;
+        });
+      });
+  }
+
+  /* =========================
+     BIND GLOBAL
+  ========================= */
+  function bindGlobal(){
+    window.showPage = showPage;
+
+    window.next = next;
+    window.prev = prev;
+    window.go = go;
+
+    window.criarChamado = criarChamado;
+
+    window.toggleChat = toggleChat;
+    window.sendChat = sendChat;
+
+    // compatibilidade extra (evita bug antigo)
+    window.enviarMensagem = sendChat;
+  }
+
+  return { init };
+
+})();
+
+/* =========================
+   START APP
+========================= */
+window.addEventListener("load", App.init);
+
 </script>
 
 </body>
