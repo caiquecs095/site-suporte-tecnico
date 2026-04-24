@@ -293,9 +293,9 @@ right:5%;
 
 </div>
 <div class="cards">
-<div class="card">🧾 Chamados<br><b>12</b></div>
-<div class="card">⚡ Em andamento<br><b>5</b></div>
-<div class="card">✅ Resolvidos<br><b>30</b></div>
+<div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
+<div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
+<div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
 </div>
 
 </div>
@@ -385,7 +385,8 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+import { getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
@@ -397,6 +398,35 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+async function carregarDashboard(){
+
+const querySnapshot = await getDocs(collection(db,"chamados"));
+
+let total = 0;
+let andamento = 0;
+let resolvidos = 0;
+
+querySnapshot.forEach(doc=>{
+let d = doc.data();
+
+total++;
+
+if(d.status === "aberto"){
+andamento++;
+}
+
+if(d.status === "resolvido"){
+resolvidos++;
+}
+});
+
+document.getElementById("totalChamados").innerText = total;
+document.getElementById("andamento").innerText = andamento;
+document.getElementById("resolvidos").innerText = resolvidos;
+
+}
+
 
 /* ================= NAV ================= */
 window.showPage = function(id){
@@ -436,9 +466,13 @@ data: serverTimestamp()
 
 document.getElementById("statusMsg").innerText="Chamado enviado com sucesso!";
 
+// LIMPA CAMPOS
 document.getElementById("nomeChat").value="";
 document.getElementById("emailChat").value="";
 document.getElementById("problemaChat").value="";
+
+// 🔥 AQUI (ITEM 5)
+carregarDashboard();
 
 }catch(e){
 console.error(e);
