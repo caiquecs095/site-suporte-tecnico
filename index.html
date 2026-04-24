@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <style>
+<style>
 /* RESET */
 *{
 margin:0;
@@ -40,8 +40,6 @@ border-right:1px solid #1e293b;
 cursor:pointer;
 padding:8px;
 border-radius:5px;
-text-decoration:none;
-color:inherit;
 }
 
 .sidebar a:hover{
@@ -134,9 +132,7 @@ font-size:22px;
 color:#3b82f6;
 }
 
-/* FIX PRINCIPAL */
 .saas-cards{
-display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:20px;
 margin-bottom:15px;
@@ -149,11 +145,6 @@ text-align:left;
 transition:.3s;
 }
 
-.card.saas:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
-
 .card.saas b{
 display:block;
 font-size:26px;
@@ -161,10 +152,24 @@ margin-top:5px;
 }
 
 /* CORES INTELIGENTES */
-.card.total{border-left:4px solid #3b82f6;}
-.card.aberto{border-left:4px solid #f59e0b;}
-.card.resolvido{border-left:4px solid #10b981;}
+.card.total{
+border-left:4px solid #3b82f6;
+}
 
+.card.aberto{
+border-left:4px solid #f59e0b;
+}
+
+.card.resolvido{
+border-left:4px solid #10b981;
+}
+
+/* HOVER MODERNO */
+.card.saas:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+  
 /* SUPORTE */
 .suporte-card{
 background:#0b1220;
@@ -200,7 +205,7 @@ padding:15px;
 border-radius:10px;
 }
 
-/* TAGS */
+/* TAG */
 .tag{
 padding:3px 8px;
 border-radius:20px;
@@ -209,9 +214,21 @@ margin-left:5px;
 text-transform:uppercase;
 }
 
-.tag.bug{background:#ef4444;color:#fff;}
-.tag.suporte{background:#3b82f6;color:#fff;}
-.tag.financeiro{background:#f59e0b;color:#000;}
+/* cores por tipo */
+.tag.bug{
+background:#ef4444;
+color:#fff;
+}
+
+.tag.suporte{
+background:#3b82f6;
+color:#fff;
+}
+
+.tag.financeiro{
+background:#f59e0b;
+color:#000;
+}
 
 /* CONTATOS */
 .social-cards{
@@ -222,17 +239,15 @@ margin-top:10px;
 }
 
 .social-card{
-display:flex;
-gap:10px;
-align-items:center;
 background:#0b1220;
 border:1px solid #1e293b;
 padding:20px;
 border-radius:12px;
+display:flex;
+gap:10px;
 cursor:pointer;
 transition:.3s;
-text-decoration:none;
-color:inherit;
+pointer-events:auto;
 }
 
 .social-card:hover{
@@ -240,7 +255,10 @@ transform:translateY(-5px);
 box-shadow:0 0 15px rgba(59,130,246,0.5);
 }
 
-/* CHAT */
+.linkedin i{color:#0A66C2;}
+.github i{color:#fff;}
+
+/* CHAT BOX */
 .chat-box{
 position:fixed;
 bottom:150px;
@@ -271,6 +289,7 @@ flex-direction:column;
 gap:8px;
 }
 
+/* MSG BASE */
 .chat-msg{
 display:flex;
 gap:8px;
@@ -284,6 +303,7 @@ from{opacity:0;transform:translateY(5px);}
 to{opacity:1;transform:translateY(0);}
 }
 
+/* BALÃO */
 .msg-content{
 padding:10px;
 border-radius:10px;
@@ -291,8 +311,10 @@ font-size:13px;
 position:relative;
 }
 
+/* ME */
 .chat-msg.me{
 align-self:flex-end;
+justify-content:flex-end;
 }
 
 .chat-msg.me .msg-content{
@@ -301,6 +323,7 @@ color:#fff;
 border-bottom-right-radius:2px;
 }
 
+/* OUTRO */
 .chat-msg.other{
 align-self:flex-start;
 }
@@ -323,6 +346,14 @@ justify-content:center;
 font-size:12px;
 font-weight:bold;
 color:#fff;
+}
+
+/* HORA */
+.time{
+font-size:10px;
+opacity:0.7;
+margin-top:4px;
+text-align:right;
 }
 
 /* INPUT CHAT */
@@ -354,7 +385,7 @@ color:#fff;
 cursor:pointer;
 }
 
-/* FLOAT BUTTONS */
+/* FLOAT */
 .chat-btn{
 position:fixed;
 bottom:80px;
@@ -368,7 +399,7 @@ align-items:center;
 justify-content:center;
 cursor:pointer;
 color:#fff;
-z-index:99999;
+z-index: 99999;
 }
 
 .whats{
@@ -380,8 +411,9 @@ padding:15px;
 border-radius:50%;
 color:#fff;
 text-decoration:none;
-z-index:99999;
+z-index: 99999;
 }
+</style>
 </head>
 
 <body>
