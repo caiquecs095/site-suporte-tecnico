@@ -23,18 +23,38 @@ color:#d6e2f0;
 /* SIDEBAR */
 .sidebar{
 position:fixed;
-left:0;top:0;
-width:200px;height:100%;
+left:0;
+top:0;
+width:200px;
+height:100%;
+
+.sidebar a{
+padding:10px;
+border-radius:10px;
+transition:.25s;
+color:#d6e2f0;
+background:transparent;
+}
+
+.sidebar a:hover{
+background: rgba(59,130,246,0.15);
+backdrop-filter: blur(8px);
+transform: translateX(4px);
+}
+
+/* GLASS REAL */
+background: rgba(15, 23, 42, 0.35);
+backdrop-filter: blur(18px);
+-webkit-backdrop-filter: blur(18px);
+
+border-right: 1px solid rgba(255,255,255,0.08);
+box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+
 padding:20px;
 display:flex;
 flex-direction:column;
 gap:15px;
-border-right:1px solid rgba(255,255,255,0.08);
-
-/* GLASS */
-background: rgba(15, 23, 42, 0.45);
-backdrop-filter: blur(18px);
--webkit-backdrop-filter: blur(18px);
+z-index:1000;
 }
 
 /* PAGES */
