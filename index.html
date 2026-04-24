@@ -132,10 +132,15 @@ color:white;text-decoration:none;
 </div>
 
 <!-- SUPORTE -->
-<div id="support" class="page">
 <h2>💬 Suporte</h2>
-<p>Abra chamados através do chat em tempo real ou acompanhe atendimentos em andamento.</p>
+
+<div class="chat-body">
+<input id="nomeChamado" placeholder="Seu nome">
+<textarea id="msgChamado" placeholder="Descreva o problema"></textarea>
+<button onclick="criarChamado()">Abrir Chamado</button>
 </div>
+
+<div id="listaChamados" class="chamados-container"></div>
 
 <!-- SOBRE -->
 <div id="about" class="page">
@@ -233,55 +238,49 @@ function showPage(id){
 }
 
 /* CHAT */
-function toggleChat(){
-let box=document.getElementById("chatBox");
-box.style.display = box.style.display==="flex"?"none":"flex";
-}
+function criarChamado(){
 
-function enviarMensagem(){
-let nome = nomeChat.value;
-let msg = mensagemChat.value;
+let nome = document.getElementById("nomeChamado").value;
+let msg = document.getElementById("msgChamado").value;
 
 if(!nome || !msg) return;
 
-db.collection("chat").add({
-nome: nome,
-mensagem: msg,
+db.collection("chamados").add({
+nome:nome,
+mensagem:msg,
+status:"aberto",
 data: firebase.firestore.FieldValue.serverTimestamp()
 });
 
-mensagemChat.value="";
+document.getElementById("msgChamado").value="";
 }
 
-db.collection("chat").orderBy("data")
+/* LISTAR BONITO */
+db.collection("chamados").orderBy("data","desc")
 .onSnapshot(snapshot=>{
-chatMessages.innerHTML="";
+
+const lista = document.getElementById("listaChamados");
+lista.innerHTML="";
+
 snapshot.forEach(doc=>{
-let d=doc.data();
-chatMessages.innerHTML+=`<div><b>${d.nome}:</b> ${d.mensagem}</div>`;
+let d = doc.data();
+
+lista.innerHTML += `
+<div class="chamado-card">
+
+  <div class="chamado-header">
+    <span class="chamado-nome">👤 ${d.nome}</span>
+    <span class="status ${d.status}">${d.status}</span>
+  </div>
+
+  <div class="chamado-msg">
+    ${d.mensagem}
+  </div>
+
+</div>
+`;
 });
-chatMessages.scrollTop=chatMessages.scrollHeight;
 });
-
-/* SLIDER */
-let i=0;
-const slides=document.querySelectorAll(".slide");
-const dots=document.querySelectorAll(".dots span");
-
-function show(n){
-slides.forEach(s=>s.classList.remove("active"));
-dots.forEach(d=>d.classList.remove("active"));
-slides[n].classList.add("active");
-dots[n].classList.add("active");
-i=n;
-}
-
-function next(){ show((i+1)%slides.length); }
-function prev(){ show((i-1+slides.length)%slides.length); }
-function go(n){ show(n); }
-
-setInterval(next,4000);
-
 </script>
 
 </body>
