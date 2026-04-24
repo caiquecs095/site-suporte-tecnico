@@ -436,114 +436,125 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
-  projectId: "chamados-17bc3",
+  projectId: "chamados-17bc3"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ================= NAV =================
+/* ================= NAV ================= */
 window.showPage = function(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-const el = document.getElementById(id);
-if(el) el.classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const el = document.getElementById(id);
+  if(el) el.classList.add("active");
 }
 
-// ================= CHAT =================
+/* ================= CHAT ================= */
 window.toggleChat = function(){
-let box=document.getElementById("chatBox");
-box.style.display = box.style.display==="flex"?"none":"flex";
+  let box=document.getElementById("chatBox");
+  box.style.display = box.style.display==="flex"?"none":"flex";
 }
 
-// ================= DASH =================
+/* ================= DASH ================= */
 async function carregarDashboard(){
-try{
-const querySnapshot = await getDocs(collection(db,"chamados"));
+  try{
+    const querySnapshot = await getDocs(collection(db,"chamados"));
 
-let total=0, andamento=0, resolvidos=0;
+    let total=0, andamento=0, resolvidos=0;
 
-querySnapshot.forEach(doc=>{
-let d = doc.data();
-total++;
-if(d.status==="aberto") andamento++;
-if(d.status==="resolvido") resolvidos++;
-});
+    querySnapshot.forEach(doc=>{
+      let d = doc.data();
+      total++;
+      if(d.status==="aberto") andamento++;
+      if(d.status==="resolvido") resolvidos++;
+    });
 
-document.getElementById("totalChamados").innerText = total;
-document.getElementById("andamento").innerText = andamento;
-document.getElementById("resolvidos").innerText = resolvidos;
+    document.getElementById("totalChamados").innerText = total;
+    document.getElementById("andamento").innerText = andamento;
+    document.getElementById("resolvidos").innerText = resolvidos;
 
-}catch(e){
-console.warn("Dashboard falhou (ok em teste)");
-}
+  }catch(e){
+    console.warn("Erro dashboard:", e);
+  }
 }
 
 carregarDashboard();
 
-// ================= ENVIAR =================
+/* ================= ENVIAR ================= */
 window.enviarChamado = async function(){
 
-let nome = document.getElementById("nomeChat").value;
-let email = document.getElementById("emailChat").value;
-let problema = document.getElementById("problemaChat").value;
+  let nome = document.getElementById("nomeChat").value;
+  let email = document.getElementById("emailChat").value;
+  let problema = document.getElementById("problemaChat").value;
 
-if(!nome || !email || !problema){
-document.getElementById("statusMsg").innerText="Preencha todos os campos";
-return;
+  if(!nome || !email || !problema){
+    document.getElementById("statusMsg").innerText="Preencha todos os campos";
+    return;
+  }
+
+  document.getElementById("statusMsg").innerText="Enviando...";
+
+  try{
+    await addDoc(collection(db,"chamados"),{
+      nome,
+      email,
+      problema,
+      status:"aberto",
+      data: serverTimestamp()
+    });
+
+    document.getElementById("statusMsg").innerText="Enviado!";
+    carregarDashboard();
+
+    document.getElementById("nomeChat").value="";
+    document.getElementById("emailChat").value="";
+    document.getElementById("problemaChat").value="";
+
+  }catch(e){
+    console.error(e);
+    document.getElementById("statusMsg").innerText="Erro ao enviar";
+  }
 }
 
-try{
-await addDoc(collection(db,"chamados"),{
-nome,email,problema,status:"aberto",data: serverTimestamp()
-});
-
-document.getElementById("statusMsg").innerText="Enviado!";
-carregarDashboard();
-
-}catch(e){
-document.getElementById("statusMsg").innerText="Erro ao enviar";
-}
-}
-
-// ================= SLIDER =================
+/* ================= SLIDER ================= */
 let slides = document.querySelectorAll(".slide");
 let dots = document.querySelectorAll(".dots span");
+let current = 0;
 
-if(slides.length === 0){
-console.warn("Slider não encontrado");
-}
+function show(i){
+  if(slides.length === 0) return;
 
-slides.forEach(s=>s.classList.remove("active"));
-dots.forEach(d=>d.classList.remove("active"));
+  slides.forEach(s=>s.classList.remove("active"));
+  dots.forEach(d=>d.classList.remove("active"));
 
-slides[i].classList.add("active");
-if(dots[i]) dots[i].classList.add("active");
+  slides[i].classList.add("active");
+  if(dots[i]) dots[i].classList.add("active");
 
-current = i;
+  current = i;
 }
 
 window.next = function(e){
-if(e) e.stopPropagation();
-show((current+1)%slides.length);
+  if(e) e.stopPropagation();
+  show((current+1)%slides.length);
 }
 
 window.prev = function(e){
-if(e) e.stopPropagation();
-show((current-1+slides.length)%slides.length);
+  if(e) e.stopPropagation();
+  show((current-1+slides.length)%slides.length);
 }
 
 window.go = function(i){
-show(i);
+  show(i);
 }
 
-// 🔥 INICIA SLIDER COM SEGURANÇA
-setTimeout(()=>{
+/* INICIAR SLIDER */
 if(slides.length > 0){
-setInterval(()=>next(),4000);
+  setInterval(()=>next(),4000);
 }
-},500);
 
 </script>
 </html>
