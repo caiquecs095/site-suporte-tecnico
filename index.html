@@ -80,6 +80,46 @@ background:#25D366;padding:15px;border-radius:50%;
 color:white;text-decoration:none;
 }
 
+/* suport card */
+.suporte-card{
+background:#0b1220;
+border:1px solid #1e293b;
+padding:20px;
+border-radius:12px;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-top:10px;
+}
+
+.suporte-card input,
+.suporte-card textarea{
+padding:10px;
+border-radius:8px;
+border:1px solid #1e293b;
+background:#0f172a;
+color:#fff;
+outline:none;
+}
+
+.suporte-card textarea{
+min-height:100px;
+resize:none;
+}
+
+.suporte-card button{
+background:#3b82f6;
+border:none;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.suporte-card button:hover{
+background:#2563eb;
+}
+
 /* social card */
 .social-card{
 box-shadow:0 5px 20px rgba(0,0,0,0.3);
@@ -181,15 +221,24 @@ color:#ffffff;
 </div>
 
 <!-- SUPORTE -->
+<!-- SUPORTE -->
+<div id="support" class="page">
+
 <h2>💬 Suporte</h2>
 
-<div class="chat-body">
+<div class="suporte-card">
+
 <input id="nomeChamado" placeholder="Seu nome">
 <textarea id="msgChamado" placeholder="Descreva o problema"></textarea>
-<button onclick="criarChamado()">Abrir Chamado</button>
+
+<button onclick="criarChamado()">🚀 Abrir Chamado</button>
+
 </div>
 
+<h3 style="margin-top:20px;">📋 Chamados</h3>
 <div id="listaChamados" class="chamados-container"></div>
+
+</div>
 
 <!-- SOBRE -->
 <div id="about" class="page">
