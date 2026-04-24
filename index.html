@@ -119,12 +119,96 @@ color:white;text-decoration:none;
 
 </div>
 
-<div id="system" class="page"><h2>Sistema</h2></div>
-<div id="support" class="page"><h2>Suporte</h2></div>
-<div id="about" class="page"><h2>Sobre</h2></div>
-<div id="course" class="page"><h2>Cursos</h2></div>
-<div id="ods" class="page"><h2>ODS 9</h2></div>
-<div id="contato" class="page"><h2>Contatos</h2></div>
+<!-- DASHBOARD -->
+<div id="home" class="page active">
+<h2>🏠 Dashboard</h2>
+
+<div class="slider">
+  <div class="slide active">🚀 NEXUS SYSTEM</div>
+  <div class="slide">📡 Monitoramento Inteligente</div>
+  <div class="slide">💻 Infraestrutura TI</div>
+
+  <div class="nav">
+    <span onclick="prev()">‹</span>
+    <span onclick="next()">›</span>
+  </div>
+
+  <div class="dots">
+    <span onclick="go(0)" class="active"></span>
+    <span onclick="go(1)"></span>
+    <span onclick="go(2)"></span>
+  </div>
+</div>
+
+<div class="cards">
+  <div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
+  <div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
+  <div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
+</div>
+
+</div>
+
+<!-- SISTEMA -->
+<div id="system" class="page">
+<h2>🖥 Sistema</h2>
+<p>Gestão completa de TI, controle de ativos, monitoramento e administração de infraestrutura.</p>
+</div>
+
+<!-- SUPORTE -->
+<div id="support" class="page">
+<h2>💬 Suporte</h2>
+<p>Abra chamados através do chat em tempo real ou acompanhe atendimentos em andamento.</p>
+</div>
+
+<!-- SOBRE -->
+<div id="about" class="page">
+<h2>📄 Sobre</h2>
+<p>O NEXUS SYSTEM é uma plataforma desenvolvida para centralizar o suporte técnico e a gestão de TI com eficiência e inovação.</p>
+</div>
+
+<!-- CURSOS -->
+<div id="course" class="page">
+<h2>🎓 Cursos</h2>
+<p>💻 Informática</p>
+<p>🌐 Redes</p>
+<p>🔐 Segurança da Informação</p>
+</div>
+
+<!-- ODS 9 -->
+<div id="ods" class="page">
+<h2>🌍 ODS 9 - Indústria, Inovação e Infraestrutura</h2>
+<p>
+O suporte técnico contribui diretamente para o desenvolvimento tecnológico das empresas,
+garantindo que sistemas funcionem corretamente e permitindo inovação contínua.
+</p>
+</div>
+
+<!-- CONTATOS -->
+<div id="contato" class="page">
+<h2>📲 Redes e Contatos</h2>
+
+<div class="social-cards">
+
+<div class="social-card linkedin"
+onclick="window.open('https://linkedin.com/in/seu-link','_blank')">
+<i class="fab fa-linkedin"></i>
+<div>
+<b>LinkedIn</b><br>
+<small>Conecte-se profissionalmente</small>
+</div>
+</div>
+
+<div class="social-card github"
+onclick="window.open('https://github.com/seu-user','_blank')">
+<i class="fab fa-github"></i>
+<div>
+<b>GitHub</b><br>
+<small>Veja meus projetos</small>
+</div>
+</div>
+
+</div>
+</div>
 
 <!-- CHAT -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
@@ -160,8 +244,15 @@ const db = firebase.firestore();
 
 /* NAV */
 function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  const el = document.getElementById(id);
+
+  if(el){
+    el.classList.add("active");
+  }
 }
 
 /* CHAT */
