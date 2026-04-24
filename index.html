@@ -84,8 +84,8 @@ position:absolute;
 top:50%;
 transform:translateY(-50%);
 font-size:30px;
-cursor:pointer;
 color:#fff;
+cursor:pointer;
 }
 
 .nav span:first-child{left:10px;}
@@ -110,6 +110,7 @@ cursor:pointer;
 
 .dots span.active{background:#3b82f6;}
 
+
 /* CARDS */
 .cards{
 display:grid;
@@ -130,6 +131,25 @@ border-radius:10px;
 .card.total{border-left:4px solid #3b82f6;}
 .card.aberto{border-left:4px solid #f59e0b;}
 .card.resolvido{border-left:4px solid #10b981;}
+
+/* CORES INTELIGENTES */
+.card.total{
+border-left:4px solid #3b82f6;
+}
+
+.card.aberto{
+border-left:4px solid #f59e0b;
+}
+
+.card.resolvido{
+border-left:4px solid #10b981;
+}
+
+/* HOVER MODERNO */
+.card.saas:hover{
+transform:translateY(-5px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
 
 /* SUPORTE */
 .suporte-card{
@@ -174,28 +194,33 @@ padding:15px;
 border-radius:10px;
 }
 
-/* CONTATO */
+/* CONTATOS */
 .social-cards{
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:15px;
+margin-top:10px;
 }
 
 .social-card{
-display:block;
-padding:15px;
 background:#0b1220;
 border:1px solid #1e293b;
-border-radius:10px;
-text-decoration:none;
-color:#fff;
+padding:20px;
+border-radius:12px;
+display:flex;
+gap:10px;
+cursor:pointer;
 transition:.3s;
+pointer-events:auto;
 }
 
 .social-card:hover{
 transform:translateY(-5px);
-box-shadow:0 0 15px rgba(59,130,246,0.4);
+box-shadow:0 0 15px rgba(59,130,246,0.5);
 }
+
+.linkedin i{color:#0A66C2;}
+.github i{color:#fff;}
 
 /* CHAT */
 .chat-box{
@@ -274,11 +299,13 @@ text-decoration:none;
 
 <div class="sidebar">
 <h2>NEXUS</h2>
-<a onclick="showPage('home')">Dashboard</a>
-<a onclick="showPage('system')">Sistema</a>
-<a onclick="showPage('support')">Suporte</a>
-<a onclick="showPage('about')">Sobre</a>
-<a onclick="showPage('contato')">Contato</a>
+<a onclick="showPage('home')">🏠 Dashboard</a>
+<a onclick="showPage('system')">🖥 Sistema</a>
+<a onclick="showPage('support')">💬 Suporte</a>
+<a onclick="showPage('about')">📄 Sobre</a>
+<a onclick="showPage('course')">🎓 Cursos</a>
+<a onclick="showPage('ods')">🌍 ODS 9</a>
+<a onclick="showPage('contato')">📲 Contatos</a>
 </div>
 
 <!-- HOME -->
@@ -286,15 +313,22 @@ text-decoration:none;
 <h2>Dashboard</h2>
 
 <div class="slider">
-<div class="slide active">NEXUS SYSTEM</div>
-<div class="slide">Monitoramento</div>
-<div class="slide">Infraestrutura TI</div>
+  <div class="slide active">🚀 NEXUS SYSTEM</div>
+  <div class="slide">📡 Monitoramento Inteligente</div>
+  <div class="slide">💻 Infraestrutura TI</div>
 
-<div class="nav">
-<span onclick="prev()">‹</span>
-<span onclick="next()">›</span>
+  <div class="nav">
+    <span onclick="prev()">‹</span>
+    <span onclick="next()">›</span>
+  </div>
+
+  <div class="dots">
+    <span onclick="go(0)" class="active"></span>
+    <span onclick="go(1)"></span>
+    <span onclick="go(2)"></span>
+  </div>
 </div>
-</div>
+
 </div>
 
 <!-- SISTEMA -->
@@ -321,6 +355,18 @@ text-decoration:none;
 <div id="about" class="page">
 <h2>Sobre</h2>
 <p>NEXUS SYSTEM plataforma de suporte.</p>
+</div>
+
+<!-- CURSOS -->
+<div id="course" class="page">
+<h2>Cursos</h2>
+<p>TI / Redes / Segurança</p>
+</div>
+
+<!-- ODS -->
+<div id="ods" class="page">
+<h2>ODS 9 - Indústria, Inovação e Infraestrutura</h2>
+<p>O suporte técnico contribui diretamente para o desenvolvimento tecnológico das empresas, garantindo que sistemas funcionem corretamente e permitindo inovação contínua.</p>
 </div>
 
 <!-- CONTATO -->
@@ -351,7 +397,11 @@ Chat
 
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
-<a class="whats" href="https://wa.me/5500000000000" target="_blank">W</a>
+<a class="whats" href="https://wa.me/5500000000000" target="_blank">Whatsapp</a>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
 let index=0;
