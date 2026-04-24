@@ -301,85 +301,174 @@ garantindo que sistemas funcionem corretamente e permitindo inovação contínua
 
 <script>
 
+/* =========================
+   FIREBASE INIT
+========================= */
 firebase.initializeApp({
-apiKey:"xxx",
-authDomain:"xxx",
-projectId:"chamados-17bc3"
+  apiKey: "xxx",
+  authDomain: "xxx",
+  projectId: "chamados-17bc3"
 });
 
-const db=firebase.firestore();
+const db = firebase.firestore();
 
-/* PAGES */
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
+/* =========================
+   APP ORQUESTRADOR
+========================= */
+const App = (() => {
 
-/* SLIDER */
-let current=0;
-const slides=document.querySelectorAll(".slide");
+  const state = {
+    currentSlide: 0,
+    slides: []
+  };
 
-function update(){
-slides.forEach(s=>s.classList.remove("active"));
-slides[current].classList.add("active");
-}
+  /* INIT GERAL */
+  function init() {
+    initSlider();
+    initChamadosRealtime();
+    bindFunctions();
+  }
 
-function next(){
-current=(current+1)%slides.length;
-update();
-}
+  /* =========================
+     NAV PAGES
+  ========================= */
+  function showPage(id) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    const el = document.getElementById(id);
+    if (el) el.classList.add("active");
+  }
 
-function prev(){
-current=(current-1+slides.length)%slides.length;
-update();
-}
+  /* =========================
+     SLIDER
+  ========================= */
+  function initSlider() {
+    state.slides = document.querySelectorAll(".slide");
+    renderSlider();
+  }
 
-function go(i){
-current=i;
-update();
-}
+  function renderSlider() {
+    state.slides.forEach(s => s.classList.remove("active"));
+    if (state.slides[state.currentSlide]) {
+      state.slides[state.currentSlide].classList.add("active");
+    }
+    updateDots();
+  }
 
-/* CHAMADO */
-function criarChamado(){
-let nome=document.getElementById("nomeChamado").value;
-let msg=document.getElementById("msgChamado").value;
+  function next() {
+    state.currentSlide = (state.currentSlide + 1) % state.slides.length;
+    renderSlider();
+  }
 
-if(!nome||!msg)return;
+  function prev() {
+    state.currentSlide = (state.currentSlide - 1 + state.slides.length) % state.slides.length;
+    renderSlider();
+  }
 
-db.collection("chamados").add({
-nome,
-mensagem:msg,
-status:"aberto",
-data:firebase.firestore.FieldValue.serverTimestamp()
-});
+  function go(i) {
+    state.currentSlide = i;
+    renderSlider();
+  }
 
-document.getElementById("msgChamado").value="";
-}
+  function updateDots() {
+    const dots = document.querySelectorAll(".dots span");
+    dots.forEach(d => d.classList.remove("active"));
+    if (dots[state.currentSlide]) {
+      dots[state.currentSlide].classList.add("active");
+    }
+  }
 
-/* TEMPO REAL (1 SÓ VEZ) */
-db.collection("chamados").orderBy("data","desc")
-.onSnapshot(snap=>{
+  /* =========================
+     CRIAR CHAMADO
+  ========================= */
+  function criarChamado() {
 
-let total=0,aberto=0,res=0;
-let lista=document.getElementById("listaChamados");
-lista.innerHTML="";
+    const nome = document.getElementById("nomeChamado").value;
+    const msg = document.getElementById("msgChamado").value;
 
-snap.forEach(d=>{
-let x=d.data();
-total++;
-if(x.status==="aberto")aberto++;
-if(x.status==="resolvido")res++;
+    if (!nome || !msg) return;
 
-lista.innerHTML+=`
-<div class="chamado-card">
-<b>${x.nome}</b><br>${x.mensagem}
-</div>`;
-});
+    db.collection("chamados").add({
+      nome,
+      mensagem: msg,
+      status: "aberto",
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-document.getElementById("totalChamados").innerText=total;
-document.getElementById("andamento").innerText=aberto;
-document.getElementById("resolvidos").innerText=res;
+    document.getElementById("msgChamado").value = "";
+  }
 
+  /* =========================
+     TEMPO REAL (1 LISTENER SÓ)
+  ========================= */
+  function initChamadosRealtime() {
+
+    db.collection("chamados")
+      .orderBy("data", "desc")
+      .onSnapshot(snapshot => {
+
+        let total = 0;
+        let aberto = 0;
+        let resolvido = 0;
+
+        const lista = document.getElementById("listaChamados");
+        if (!lista) return;
+
+        lista.innerHTML = "";
+
+        snapshot.forEach(doc => {
+          const d = doc.data();
+
+          total++;
+
+          if (d.status === "aberto") aberto++;
+          if (d.status === "resolvido") resolvido++;
+
+          lista.innerHTML += `
+            <div class="chamado-card">
+              <b>👤 ${d.nome}</b><br>
+              ${d.mensagem}
+            </div>
+          `;
+        });
+
+        updateDashboard(total, aberto, resolvido);
+      });
+  }
+
+  /* =========================
+     DASHBOARD
+  ========================= */
+  function updateDashboard(total, aberto, resolvido) {
+
+    const t = document.getElementById("totalChamados");
+    const a = document.getElementById("andamento");
+    const r = document.getElementById("resolvidos");
+
+    if (t) t.innerText = total;
+    if (a) a.innerText = aberto;
+    if (r) r.innerText = resolvido;
+  }
+
+  /* =========================
+     BIND GLOBAL FUNCTIONS
+  ========================= */
+  function bindFunctions() {
+    window.showPage = showPage;
+    window.next = next;
+    window.prev = prev;
+    window.go = go;
+    window.criarChamado = criarChamado;
+  }
+
+  return { init };
+
+})();
+
+/* =========================
+   START SYSTEM
+========================= */
+window.addEventListener("load", () => {
+  App.init();
 });
 
 </script>
