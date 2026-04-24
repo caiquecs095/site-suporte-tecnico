@@ -466,7 +466,9 @@ text-decoration:none;
   <div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
   <div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
 </div>
-  
+  <P>
+     
+  </P>
 <h3>Lista de Chamados</h3>
 <div id="listaChamados" class="chamados-container"></div>
 </div>
@@ -553,7 +555,47 @@ const App = (() => {
 
   let slides = [];
   let index = 0;
+/* =========================
+   IA AUTO RESPONDEDORA
+========================= */
+function initAutoIA(){
 
+  db.collection("chamados")
+  .orderBy("data","desc")
+  .onSnapshot(snapshot => {
+
+    snapshot.docChanges().forEach(change => {
+
+      if(change.type === "added"){
+
+        const d = change.doc.data();
+
+        // evita spam em chamados antigos
+        if(d.iaRespondido) return;
+
+        setTimeout(() => {
+
+          const resposta = gerarRespostaIA(d.mensagem);
+
+          db.collection("chat").add({
+            nome: "NEXUS IA",
+            mensagem: resposta,
+            data: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          // marca como respondido
+          change.doc.ref.update({
+            iaRespondido: true
+          });
+
+        }, 2000); // delay natural
+
+      }
+
+    });
+
+  });
+}
   /* =========================
      INIT GERAL
   ========================= */
@@ -563,6 +605,7 @@ const App = (() => {
     initChamadosRealtime();
     initChatRealtime();
     initTyping();
+    initAutoIA();
   }
 
   /* =========================
