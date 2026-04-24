@@ -289,11 +289,10 @@ right:5%;
   </div>
 </div>
 
-</div>
 <div class="cards">
-<div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
-<div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
-<div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
+  <div class="card">🧾 Chamados<br><b id="totalChamados">0</b></div>
+  <div class="card">⚡ Em andamento<br><b id="andamento">0</b></div>
+  <div class="card">✅ Resolvidos<br><b id="resolvidos">0</b></div>
 </div>
 
 </div>
@@ -324,8 +323,6 @@ right:5%;
 <p>🔐 Segurança</p>
 </div>
 
-<div id="contato" class="page">
-
 <!-- CONTATOS -->
 <div id="contato" class="page">
 
@@ -344,7 +341,6 @@ onclick="window.open('https://linkedin.com/in/seu-link','_blank')">
 </div>
 
 </div>
-</div>
 
 <div class="social-card github"
 onclick="window.open('https://github.com/seu-user','_blank')">
@@ -360,7 +356,8 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 
 </div>
 
-
+</div>
+  
 <!-- CHAT -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
@@ -381,10 +378,14 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 
 <script type="module">
 
+const db = getFirestore(app);
+carregarDashboard();
+  
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
   authDomain: "chamados-17bc3.firebaseapp.com",
@@ -475,6 +476,37 @@ carregarDashboard();
 }catch(e){
 console.error(e);
 document.getElementById("statusMsg").innerText="Erro ao enviar";
+
+// SLIDER
+let slides = document.querySelectorAll(".slide");
+let dots = document.querySelectorAll(".dots span");
+let current = 0;
+
+function show(i){
+slides.forEach(s=>s.classList.remove("active"));
+dots.forEach(d=>d.classList.remove("active"));
+
+slides[i].classList.add("active");
+dots[i].classList.add("active");
+
+current = i;
+}
+
+window.next = function(e){
+if(e) e.stopPropagation();
+show((current+1)%slides.length);
+}
+
+window.prev = function(e){
+if(e) e.stopPropagation();
+show((current-1+slides.length)%slides.length);
+}
+
+window.go = function(i){
+show(i);
+}
+
+setInterval(()=>next(),5000);
 }
 
 }
