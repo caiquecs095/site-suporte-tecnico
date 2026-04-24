@@ -132,30 +132,66 @@ box-shadow:0 0 15px rgba(59,130,246,0.5);
 }
 
 /* FLOAT */
-.chat-btn{
-position:fixed;
-bottom:80px;
-right:20px;
-width:55px;height:55px;
-border-radius:50%;
-background:#3b82f6;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-color:#fff;
-}
-
 .chat-box{
 position:fixed;
-bottom:140px;
+bottom:150px;
 right:20px;
-width:280px;
+width:300px;
+height:400px;
 background:#0b1220;
+border:1px solid #1e293b;
+border-radius:12px;
 display:none;
 flex-direction:column;
-border-radius:10px;
+overflow:hidden;
+z-index:9999;
+}
+
+.chat-header{
+padding:10px;
+background:#111827;
+font-weight:bold;
+}
+
+.chat-messages{
+flex:1;
+padding:10px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.chat-msg{
+background:#1e293b;
+padding:8px;
+border-radius:8px;
+font-size:13px;
+}
+
+.chat-input{
+display:flex;
+gap:5px;
+padding:10px;
+border-top:1px solid #1e293b;
+}
+
+.chat-input input{
+flex:1;
+padding:6px;
+background:#0f172a;
 border:1px solid #1e293b;
+color:#fff;
+border-radius:6px;
+}
+
+.chat-input button{
+background:#3b82f6;
+border:none;
+color:#fff;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
 }
 
 .whats{
@@ -291,10 +327,26 @@ garantindo que sistemas funcionem corretamente e permitindo inovação contínua
 </div>
 </div>
 
-<!-- FLOAT -->
+<!-- CHAT BOX -->
+<div id="chatBox" class="chat-box">
+
+  <div class="chat-header">
+    💬 Chat Interno
+    <span onclick="toggleChat()" style="float:right;cursor:pointer;">✖</span>
+  </div>
+
+  <div id="chatMessages" class="chat-messages"></div>
+
+  <div class="chat-input">
+    <input id="chatNome" placeholder="Seu nome">
+    <input id="chatMsg" placeholder="Mensagem">
+    <button onclick="enviarMensagem()">Enviar</button>
+  </div>
+
+</div>
+
+<!-- BOTÃO FLUTUANTE -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
-<div class="chat-btn">💬</div>
-<a class="whats">📱</a>
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -314,79 +366,117 @@ firebase.initializeApp({
 const db = firebase.firestore();
 
 /* =========================
-   APP ORQUESTRADOR
+   ORQUESTRADOR APP
 ========================= */
 const App = (() => {
 
-  const state = {
-    currentSlide: 0,
-    slides: []
-  };
+  let slides = [];
+  let index = 0;
 
-  /* INIT GERAL */
+  /* INIT */
   function init() {
+    bindGlobal();
     initSlider();
     initChamadosRealtime();
-    bindFunctions();
+    initChatRealtime();
   }
 
   /* =========================
-     NAV PAGES
+     PAGES
   ========================= */
-  function showPage(id) {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  function showPage(id){
+    document.querySelectorAll(".page").forEach(p=>{
+      p.classList.remove("active");
+    });
+
     const el = document.getElementById(id);
-    if (el) el.classList.add("active");
+    if(el) el.classList.add("active");
   }
 
   /* =========================
      SLIDER
   ========================= */
-  function initSlider() {
-    state.slides = document.querySelectorAll(".slide");
-    renderSlider();
+  function initSlider(){
+    slides = document.querySelectorAll(".slide");
+    render();
   }
 
-  function renderSlider() {
-    state.slides.forEach(s => s.classList.remove("active"));
-    if (state.slides[state.currentSlide]) {
-      state.slides[state.currentSlide].classList.add("active");
-    }
+  function render(){
+    slides.forEach(s => s.classList.remove("active"));
+    if(slides[index]) slides[index].classList.add("active");
+
     updateDots();
   }
 
-  function next() {
-    state.currentSlide = (state.currentSlide + 1) % state.slides.length;
-    renderSlider();
+  function next(){
+    index = (index + 1) % slides.length;
+    render();
   }
 
-  function prev() {
-    state.currentSlide = (state.currentSlide - 1 + state.slides.length) % state.slides.length;
-    renderSlider();
+  function prev(){
+    index = (index - 1 + slides.length) % slides.length;
+    render();
   }
 
-  function go(i) {
-    state.currentSlide = i;
-    renderSlider();
+  function go(i){
+    index = i;
+    render();
   }
 
-  function updateDots() {
+  function updateDots(){
     const dots = document.querySelectorAll(".dots span");
     dots.forEach(d => d.classList.remove("active"));
-    if (dots[state.currentSlide]) {
-      dots[state.currentSlide].classList.add("active");
-    }
+    if(dots[index]) dots[index].classList.add("active");
+  }
+
+  /* =========================
+     CHAMADOS REALTIME
+  ========================= */
+  function initChamadosRealtime(){
+
+    db.collection("chamados")
+    .orderBy("data","desc")
+    .onSnapshot(snap => {
+
+      const lista = document.getElementById("listaChamados");
+      if(!lista) return;
+
+      let total = 0;
+      let aberto = 0;
+      let resolvido = 0;
+
+      lista.innerHTML = "";
+
+      snap.forEach(doc => {
+        const d = doc.data();
+
+        total++;
+        if(d.status === "aberto") aberto++;
+        if(d.status === "resolvido") resolvido++;
+
+        lista.innerHTML += `
+          <div class="chamado-card">
+            <b>👤 ${d.nome}</b><br>
+            ${d.mensagem}
+          </div>
+        `;
+      });
+
+      document.getElementById("totalChamados").innerText = total;
+      document.getElementById("andamento").innerText = aberto;
+      document.getElementById("resolvidos").innerText = resolvido;
+    });
   }
 
   /* =========================
      CRIAR CHAMADO
   ========================= */
-  function criarChamado() {
+  function criarChamado(){
 
     const nome = document.getElementById("nomeChamado").value;
     const msg = document.getElementById("msgChamado").value;
 
-    if (!nome || !msg) return;
+    if(!nome || !msg) return;
 
     db.collection("chamados").add({
       nome,
@@ -399,78 +489,73 @@ const App = (() => {
   }
 
   /* =========================
-     TEMPO REAL (1 LISTENER SÓ)
+     CHAT FLUTUANTE REALTIME
   ========================= */
-  function initChamadosRealtime() {
+  function toggleChat(){
+    const box = document.getElementById("chatBox");
+    if(!box) return;
 
-    db.collection("chamados")
-      .orderBy("data", "desc")
-      .onSnapshot(snapshot => {
+    box.style.display = (box.style.display === "flex") ? "none" : "flex";
+  }
 
-        let total = 0;
-        let aberto = 0;
-        let resolvido = 0;
+  function sendChat(){
 
-        const lista = document.getElementById("listaChamados");
-        if (!lista) return;
+    const nome = document.getElementById("nomeChat").value;
+    const msg = document.getElementById("mensagemChat").value;
 
-        lista.innerHTML = "";
+    if(!nome || !msg) return;
 
-        snapshot.forEach(doc => {
-          const d = doc.data();
+    db.collection("chat").add({
+      nome,
+      mensagem: msg,
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-          total++;
+    document.getElementById("mensagemChat").value = "";
+  }
 
-          if (d.status === "aberto") aberto++;
-          if (d.status === "resolvido") resolvido++;
+  function initChatRealtime(){
 
-          lista.innerHTML += `
-            <div class="chamado-card">
-              <b>👤 ${d.nome}</b><br>
-              ${d.mensagem}
-            </div>
-          `;
-        });
+    db.collection("chat")
+    .orderBy("data","asc")
+    .onSnapshot(snap => {
 
-        updateDashboard(total, aberto, resolvido);
+      const box = document.getElementById("chatMessages");
+      if(!box) return;
+
+      box.innerHTML = "";
+
+      snap.forEach(doc => {
+        const d = doc.data();
+
+        box.innerHTML += `
+          <div>
+            <b>${d.nome}:</b> ${d.mensagem}
+          </div>
+        `;
       });
+    });
   }
 
   /* =========================
-     DASHBOARD
+     GLOBAL BIND
   ========================= */
-  function updateDashboard(total, aberto, resolvido) {
-
-    const t = document.getElementById("totalChamados");
-    const a = document.getElementById("andamento");
-    const r = document.getElementById("resolvidos");
-
-    if (t) t.innerText = total;
-    if (a) a.innerText = aberto;
-    if (r) r.innerText = resolvido;
-  }
-
-  /* =========================
-     BIND GLOBAL FUNCTIONS
-  ========================= */
-  function bindFunctions() {
+  function bindGlobal(){
     window.showPage = showPage;
     window.next = next;
     window.prev = prev;
     window.go = go;
     window.criarChamado = criarChamado;
+    window.toggleChat = toggleChat;
+    window.sendChat = sendChat;
   }
 
   return { init };
 
 })();
 
-/* =========================
-   START SYSTEM
-========================= */
-window.addEventListener("load", () => {
-  App.init();
-});
+/* START */
+window.addEventListener("load", App.init);
 
 </script>
 
