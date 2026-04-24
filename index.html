@@ -794,21 +794,28 @@ const App = (() => {
   /* =========================
      CHAT SEND
   ========================= */
-  function sendChat(){
+ function sendChat(){
 
-    const nome = document.getElementById("chatNome")?.value;
-    const msg = document.getElementById("chatMsg")?.value;
+  const nome = document.getElementById("chatNome")?.value;
+  const msg = document.getElementById("chatMsg")?.value;
 
-    if(!nome || !msg) return;
+  if(!nome || !msg) return;
 
-    db.collection("chat").add({
-      nome,
-      mensagem: msg,
-      data: firebase.firestore.FieldValue.serverTimestamp()
-    });
+  db.collection("chat").add({
+    nome,
+    mensagem: msg,
+    data: firebase.firestore.FieldValue.serverTimestamp()
+  });
 
-    document.getElementById("chatMsg").value = "";
-  }
+  // limpa input
+  document.getElementById("chatMsg").value = "";
+
+  // 🔥 REMOVE STATUS "digitando"
+  db.collection("typing").doc("user").set({
+    nome,
+    typing: false
+  });
+}
 
   /* =========================
      CHAT REALTIME (WHATSAPP STYLE)
@@ -853,12 +860,24 @@ const App = (() => {
     const input = document.getElementById("chatMsg");
     if (!input) return;
 
-    input.addEventListener("input", () => {
-      db.collection("typing").doc("user").set({
-        nome: document.getElementById("chatNome")?.value || "Alguém",
-        typing: true
-      });
+   let typingTimer;
+
+input.addEventListener("input", () => {
+
+  db.collection("typing").doc("user").set({
+    nome: document.getElementById("chatNome")?.value || "Alguém",
+    typing: true
+  });
+
+  clearTimeout(typingTimer);
+
+  typingTimer = setTimeout(() => {
+    db.collection("typing").doc("user").set({
+      nome: document.getElementById("chatNome")?.value || "Alguém",
+      typing: false
     });
+  }, 1200);
+});
 
     db.collection("typing").onSnapshot(snap => {
 
