@@ -315,9 +315,10 @@ text-decoration:none;
 <h2>Suporte</h2>
 
 <div class="suporte-card">
-<input id="nomeChamado" placeholder="Seu nome">
-<textarea id="msgChamado placeholder="Mensagem""></textarea>
-<button onclick="criarChamado()">Abrir Chamado</button>
+  <input id="nomeChamado" placeholder="Seu nome">
+  <input id="assuntoChamado" placeholder="Assunto do chamado">
+  <textarea id="msgChamado" placeholder="Descreva o problema"></textarea>
+  <button onclick="criarChamado()">🚀 Abrir Chamado</button>
 </div>
 
 <div id="listaChamados" class="chamados-container"></div>
@@ -361,18 +362,21 @@ text-decoration:none;
 </div>
 
 <!-- CHAT -->
-<div class="chat-btn" onclick="toggleChat()">💬</div>
+<div id="chatBox" class="chat-box">
 
-<div class="chat-box" id="chatBox">
-<div class="chat-header">Chat</div>
+  <div class="chat-header">
+    💬 Chat Interno
+    <span onclick="toggleChat()" style="float:right;cursor:pointer;">✖</span>
+  </div>
 
-<div id="chatMessages" class="chat-messages"></div>
+  <div id="chatMessages" class="chat-messages"></div>
 
-<div class="chat-input">
-<input id="chatNome">
-<input id="chatMsg">
-<button onclick="enviarMensagem()">OK</button>
-</div>
+  <div class="chat-input">
+    <input id="chatNome" placeholder="Nome">
+    <input id="chatMsg" placeholder="Mensagem">
+    <button onclick="sendChat()">Enviar</button>
+  </div>
+
 </div>
 
 <a class="whats">📱</a>
@@ -472,20 +476,22 @@ const App = (() => {
   ========================= */
   function criarChamado(){
 
-    const nome = document.getElementById("nomeChamado")?.value;
-    const msg  = document.getElementById("msgChamado")?.value;
+  const nome = document.getElementById("nomeChamado")?.value;
+  const assunto = document.getElementById("assuntoChamado")?.value;
+  const msg = document.getElementById("msgChamado")?.value;
 
-    if(!nome || !msg) return;
+  if(!nome || !assunto || !msg) return;
 
-    db.collection("chamados").add({
-      nome,
-      mensagem: msg,
-      status: "aberto",
-      data: firebase.firestore.FieldValue.serverTimestamp()
-    });
+  db.collection("chamados").add({
+    nome,
+    assunto,
+    mensagem: msg,
+    status: "aberto",
+    data: firebase.firestore.FieldValue.serverTimestamp()
+  });
 
-    document.getElementById("msgChamado").value = "";
-  }
+  document.getElementById("msgChamado").value = "";
+}
 
   /* =========================
      CHAMADOS REALTIME (1 LISTENER)
@@ -514,11 +520,21 @@ const App = (() => {
           if(d.status === "resolvido") resolvido++;
 
           lista.innerHTML += `
-            <div class="chamado-card">
-              <b>👤 ${d.nome}</b><br>
-              ${d.mensagem}
-            </div>
-          `;
+  <div class="chamado-card">
+    
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+      <b style="color:#3b82f6;">👤 ${d.nome}</b>
+      <span style="font-size:11px;padding:3px 8px;border-radius:20px;background:${d.status === 'aberto' ? '#f59e0b' : '#10b981'};color:#000;">
+        ${d.status}
+      </span>
+    </div>
+
+    <div style="opacity:0.9;">
+      ${d.mensagem}
+    </div>
+
+  </div>
+`;
         });
 
         const t = document.getElementById("totalChamados");
@@ -535,11 +551,11 @@ const App = (() => {
      CHAT TOGGLE
   ========================= */
   function toggleChat(){
-    const box = document.getElementById("chatBox");
-    if(!box) return;
+  const box = document.getElementById("chatBox");
+  if(!box) return;
 
-    box.style.display = (box.style.display === "flex") ? "none" : "flex";
-  }
+  box.style.display = (box.style.display === "flex") ? "none" : "flex";
+}
 
   /* =========================
      ENVIAR CHAT (COMPATÍVEL)
