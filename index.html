@@ -203,10 +203,56 @@ document.getElementById(id)?.classList.add("active");
 }
 
 /* CHAT */
-window.toggleChat = ()=>{
-let b=document.getElementById("chatBox");
-b.style.display=b.style.display==="flex"?"none":"flex";
+import { 
+  collection, 
+  addDoc, 
+  serverTimestamp, 
+  onSnapshot, 
+  query, 
+  orderBy 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* ================= CHAT REALTIME ================= */
+
+// enviar mensagem
+window.enviarMensagem = async function(){
+
+  let nome = document.getElementById("nomeChat").value;
+  let mensagem = document.getElementById("mensagemChat").value;
+
+  if(!nome || !mensagem) return;
+
+  await addDoc(collection(db, "chat"), {
+    nome,
+    mensagem,
+    data: serverTimestamp()
+  });
+
+  document.getElementById("mensagemChat").value="";
 }
+
+
+// ouvir mensagens em tempo real
+const q = query(collection(db, "chat"), orderBy("data"));
+
+onSnapshot(q, (snapshot) => {
+
+  const chatBox = document.getElementById("chatMessages");
+  chatBox.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    let d = doc.data();
+
+    chatBox.innerHTML += `
+      <div style="margin-bottom:8px">
+        <b>${d.nome}:</b> ${d.mensagem}
+      </div>
+    `;
+  });
+
+  // auto scroll
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
 
 /* ENVIAR */
 window.enviarChamado = async()=>{
