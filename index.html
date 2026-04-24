@@ -185,40 +185,45 @@ color:white;text-decoration:none;
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-/* FIREBASE */
-const app = initializeApp({
-apiKey:"AIzaSy...",
-authDomain:"chamados-17bc3.firebaseapp.com",
-projectId:"chamados-17bc3"
-});
-
-const db = getFirestore(app);
-
-/* NAV */
-window.showPage = id=>{
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id)?.classList.add("active");
-}
-
-/* CHAT */
 import { 
+  getFirestore, 
   collection, 
   addDoc, 
-  serverTimestamp, 
-  onSnapshot, 
-  query, 
-  orderBy 
+  getDocs, 
+  serverTimestamp,
+  onSnapshot,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-/* ================= CHAT REALTIME ================= */
+/* FIREBASE */
+const firebaseConfig = {
+  apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
+  authDomain: "chamados-17bc3.firebaseapp.com",
+  projectId: "chamados-17bc3",
+  storageBucket: "chamados-17bc3.firebasestorage.app",
+  messagingSenderId: "352897852293",
+  appId: "1:352897852293:web:989ed88f0dfb9e2d561aec",
+  measurementId: "G-7BMJGH1QV8"
+};
 
-// enviar mensagem
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+/* ================= NAV ================= */
+window.showPage = function(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const el = document.getElementById(id);
+  if(el) el.classList.add("active");
+}
+
+/* ================= CHAT REALTIME ================= */
 window.enviarMensagem = async function(){
 
-  let nome = document.getElementById("nomeChat").value;
-  let mensagem = document.getElementById("mensagemChat").value;
+  const nome = document.getElementById("nomeChat").value;
+  const mensagem = document.getElementById("mensagemChat").value;
 
   if(!nome || !mensagem) return;
 
@@ -231,13 +236,13 @@ window.enviarMensagem = async function(){
   document.getElementById("mensagemChat").value="";
 }
 
-
-// ouvir mensagens em tempo real
 const q = query(collection(db, "chat"), orderBy("data"));
 
 onSnapshot(q, (snapshot) => {
 
   const chatBox = document.getElementById("chatMessages");
+  if(!chatBox) return;
+
   chatBox.innerHTML = "";
 
   snapshot.forEach(doc => {
@@ -250,53 +255,45 @@ onSnapshot(q, (snapshot) => {
     `;
   });
 
-  // auto scroll
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
-/* ENVIAR */
-window.enviarChamado = async()=>{
-let nome=nomeChat.value;
-let email=emailChat.value;
-let problema=problemaChat.value;
-
-if(!nome||!email||!problema){
-statusMsg.innerText="Preencha tudo";
-return;
-}
-
-await addDoc(collection(db,"chamados"),{
-nome,email,problema,status:"aberto",data:serverTimestamp()
-});
-
-statusMsg.innerText="Enviado!";
-}
-
-/* DASH */
+/* ================= DASH ================= */
 async function load(){
-let snap=await getDocs(collection(db,"chamados"));
-totalChamados.innerText=snap.size;
+  try{
+    let snap = await getDocs(collection(db,"chamados"));
+    document.getElementById("totalChamados").innerText = snap.size;
+  }catch(e){
+    console.log("Dashboard ok sem dados");
+  }
 }
 load();
 
-/* SLIDER */
-let i=0;
-const slides=document.querySelectorAll(".slide");
-const dots=document.querySelectorAll(".dots span");
+/* ================= SLIDER ================= */
+let i = 0;
+const slides = document.querySelectorAll(".slide");
+const dots = document.querySelectorAll(".dots span");
 
 function show(n){
-slides.forEach(s=>s.classList.remove("active"));
-dots.forEach(d=>d.classList.remove("active"));
-slides[n].classList.add("active");
-dots[n].classList.add("active");
-i=n;
+  if(slides.length === 0) return;
+
+  slides.forEach(s=>s.classList.remove("active"));
+  dots.forEach(d=>d.classList.remove("active"));
+
+  slides[n].classList.add("active");
+  if(dots[n]) dots[n].classList.add("active");
+
+  i = n;
 }
 
-window.next=()=>show((i+1)%slides.length);
-window.prev=()=>show((i-1+slides.length)%slides.length);
-window.go=n=>show(n);
+window.next = () => show((i+1)%slides.length);
+window.prev = () => show((i-1+slides.length)%slides.length);
+window.go = (n) => show(n);
 
-setInterval(()=>next(),4000);
+/* AUTO SLIDE */
+if(slides.length > 0){
+  setInterval(()=>next(),4000);
+}
 
 </script>
 
