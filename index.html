@@ -315,8 +315,8 @@ text-decoration:none;
 <h2>Suporte</h2>
 
 <div class="suporte-card">
-<input id="nomeChamado">Nome
-<textarea id="msgChamado"></textarea>Assunto
+<input id="nomeChamado" placeholder="Seu nome">
+<textarea id="msgChamado placeholder="Mensagem""></textarea>
 <button onclick="criarChamado()">Abrir Chamado</button>
 </div>
 
@@ -625,5 +625,26 @@ window.addEventListener("load", App.init);
 
 </script>
 
+  
+<!-- CHAT BOX -->
+<div id="chatBox" class="chat-box">
+
+  <div class="chat-header">
+    💬 Chat Interno
+    <span onclick="toggleChat()" style="float:right;cursor:pointer;">✖</span>
+  </div>
+
+  <div id="chatMessages" class="chat-messages"></div>
+
+  <div class="chat-input">
+    <input id="chatNome" placeholder="Seu nome">
+    <input id="chatMsg" placeholder="Mensagem">
+    <button onclick="enviarMensagem()">Enviar</button>
+  </div>
+
+</div>
+
+<!-- BOTÃO FLUTUANTE -->
+<div class="chat-btn" onclick="toggleChat()">💬</div>
 </body>
 </html>
