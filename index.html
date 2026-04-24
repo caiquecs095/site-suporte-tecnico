@@ -573,6 +573,13 @@ const App = (() => {
   let slides = [];
   let index = 0;
 
+  // 🔥 sessão local do usuário (CORRIGE CHAT GRUPO)
+  const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
+  localStorage.setItem("sessionId", sessionId);
+
+  /* =========================
+     INIT GERAL
+  ========================= */
   function init() {
     bindGlobal();
     initSlider();
@@ -582,10 +589,14 @@ const App = (() => {
     initAutoIA();
   }
 
+  /* =========================
+     NAV
+  ========================= */
   function showPage(id){
     document.querySelectorAll(".page").forEach(p=>{
       p.classList.remove("active");
     });
+
     const el = document.getElementById(id);
     if(el) el.classList.add("active");
   }
@@ -629,10 +640,9 @@ const App = (() => {
   }
 
   /* =========================
-     IA CLASSIFICAÇÃO
+     IA
   ========================= */
   function classificarChamado(texto){
-
     texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug") || texto.includes("falha") || texto.includes("não funciona")){
@@ -647,22 +657,21 @@ const App = (() => {
   }
 
   function gerarRespostaIA(texto){
-
     texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug")){
-      return "Detectei um possível BUG. Já estou encaminhando para análise técnica.";
+      return "Detectei um possível BUG. Encaminhando para análise técnica.";
     }
 
     if(texto.includes("pagamento")){
-      return "Problema financeiro identificado. Vou direcionar para o setor responsável.";
+      return "Chamado financeiro identificado. Direcionando ao setor responsável.";
     }
 
-    return "Seu chamado foi registrado e está sendo analisado pela equipe.";
+    return "Chamado registrado e em análise pela equipe.";
   }
 
   /* =========================
-     IA AUTO
+     AUTO IA
   ========================= */
   function initAutoIA(){
 
@@ -674,8 +683,7 @@ const App = (() => {
 
         const d = doc.data();
 
-        if(d.iaRespondido) return;
-        if(!d.mensagem) return;
+        if(d.iaRespondido || !d.mensagem) return;
 
         setTimeout(() => {
 
@@ -685,10 +693,10 @@ const App = (() => {
           doc.ref.update({
             iaRespondido: true,
             respostaIA: resposta,
-            categoria: categoria
+            categoria
           });
 
-        }, 2000);
+        }, 1200);
 
       });
 
@@ -706,13 +714,11 @@ const App = (() => {
 
     if(!nome || !assunto || !msg) return;
 
-    const categoria = classificarChamado(msg);
-
     db.collection("chamados").add({
       nome,
       assunto,
       mensagem: msg,
-      categoria,
+      categoria: classificarChamado(msg),
       status: "aberto",
       data: firebase.firestore.FieldValue.serverTimestamp()
     });
@@ -721,7 +727,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAMADOS REALTIME (CORRIGIDO FINAL)
+     CHAMADOS (COM CORES FIX)
   ========================= */
   function initChamadosRealtime(){
 
@@ -732,31 +738,33 @@ const App = (() => {
         const lista = document.getElementById("listaChamados");
         if(!lista) return;
 
-        let total = 0;
-        let aberto = 0;
-        let resolvido = 0;
+        let total = 0, aberto = 0, resolvido = 0;
 
         lista.innerHTML = "";
 
         snapshot.forEach(doc => {
           const d = doc.data();
+          const id = doc.id;
 
           total++;
           if(d.status === "aberto") aberto++;
           if(d.status === "resolvido") resolvido++;
 
-          // 🔥 FIX PRINCIPAL DAS CORES
-          const categoria = (d.categoria || "suporte").trim();
-
           lista.innerHTML += `
             <div class="chamado-card">
+
               <b>👤 ${d.nome}</b><br>
               📌 ${d.assunto || ""}<br>
 
-              🏷 <span class="tag ${categoria}">${categoria}</span><br>
+              🏷 <span class="tag ${d.categoria}">
+                ${d.categoria || ""}
+              </span><br>
 
               💬 ${d.mensagem}<br>
-              🤖 ${d.respostaIA || ""}
+              🤖 ${d.respostaIA || ""}<br>
+
+              <button onclick="deletarChamado('${id}')">🗑 apagar</button>
+
             </div>
           `;
         });
@@ -768,38 +776,46 @@ const App = (() => {
   }
 
   /* =========================
-     CHAT
+     DELETAR CHAMADO
   ========================= */
+  function deletarChamado(id){
+    db.collection("chamados").doc(id).delete();
+  }
+
+  /* =========================
+     CHAT (AGORA NÃO É GRUPO)
+  ========================= */
+  function sendChat(){
+
+    const nome = document.getElementById("chatNome")?.value;
+    const msg = document.getElementById("chatMsg")?.value;
+
+    if(!nome || !msg) return;
+
+    db.collection("chat").add({
+      nome,
+      mensagem: msg,
+      sessionId,
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById("chatMsg").value = "";
+
+    db.collection("typing").doc(sessionId).set({
+      nome,
+      typing: false
+    });
+  }
+
   function toggleChat(){
     const box = document.getElementById("chatBox");
     if(!box) return;
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
-function sendChat(){
-
-  const nome = document.getElementById("chatNome")?.value;
-  const msg = document.getElementById("chatMsg")?.value;
-
-  if(!nome || !msg) return;
-
-  db.collection("chat").add({
-    nome,
-    mensagem: msg,
-    data: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  document.getElementById("chatMsg").value = "";
-
-  db.collection("typing").doc("status").set({
-    nome: "",
-    typing: false
-  });
-
-  // 🤖 IA RESPONDE AUTOMATICAMENTE
-  autoReplyChat(msg);
-}
-
+  /* =========================
+     CHAT REAL (FILTRADO POR SESSÃO)
+  ========================= */
   function initChatRealtime(){
 
     db.collection("chat")
@@ -814,12 +830,17 @@ function sendChat(){
         snapshot.forEach(doc => {
           const d = doc.data();
 
+          // 🔥 NÃO vira chat de grupo mais
+          if(d.sessionId !== sessionId) return;
+
           const isMe = d.nome === document.getElementById("chatNome")?.value;
 
           box.innerHTML += `
             <div class="chat-msg ${isMe ? 'me' : 'other'}">
-              ${!isMe ? `<div class="avatar">${d.nome.charAt(0).toUpperCase()}</div>` : ``}
-              <div class="msg-content">${d.mensagem}</div>
+              ${!isMe ? `<div class="avatar">${d.nome.charAt(0)}</div>` : ``}
+              <div class="msg-content">
+                ${d.mensagem}
+              </div>
             </div>
           `;
         });
@@ -827,73 +848,50 @@ function sendChat(){
   }
 
   /* =========================
-     TYPING (ESTÁVEL)
+     TYPING (CORRIGIDO)
   ========================= */
   function initTyping(){
 
     const input = document.getElementById("chatMsg");
     if(!input) return;
 
-    let typingTimer;
+    let timer;
 
     input.addEventListener("input", () => {
 
-      db.collection("typing").doc("status").set({
-        nome: document.getElementById("chatNome")?.value || "Alguém",
+      const nome = document.getElementById("chatNome")?.value || "Usuário";
+
+      db.collection("typing").doc(sessionId).set({
+        nome,
         typing: true
       });
 
-      clearTimeout(typingTimer);
+      clearTimeout(timer);
 
-      typingTimer = setTimeout(() => {
-
-        db.collection("typing").doc("status").set({
-          nome: "",
+      timer = setTimeout(() => {
+        db.collection("typing").doc(sessionId).set({
+          nome,
           typing: false
         });
-
       }, 900);
     });
 
-    db.collection("typing").doc("status")
-    .onSnapshot(doc => {
+    db.collection("typing")
+    .onSnapshot(snap => {
 
-      const d = doc.data();
-      const el = document.getElementById("typing");
+      let text = "";
 
-      if(!el) return;
+      snap.forEach(doc => {
+        const d = doc.data();
+        if(d.typing && doc.id !== sessionId){
+          text = `${d.nome} está digitando...`;
+        }
+      });
 
-      el.innerText = d?.typing ? `${d.nome} está digitando...` : "";
+      document.getElementById("typing").innerText = text;
     });
   }
- /* =========================
-     AUTO REPLY
-  ========================= */
-  function autoReplyChat(msg){
 
-  let texto = (msg || "").toLowerCase();
-
-  let resposta = "🤖 Recebi sua mensagem e já estou analisando.";
-
-  if(texto.includes("erro") || texto.includes("bug")){
-    resposta = "🤖 Detectei possível problema técnico. Já vou encaminhar para suporte.";
-  }
-
-  if(texto.includes("pagamento") || texto.includes("boleto") || texto.includes("pix")){
-    resposta = "🤖 Assunto financeiro identificado. Vou direcionar para o setor responsável.";
-  }
-
-  setTimeout(() => {
-
-    db.collection("chat").add({
-      nome: "IA NEXUS",
-      mensagem: resposta,
-      data: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-  }, 1500);
-}
-  
   /* =========================
      BIND
   ========================= */
@@ -905,6 +903,7 @@ function sendChat(){
     window.criarChamado = criarChamado;
     window.toggleChat = toggleChat;
     window.sendChat = sendChat;
+    window.deletarChamado = deletarChamado;
   }
 
   return { init };
