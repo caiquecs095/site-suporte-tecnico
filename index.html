@@ -576,9 +576,6 @@ const App = (() => {
   let slides = [];
   let index = 0;
 
-  /* =========================
-     INIT GERAL
-  ========================= */
   function init() {
     bindGlobal();
     initSlider();
@@ -588,20 +585,16 @@ const App = (() => {
     initAutoIA();
   }
 
-  /* =========================
-     NAV PAGES
-  ========================= */
   function showPage(id){
     document.querySelectorAll(".page").forEach(p=>{
       p.classList.remove("active");
     });
-
     const el = document.getElementById(id);
     if(el) el.classList.add("active");
   }
 
   /* =========================
-     SLIDER
+     SLIDER (SEM ALTERAÇÃO)
   ========================= */
   function initSlider(){
     slides = document.querySelectorAll(".slide");
@@ -610,13 +603,8 @@ const App = (() => {
 
   function render(){
     if(!slides.length) return;
-
     slides.forEach(s => s.classList.remove("active"));
-
-    if(slides[index]){
-      slides[index].classList.add("active");
-    }
-
+    if(slides[index]) slides[index].classList.add("active");
     updateDots();
   }
 
@@ -644,11 +632,10 @@ const App = (() => {
   }
 
   /* =========================
-     CLASSIFICAÇÃO IA
+     CLASSIFICAÇÃO IA (OK)
   ========================= */
   function classificarChamado(texto){
-
-    texto = texto.toLowerCase();
+    texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug") || texto.includes("falha") || texto.includes("não funciona")){
       return "bug";
@@ -662,8 +649,7 @@ const App = (() => {
   }
 
   function gerarRespostaIA(texto){
-
-    texto = texto.toLowerCase();
+    texto = (texto || "").toLowerCase();
 
     if(texto.includes("erro") || texto.includes("bug")){
       return "Detectei um possível BUG. Já estou encaminhando para análise técnica.";
@@ -677,7 +663,7 @@ const App = (() => {
   }
 
   /* =========================
-     IA AUTO
+     IA AUTO (OK)
   ========================= */
   function initAutoIA(){
 
@@ -711,7 +697,7 @@ const App = (() => {
   }
 
   /* =========================
-     CRIAR CHAMADO
+     CRIAR CHAMADO (OK)
   ========================= */
   function criarChamado(){
 
@@ -736,7 +722,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAMADOS REALTIME
+     CHAMADOS REALTIME (OK)
   ========================= */
   function initChamadosRealtime(){
 
@@ -764,7 +750,7 @@ const App = (() => {
             <div class="chamado-card">
               <b>👤 ${d.nome}</b><br>
               📌 ${d.assunto || ""}<br>
-              🏷 ${d.categoria || ""}<br>
+              🏷 <span class="tag ${d.categoria}">${d.categoria || ""}</span><br>
               💬 ${d.mensagem}<br>
               🤖 ${d.respostaIA || ""}
             </div>
@@ -778,7 +764,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAT
+     CHAT TOGGLE
   ========================= */
   function toggleChat(){
     const box = document.getElementById("chatBox");
@@ -786,6 +772,9 @@ const App = (() => {
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
+  /* =========================
+     CHAT SEND (CORRIGIDO REGRA 1)
+  ========================= */
   function sendChat(){
 
     const nome = document.getElementById("chatNome")?.value;
@@ -801,12 +790,16 @@ const App = (() => {
 
     document.getElementById("chatMsg").value = "";
 
-    db.collection("typing").doc("user").set({
+    // 🔥 CORREÇÃO REAL: limpa typing global corretamente
+    db.collection("typing").doc("status").set({
       nome: "",
       typing: false
     });
   }
 
+  /* =========================
+     CHAT REALTIME (OK)
+  ========================= */
   function initChatRealtime(){
 
     db.collection("chat")
@@ -834,7 +827,7 @@ const App = (() => {
   }
 
   /* =========================
-     TYPING (CORRIGIDO)
+     TYPING (CORRIGIDO DEFINITIVO)
   ========================= */
   function initTyping(){
 
@@ -845,7 +838,7 @@ const App = (() => {
 
     input.addEventListener("input", () => {
 
-      db.collection("typing").doc("user").set({
+      db.collection("typing").doc("status").set({
         nome: document.getElementById("chatNome")?.value || "Alguém",
         typing: true
       });
@@ -854,15 +847,15 @@ const App = (() => {
 
       typingTimer = setTimeout(() => {
 
-        db.collection("typing").doc("user").set({
+        db.collection("typing").doc("status").set({
           nome: "",
           typing: false
         });
 
-      }, 1000);
+      }, 900);
     });
 
-    db.collection("typing").doc("user")
+    db.collection("typing").doc("status")
     .onSnapshot(doc => {
 
       const d = doc.data();
@@ -891,7 +884,6 @@ const App = (() => {
 
 })();
 
-/* START */
 window.addEventListener("load", App.init);
 
 </script>
