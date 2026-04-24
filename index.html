@@ -409,8 +409,8 @@ Chat
    FIREBASE INIT
 ========================= */
 firebase.initializeApp({
-  apiKey: "xxx",
-  authDomain: "xxx",
+  apiKey: "AIzaSyC0P6CwncDoEQnW8Yd_2rjdXllwcVaqS1M",
+  authDomain: "chamados-17bc3.firebaseapp.com",
   projectId: "chamados-17bc3"
 });
 
@@ -426,39 +426,6 @@ const App = (() => {
 
   const sessionId = localStorage.getItem("sessionId") || crypto.randomUUID();
   localStorage.setItem("sessionId", sessionId);
-
-  /* =========================
-     INIT GERAL
-  ========================= */
-  function init() {
-    bindGlobal();
-    initSlider();
-    initChamadosRealtime();
-    initChatRealtime();
-    initTyping();
-    initAutoIA();
-
-    // FIX: abrir página pelo URL
-    const hash = window.location.hash.replace("#","");
-    if(hash){
-      showPage(hash);
-    }
-  }
-
-  /* =========================
-     NAV PAGES (CORRIGIDO)
-  ========================= */
-  function showPage(id){
-    document.querySelectorAll(".page").forEach(p=>{
-      p.classList.remove("active");
-    });
-
-    const el = document.getElementById(id);
-    if(el) el.classList.add("active");
-
-    // FIX: atualiza URL
-    window.location.hash = id;
-  }
 
   /* =========================
      SLIDER
