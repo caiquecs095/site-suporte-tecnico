@@ -79,6 +79,55 @@ position:fixed;bottom:20px;right:20px;
 background:#25D366;padding:15px;border-radius:50%;
 color:white;text-decoration:none;
 }
+
+/* social card */
+.social-card{
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+.social-card:hover{
+box-shadow:0 0 15px rgba(59,130,246,0.5);
+}  
+  
+.social-cards{
+display:flex;
+gap:20px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.social-card{
+background:#0b1220;
+border:1px solid #1e293b;
+border-radius:12px;
+padding:20px;
+width:250px;
+display:flex;
+align-items:center;
+gap:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.social-card i{
+font-size:28px;
+}
+
+.social-card:hover{
+transform:translateY(-5px);
+background:#111827;
+}
+
+/* CORES REAIS DAS MARCAS */
+.linkedin i{
+color:#0A66C2;
+}
+
+.github i{
+color:#ffffff;
+}
+
+  
 </style>
 </head>
 
@@ -167,9 +216,8 @@ garantindo que sistemas funcionem corretamente e permitindo inovação contínua
 
 <!-- CONTATOS -->
 <div id="contato" class="page">
-<h2>📲 Redes e Contatos</h2>
 
-<div class="social-cards">
+<h2>📲 Redes e Contatos</h2>
 
 <div class="social-card linkedin"
 onclick="window.open('https://linkedin.com/in/seu-link','_blank')">
@@ -188,10 +236,9 @@ onclick="window.open('https://github.com/seu-user','_blank')">
 <small>Veja meus projetos</small>
 </div>
 </div>
-
 </div>
 </div>
-
+  
 <!-- CHAT -->
 <div class="chat-btn" onclick="toggleChat()">💬</div>
 
