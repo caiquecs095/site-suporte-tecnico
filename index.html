@@ -585,7 +585,7 @@ const App = (() => {
     initChamadosRealtime();
     initChatRealtime();
     initTyping();
-    initAutoIA(); // ✅ IA ATIVADA
+    initAutoIA();
   }
 
   /* =========================
@@ -677,7 +677,7 @@ const App = (() => {
   }
 
   /* =========================
-     AUTO IA (CORRIGIDO)
+     IA AUTO
   ========================= */
   function initAutoIA(){
 
@@ -685,30 +685,25 @@ const App = (() => {
     .orderBy("data","desc")
     .onSnapshot(snapshot => {
 
-      snapshot.docChanges().forEach(change => {
+      snapshot.forEach(doc => {
 
-        if(change.type === "added"){
+        const d = doc.data();
 
-          const d = change.doc.data();
+        if(d.iaRespondido) return;
+        if(!d.mensagem) return;
 
-          if(d.iaRespondido) return;
+        setTimeout(() => {
 
-          setTimeout(() => {
+          const resposta = gerarRespostaIA(d.mensagem);
+          const categoria = classificarChamado(d.mensagem);
 
-            const resposta = gerarRespostaIA(d.mensagem || "");
+          doc.ref.update({
+            iaRespondido: true,
+            respostaIA: resposta,
+            categoria: categoria
+          });
 
-            const categoria = classificarChamado(d.mensagem || "");
-
-            // salva resposta IA dentro do próprio chamado
-            change.doc.ref.update({
-              iaRespondido: true,
-              respostaIA: resposta,
-              categoria: categoria
-            });
-
-          }, 2000);
-
-        }
+        }, 2000);
 
       });
 
@@ -769,9 +764,9 @@ const App = (() => {
             <div class="chamado-card">
               <b>👤 ${d.nome}</b><br>
               📌 ${d.assunto || ""}<br>
-              🏷 <span class="tag ${d.categoria}">${d.categoria || ""}</span><br>
+              🏷 ${d.categoria || ""}<br>
               💬 ${d.mensagem}<br>
-              🤖 ${d.respostaIA ? d.respostaIA : ""}
+              🤖 ${d.respostaIA || ""}
             </div>
           `;
         });
@@ -783,7 +778,7 @@ const App = (() => {
   }
 
   /* =========================
-     CHAT TOGGLE
+     CHAT
   ========================= */
   function toggleChat(){
     const box = document.getElementById("chatBox");
@@ -791,35 +786,27 @@ const App = (() => {
     box.style.display = (box.style.display === "flex") ? "none" : "flex";
   }
 
-  /* =========================
-     CHAT SEND
-  ========================= */
- function sendChat(){
+  function sendChat(){
 
-  const nome = document.getElementById("chatNome")?.value;
-  const msg = document.getElementById("chatMsg")?.value;
+    const nome = document.getElementById("chatNome")?.value;
+    const msg = document.getElementById("chatMsg")?.value;
 
-  if(!nome || !msg) return;
+    if(!nome || !msg) return;
 
-  db.collection("chat").add({
-    nome,
-    mensagem: msg,
-    data: firebase.firestore.FieldValue.serverTimestamp()
-  });
+    db.collection("chat").add({
+      nome,
+      mensagem: msg,
+      data: firebase.firestore.FieldValue.serverTimestamp()
+    });
 
-  // limpa input
-  document.getElementById("chatMsg").value = "";
+    document.getElementById("chatMsg").value = "";
 
-  // 🔥 REMOVE STATUS "digitando"
-  db.collection("typing").doc("user").set({
-    nome,
-    typing: false
-  });
-}
+    db.collection("typing").doc("user").set({
+      nome: "",
+      typing: false
+    });
+  }
 
-  /* =========================
-     CHAT REALTIME (WHATSAPP STYLE)
-  ========================= */
   function initChatRealtime(){
 
     db.collection("chat")
@@ -838,14 +825,8 @@ const App = (() => {
 
           box.innerHTML += `
             <div class="chat-msg ${isMe ? 'me' : 'other'}">
-
               ${!isMe ? `<div class="avatar">${d.nome.charAt(0).toUpperCase()}</div>` : ``}
-
-              <div class="msg-content">
-                ${!isMe ? `<b>${d.nome}</b><br>` : ``}
-                ${d.mensagem}
-              </div>
-
+              <div class="msg-content">${d.mensagem}</div>
             </div>
           `;
         });
@@ -853,43 +834,43 @@ const App = (() => {
   }
 
   /* =========================
-     TYPING
+     TYPING (CORRIGIDO)
   ========================= */
-  function initTyping() {
+  function initTyping(){
 
     const input = document.getElementById("chatMsg");
-    if (!input) return;
+    if(!input) return;
 
-   let typingTimer;
+    let typingTimer;
 
-input.addEventListener("input", () => {
+    input.addEventListener("input", () => {
 
-  db.collection("typing").doc("user").set({
-    nome: document.getElementById("chatNome")?.value || "Alguém",
-    typing: true
-  });
-
-  clearTimeout(typingTimer);
-
-  typingTimer = setTimeout(() => {
-    db.collection("typing").doc("user").set({
-      nome: document.getElementById("chatNome")?.value || "Alguém",
-      typing: false
-    });
-  }, 1200);
-});
-
-    db.collection("typing").onSnapshot(snap => {
-
-      let text = "";
-
-      snap.forEach(doc => {
-        const d = doc.data();
-        if (d.typing) text = `${d.nome} está digitando...`;
+      db.collection("typing").doc("user").set({
+        nome: document.getElementById("chatNome")?.value || "Alguém",
+        typing: true
       });
 
+      clearTimeout(typingTimer);
+
+      typingTimer = setTimeout(() => {
+
+        db.collection("typing").doc("user").set({
+          nome: "",
+          typing: false
+        });
+
+      }, 1000);
+    });
+
+    db.collection("typing").doc("user")
+    .onSnapshot(doc => {
+
+      const d = doc.data();
       const el = document.getElementById("typing");
-      if (el) el.innerText = text;
+
+      if(!el) return;
+
+      el.innerText = d?.typing ? `${d.nome} está digitando...` : "";
     });
   }
 
